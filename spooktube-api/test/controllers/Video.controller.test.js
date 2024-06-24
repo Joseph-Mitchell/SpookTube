@@ -16,7 +16,7 @@ describe("Controller", () => {
             stubbedResponse = { status: sinon.stub().returnsThis(), json: sinon.stub() };
             
             testController = new VideoController(stubbedService);
-            testRequest = { rangeMin: 0, rangeMax: 20 };
+            testRequest = { params: { rangeMin: 0, rangeMax: 20 } };
             
             testDate = Date.now();
             
@@ -27,7 +27,7 @@ describe("Controller", () => {
                 testResponseVideos.push({ videoId: i, userId: i, thumbnailTime: 0 });
             }
             
-            stubbedService.getAllVideos.resolves(testResponseVideos);
+            stubbedService.getAllVideos.resolves(testVideos);
         });
         
         afterEach(() => {
@@ -41,6 +41,19 @@ describe("Controller", () => {
         });
         
         it("should call res.status with 200 in normal circumstances", async () => {
+            //Act
+            await testController.getAllVideos(testRequest, stubbedResponse);
+            
+            //Assert
+            sinon.assert.calledOnceWithExactly(stubbedResponse.status, 200);
+            sinon.assert.calledWith(stubbedResponse.json, testResponseVideos);
+        });
+        
+        it("should respond with expected array when req.params.rangeMax < videos in collection", async () => {
+            //Arrange
+            testRequest.params.rangeMax = 15;
+            testResponseVideos = testResponseVideos.splice(0, 15);
+            
             //Act
             await testController.getAllVideos(testRequest, stubbedResponse);
             
