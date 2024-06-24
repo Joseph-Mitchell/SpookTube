@@ -2,14 +2,18 @@ import Controller from "./Controller.js";
 
 export default class VideoController extends Controller {
     async getAllVideos(req, res) {
-        const videos = await this._service.getAllVideos();
-        
-        let response = []
-        for (let i = req.params.rangeMin; (i < videos.length) && (i < req.params.rangeMax); i++) {
-            let { uploadDate, ...rest } = videos[i];
-            response.push(rest);
+        try {
+            const videos = await this._service.getAllVideos();
+
+            let response = []
+            for (let i = Math.max(req.params.rangeMin, 0); (i < videos.length) && (i < req.params.rangeMax); i++) {
+                let { uploadDate, ...rest } = videos[i];
+                response.push(rest);
+            }
+
+            res.status(200).json(response);
+        } catch (e) {
+            res.status(500).json({ message: e.message });
         }
-        
-        res.status(200).json(response);
     }
 }
