@@ -1,20 +1,20 @@
 import { Router } from "express";
 
 export default class Router {
-    #router;
-    #pathRoot = "/";
+    _router;
+    _pathRoot = "/";
     _controller;
     
     getRouter() {
-        return this.#router;
+        return this._router;
     }
     
     getPathRoot() {
-        return this.#pathRoot;
+        return this._pathRoot;
     }
     
     constructor(controller) {
-        this.#router = Router();             
+        this._router = Router();             
         this._controller = controller;
         
         this._initialiseRouter();
