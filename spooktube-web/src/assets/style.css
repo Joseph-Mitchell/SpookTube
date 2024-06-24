@@ -1,0 +1,17 @@
+@media only screen and (min-width: 992px) {
+    #video-grid {
+        max-width: 1025px;
+    }
+}
+
+@media only screen and (max-width: 991px) {
+    #video-grid {
+        max-width: 700px;
+    }
+}
+
+@media only screen and (max-width: 767px) {
+    #video-grid {
+        max-width: 375px;
+    }
+}
