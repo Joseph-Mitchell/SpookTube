@@ -98,5 +98,16 @@ describe("Controller", () => {
             sinon.assert.calledOnceWithExactly(stubbedResponse.status, 200);
             sinon.assert.calledWith(stubbedResponse.json, testResponseVideos);
         });
+                 
+        it("should respond with 500 if service rejects an error", async () => {
+            //Arrange
+            stubbedService.getAllVideos.rejects(new Error());
+            
+            //Act
+            await testController.getAllVideos(testRequest, stubbedResponse);
+            
+            //Assert
+            sinon.assert.calledOnceWithExactly(stubbedResponse.status, 500);
+        });
     });
 });
