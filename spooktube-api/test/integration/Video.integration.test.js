@@ -89,5 +89,14 @@ describe("Video Integration Tests", () => {
             assert.equal(actual.status, 200);
             assert.equal(actual.body.length, 5);
         });
+        
+        it("should respond 200 if rangeMin < zero", async () => {
+            //Act
+            const actual = await requester.get("/videos/all/-1/5");
+            
+            //Assert
+            assert.equal(actual.status, 200);
+            assert.equal(actual.body.length, 5);
+        });
     });
 });
