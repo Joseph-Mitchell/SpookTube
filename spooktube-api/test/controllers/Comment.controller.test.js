@@ -36,7 +36,7 @@ describe("Controller", () => {
             testResponseComments = undefined;
         });
         
-        it("should call res.status with 200 in normal circumstances", async () => {
+        it("should respond with 200 in normal circumstances", async () => {
             //Act
             await testController.getVideoComments(testRequest, stubbedResponse);
             
@@ -44,6 +44,17 @@ describe("Controller", () => {
             sinon.assert.calledWith(stubbedService.getVideoComments, testRequest.params.videoId);
             sinon.assert.calledWith(stubbedResponse.status, 200);
             sinon.assert.calledWith(stubbedResponse.json, testResponseComments);
+        });
+        
+        it("should respond with 500 if service rejects", async () => {
+            //Arrange
+            stubbedService.getVideoComments.rejects(new Error())
+            
+            //Act
+            await testController.getVideoComments(testRequest, stubbedResponse);
+            
+            //Assert
+            sinon.assert.calledWith(stubbedResponse.status, 500);
         });
     });
 });
