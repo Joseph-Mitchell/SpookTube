@@ -33,12 +33,12 @@ describe("Controller", () => {
         
         afterEach(() => {
             stubbedService = undefined;
-            stubbedService = undefined;
-            stubbedResponse = undefined;
             stubbedResponse = undefined;
             testController = undefined;
+            testRequest = undefined;
             testDate = undefined;
             testVideos = undefined;
+            testResponseVideos = undefined;
         });
         
         it("should call res.status with 200 in normal circumstances", async () => {
