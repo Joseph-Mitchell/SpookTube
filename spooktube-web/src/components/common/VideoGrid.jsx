@@ -1,6 +1,6 @@
 import VideoCard from "./VideoCard.jsx";
 
-const VideoGrid = ({ videos }) => {
+const VideoGrid = ({ videos = [] }) => {
 
     let videoList = [];
     for (let i = 0; i < videos.length; i++) {

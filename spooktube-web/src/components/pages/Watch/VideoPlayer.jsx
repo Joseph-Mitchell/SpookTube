@@ -1,10 +1,17 @@
 import { useEffect, useRef } from 'react';
 import { useSearchParams } from "react-router-dom";
 
-const VideoPlayer = () => {
+const VideoPlayer = ({ setVideoHeight }) => {
     const [searchParams, setSearchParams] = useSearchParams();
     const cloudinaryRef = useRef();
     const videoRef = useRef();
+
+    window.onresize = resizeVideo;
+
+    function resizeVideo(e) {
+        const video = document.getElementById("video-container");
+        setVideoHeight(video.offsetHeight);
+    }
 
     useEffect(() => {
         const cloud_name = import.meta.env.VITE_APP_CLOUDINARY_NAME;
@@ -14,8 +21,13 @@ const VideoPlayer = () => {
         cloudinaryRef.current.videoPlayer(videoRef.current, { cloud_name: cloud_name });
     }, []);
 
+    useEffect(() => {
+        const video = document.getElementById("video-container");
+        setVideoHeight(video.offsetHeight * 1.8);
+    }, []);
+
     return (
-        <div className="d-flex justify-content-end">
+        <div id="video-container" className="d-flex justify-content-end h-100">
             <video
                 ref={videoRef}
                 data-cld-public-id={searchParams.get("id")}
