@@ -71,7 +71,7 @@ describe("Video Integration Tests", () => {
             assert.equal(actual.body.length, 3);
         });
         
-        it("should respond 200 if rangeMax < collection size", async () => {
+        it("should respond 200 if rangeMin > zero", async () => {
             //Act
             const actual = await requester.get("/videos/all/1/5");
             
@@ -79,6 +79,15 @@ describe("Video Integration Tests", () => {
             assert.equal(actual.status, 200);
             assert.equal(actual.body.length, 4);
             assert.equal(actual.body[0].videoId, existingVideos[1].videoId);
+        });
+        
+        it("should respond 200 if rangeMax > collection size", async () => {
+            //Act
+            const actual = await requester.get("/videos/all/0/6");
+            
+            //Assert
+            assert.equal(actual.status, 200);
+            assert.equal(actual.body.length, 5);
         });
     });
 });
