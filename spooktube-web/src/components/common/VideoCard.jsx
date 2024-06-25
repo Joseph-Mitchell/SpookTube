@@ -1,7 +1,14 @@
-const VideoCard = () => {
+const VideoCard = ({ video }) => {
+
+    let source;
+    if (video)
+        source = `https://res.cloudinary.com/drtoipa5f/video/upload/w_250/${video.videoId}.jpg`;
+    else
+        source = `https://res.cloudinary.com/drtoipa5f/image/upload/sft5hacy89lpcj3wll8o.png`;
+
     return (
         <div className="col d-flex justify-content-center">
-            <a href="#"><img className="img rounded-4 border border-5 border-primary" src="thumb-placeholder.png" /></a>
+            <a href="#"><img className="img rounded-4 border border-5 border-primary" src={source} /></a>
         </div>
     );
 };

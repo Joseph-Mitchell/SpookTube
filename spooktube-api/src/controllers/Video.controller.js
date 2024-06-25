@@ -10,6 +10,7 @@ export default class VideoController extends Controller {
                 let { uploadDate, ...rest } = videos[i]._doc;
                 response.push(rest);
             }
+            
             res.status(200).json(response);
         } catch (e) {
             res.status(500).json({ message: e.message });
