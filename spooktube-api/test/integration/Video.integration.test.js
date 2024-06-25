@@ -11,7 +11,7 @@ import Video from "../../src/models/Video.model.js";
 
 import { existingVideos } from "../data/testVideos.js";
 
-describe.skip("Video Integration Tests", () => {
+describe("Video Integration Tests", () => {
     let server;
     let database;
     let requester;

@@ -9,7 +9,7 @@ export default class CommentRouter extends Router {
     }
     
     _initialiseRouter() {
-        this._router.get("/video/:videoid", (req, res) => {
+        this._router.get("/video/:videoId", (req, res) => {
             this._controller.getVideoComments(req, res);
         });
     }

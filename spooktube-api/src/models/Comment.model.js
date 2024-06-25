@@ -1,7 +1,7 @@
 import { Schema, model } from "mongoose";
 
 const commentSchema = new Schema({
-    message: { type: String, required: true },
+    comment: { type: String, required: true },
     videoId: { type: String, required: true },
     userId: { type: Schema.Types.ObjectId, ref: "Account", required: true },
     timeCode: { type: Number, default: 0 },

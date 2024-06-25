@@ -43,7 +43,7 @@ describe("Controller", () => {
             //Assert
             sinon.assert.calledWith(stubbedService.getVideoComments, testRequest.params.videoId);
             sinon.assert.calledWith(stubbedResponse.status, 200);
-            sinon.assert.calledWith(stubbedResponse.json, testResponseComments);
+            sinon.assert.calledWith(stubbedResponse.json, { comments: testResponseComments });
         });
         
         it("should respond with 500 if service rejects", async () => {
