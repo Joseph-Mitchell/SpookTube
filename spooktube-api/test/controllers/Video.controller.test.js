@@ -23,7 +23,7 @@ describe("Controller", () => {
             testVideos = [];
             testResponseVideos = [];
             for (let i = 0; i < 20; i++) {
-                testVideos.push({ videoId: i, userId: i, uploadDate: testDate, thumbnailTime: 0 });
+                testVideos.push({ _doc: { videoId: i, userId: i, uploadDate: testDate, thumbnailTime: 0 }});
                 testResponseVideos.push({ videoId: i, userId: i, thumbnailTime: 0 });
             }
             
