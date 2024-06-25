@@ -11,12 +11,12 @@ const VideoCard = ({ video }) => {
         source = `https://res.cloudinary.com/drtoipa5f/image/upload/sft5hacy89lpcj3wll8o.png`;
 
     function goToVideo() {
-        navigate(`/watch?videoId=${video.videoId}`);
+        navigate(`/watch?id=${video.videoId}`);
     }
 
     return (
         <div className="col d-flex justify-content-center">
-            <a className="btn" onClick={goToVideo} ><img className="img rounded-4 border border-5 border-primary" src={source} /></a>
+            <a className="btn btn-link" onClick={goToVideo} ><img className="img rounded-4 border border-5 border-primary" src={source} /></a>
         </div>
     );
 };
