@@ -53,13 +53,22 @@ describe("Video Integration Tests", () => {
     
     
     describe("getAllVideos", () => {
-        it("should call respond 200 in normal circumstances", async () => {
+        it("should respond 200 in normal circumstances", async () => {
             //Act
             const actual = await requester.get("/videos/all/0/5");
             
             //Assert
             assert.equal(actual.status, 200);
             assert.equal(actual.body.length, 5);
+        });
+        
+        it("should respond 200 if rangeMax < collection size", async () => {
+            //Act
+            const actual = await requester.get("/videos/all/0/3");
+            
+            //Assert
+            assert.equal(actual.status, 200);
+            assert.equal(actual.body.length, 3);
         });
     });
 });
