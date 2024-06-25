@@ -98,5 +98,19 @@ describe("Video Integration Tests", () => {
             assert.equal(actual.status, 200);
             assert.equal(actual.body.length, 5);
         });
+        
+        it("should respond 500 if database offline", async () => {
+            //Arrange
+            await database.close();
+            
+            //Act
+            const actual = await requester.get("/videos/all/0/5");
+            
+            //Assert
+            assert.equal(actual.status, 500);
+            
+            //Cleanup
+            await database.connect();
+        });
     });
 });
