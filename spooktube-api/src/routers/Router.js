@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { Router as ExpressRouter } from "express";
 
 export default class Router {
     _router;
@@ -14,7 +14,7 @@ export default class Router {
     }
     
     constructor(controller) {
-        this._router = Router();             
+        this._router = ExpressRouter();             
         this._controller = controller;
         
         this._initialiseRouter();

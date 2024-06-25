@@ -7,6 +7,6 @@ const videoSchema = new Schema({
     thumbnailTime: { type: Number, default: 0 },
 });
 
-const Video = model("Account", videoSchema);
+const Video = model("Video", videoSchema);
 
 export default Video;

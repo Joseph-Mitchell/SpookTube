@@ -5,7 +5,7 @@ export default class VideoRouter extends Router {
     constructor(controller) {
         super(controller);
         
-        _pathRoot = "/videos";
+        this._pathRoot = "/videos";
     }
     
     _initialiseRouter() {
