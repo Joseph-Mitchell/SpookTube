@@ -5,4 +5,8 @@ export default class VideoService extends Service {
     async getAllVideos() {
         return await Video.find({}).sort({ uploadDate: -1 });
     }
+    
+    async getVideosCount() {
+        return await Video.find({}).estimatedDocumentCount();
+    }
 }
