@@ -151,3 +151,5 @@ db-helpers/
 
 *.scss
 *.css.map
+
+.vscode

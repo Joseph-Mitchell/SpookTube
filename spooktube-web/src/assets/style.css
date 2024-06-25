@@ -25,3 +25,7 @@ body,
 #root {
     background-color: rgb(215, 215, 215);
 }
+
+.video-player {
+    max-width: 180vh
+}
