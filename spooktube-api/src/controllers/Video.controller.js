@@ -3,6 +3,11 @@ import Controller from "./Controller.js";
 export default class VideoController extends Controller {
     async getAllVideos(req, res) {
         try {
+            const VIDEOS_PER_PAGE = 18;
+            
+            const count = await this._service.getVideosCount();
+            const pages = Math.floor(count / VIDEOS_PER_PAGE) + 1;
+            
             const videos = await this._service.getAllVideos();
 
             let response = []
@@ -10,9 +15,10 @@ export default class VideoController extends Controller {
                 let { uploadDate, ...rest } = videos[i]._doc;
                 response.push(rest);
             }
-            
-            res.status(200).json(response);
+
+            res.status(200).json({ videos: response, pages: pages });
         } catch (e) {
+            console.log(e.message);
             res.status(500).json({ message: e.message });
         }
     }

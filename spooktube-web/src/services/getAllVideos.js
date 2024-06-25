@@ -3,11 +3,12 @@ import axios from "axios";
 export default async function getAllVideos(min, max) {    
     try {
         const apiUrl = import.meta.env.VITE_APP_BACKEND_URL;
+        
         const response = await axios({
             method: "get",
             url: apiUrl + "/videos/all/" + min + "/" + max,
         });
-        console.log(response)
+
         return response.data;
     } catch (e) {
         if (e.response.data) {

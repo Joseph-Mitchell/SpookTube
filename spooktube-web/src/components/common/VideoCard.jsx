@@ -1,4 +1,8 @@
+import { useNavigate } from "react-router-dom";
+
 const VideoCard = ({ video }) => {
+
+    const navigate = useNavigate();
 
     let source;
     if (video)
@@ -6,9 +10,13 @@ const VideoCard = ({ video }) => {
     else
         source = `https://res.cloudinary.com/drtoipa5f/image/upload/sft5hacy89lpcj3wll8o.png`;
 
+    function goToVideo() {
+        navigate(`/watch?videoId=${video.videoId}`);
+    }
+
     return (
         <div className="col d-flex justify-content-center">
-            <a href="#"><img className="img rounded-4 border border-5 border-primary" src={source} /></a>
+            <a className="btn" onClick={goToVideo} ><img className="img rounded-4 border border-5 border-primary" src={source} /></a>
         </div>
     );
 };

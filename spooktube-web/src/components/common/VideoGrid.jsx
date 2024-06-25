@@ -1,10 +1,9 @@
-import { useEffect } from "react";
 import VideoCard from "./VideoCard.jsx";
 
 const VideoGrid = ({ videos }) => {
 
     let videoList = [];
-    for (let i = 0; i < videos.length ?? 0; i++) {
+    for (let i = 0; i < videos.length; i++) {
         videoList.push(<VideoCard key={i} video={videos[i]} />);
     }
 

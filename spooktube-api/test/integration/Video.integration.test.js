@@ -59,7 +59,7 @@ describe("Video Integration Tests", () => {
             
             //Assert
             assert.equal(actual.status, 200);
-            assert.equal(actual.body.length, 5);
+            assert.equal(actual.body.videos.length, 5);
         });
         
         it("should respond 200 if rangeMax < collection size", async () => {
@@ -68,7 +68,7 @@ describe("Video Integration Tests", () => {
             
             //Assert
             assert.equal(actual.status, 200);
-            assert.equal(actual.body.length, 3);
+            assert.equal(actual.body.videos.length, 3);
         });
         
         it("should respond 200 if rangeMin > zero", async () => {
@@ -77,8 +77,8 @@ describe("Video Integration Tests", () => {
             
             //Assert
             assert.equal(actual.status, 200);
-            assert.equal(actual.body.length, 4);
-            assert.equal(actual.body[0].videoId, existingVideos[1].videoId);
+            assert.equal(actual.body.videos.length, 4);
+            assert.equal(actual.body.videos[0].videoId, existingVideos[1].videoId);
         });
         
         it("should respond 200 if rangeMax > collection size", async () => {
@@ -87,7 +87,7 @@ describe("Video Integration Tests", () => {
             
             //Assert
             assert.equal(actual.status, 200);
-            assert.equal(actual.body.length, 5);
+            assert.equal(actual.body.videos.length, 5);
         });
         
         it("should respond 200 if rangeMin < zero", async () => {
@@ -96,7 +96,7 @@ describe("Video Integration Tests", () => {
             
             //Assert
             assert.equal(actual.status, 200);
-            assert.equal(actual.body.length, 5);
+            assert.equal(actual.body.videos.length, 5);
         });
         
         it("should respond 500 if database offline", async () => {

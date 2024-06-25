@@ -13,7 +13,8 @@ const Paginator = ({ currentPage, setCurrentPage, pages }) => {
     if (currentPage === 1) {
         prevDisabled = " disabled";
         prevLink = " link-secondary";
-    } else if (currentPage === pages) {
+    }
+    if (currentPage === pages) {
         nextDisabled = " disabled";
         nextLink = " link-secondary";
     }

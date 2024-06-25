@@ -12,7 +12,7 @@ describe("Controller", () => {
     
     describe("getAllVideos", () => {
         beforeEach(() => {
-            stubbedService = { getAllVideos: sinon.stub() };
+            stubbedService = { getAllVideos: sinon.stub(), getVideosCount: sinon.stub() };
             stubbedResponse = { status: sinon.stub().returnsThis(), json: sinon.stub() };
             
             testController = new VideoController(stubbedService);
@@ -28,6 +28,7 @@ describe("Controller", () => {
             }
             
             stubbedService.getAllVideos.resolves(testVideos);
+            stubbedService.getVideosCount.resolves(10);
         });
         
         afterEach(() => {
@@ -46,7 +47,7 @@ describe("Controller", () => {
             
             //Assert
             sinon.assert.calledOnceWithExactly(stubbedResponse.status, 200);
-            sinon.assert.calledWith(stubbedResponse.json, testResponseVideos);
+            sinon.assert.calledWith(stubbedResponse.json, { videos: testResponseVideos, pages: 1 });
         });
         
         it("should respond with expected array when req.params.rangeMax < videos in collection", async () => {
@@ -59,7 +60,7 @@ describe("Controller", () => {
             
             //Assert
             sinon.assert.calledOnceWithExactly(stubbedResponse.status, 200);
-            sinon.assert.calledWith(stubbedResponse.json, testResponseVideos);
+            sinon.assert.calledWith(stubbedResponse.json, { videos: testResponseVideos, pages: 1 });
         });
         
         it("should respond with expected array when req.params.rangeMin > zero", async () => {
@@ -72,7 +73,7 @@ describe("Controller", () => {
             
             //Assert
             sinon.assert.calledOnceWithExactly(stubbedResponse.status, 200);
-            sinon.assert.calledWith(stubbedResponse.json, testResponseVideos);
+            sinon.assert.calledWith(stubbedResponse.json, { videos: testResponseVideos, pages: 1 });
         });
         
         it("should respond with expected array when req.params.rangeMax > videos in collection", async () => {
@@ -84,7 +85,7 @@ describe("Controller", () => {
             
             //Assert
             sinon.assert.calledOnceWithExactly(stubbedResponse.status, 200);
-            sinon.assert.calledWith(stubbedResponse.json, testResponseVideos);
+            sinon.assert.calledWith(stubbedResponse.json, { videos: testResponseVideos, pages: 1 });
         });
             
         it("should respond with expected array when req.params.rangeMin < Zero", async () => {
@@ -96,7 +97,7 @@ describe("Controller", () => {
             
             //Assert
             sinon.assert.calledOnceWithExactly(stubbedResponse.status, 200);
-            sinon.assert.calledWith(stubbedResponse.json, testResponseVideos);
+            sinon.assert.calledWith(stubbedResponse.json, { videos: testResponseVideos, pages: 1 });
         });
                  
         it("should respond with 500 if service rejects an error", async () => {
