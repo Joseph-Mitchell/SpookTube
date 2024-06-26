@@ -1,7 +1,7 @@
 import sinon from "sinon";
 import CommentController from "../../src/controllers/Comment.controller.js";
 
-describe("Controller", () => {
+describe("Comment Controller", () => {
     let stubbedService;
     let stubbedResponse;
     let testController;
