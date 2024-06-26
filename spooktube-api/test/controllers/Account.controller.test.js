@@ -12,7 +12,7 @@ describe("Account Controller", () => {
     
     describe("registerAccount", () => {
         beforeEach(() => {
-            process.env.SECRET = 
+            process.env.SECRET = "333BA566A25119A247F6FD4845E98";
             
             stubbedService = {
                 getAccountByEmail: sinon.stub(),
@@ -34,6 +34,7 @@ describe("Account Controller", () => {
         });
         
         afterEach(() => {
+            process.env.SECRET = undefined;
             stubbedService = undefined;
             stubbedResponse = undefined;
             testController = undefined;
@@ -56,6 +57,17 @@ describe("Account Controller", () => {
         it("should respond with 409 if getAccountByEmail doesn't resolve null", async () => {
             //Arrange
             stubbedService.getAccountByEmail.resolves({});
+            
+            //Act
+            await testController.registerAccount(testRequest, stubbedResponse);
+            
+            //Assert
+            sinon.assert.calledWith(stubbedResponse.status, 409);
+        });
+        
+        it("should respond with 409 if getAccountByUsername doesn't resolve null", async () => {
+            //Arrange
+            stubbedService.getAccountByUsername.resolves({});
             
             //Act
             await testController.registerAccount(testRequest, stubbedResponse);
