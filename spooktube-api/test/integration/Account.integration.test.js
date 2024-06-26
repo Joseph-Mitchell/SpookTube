@@ -191,5 +191,19 @@ describe("Comment Integration Tests", () => {
             //Assert
             assert.equal(actual.status, 404);
         });
+        
+        it("should respond 500 if database offline", async () => {
+            //Arrange
+            await database.close();
+            
+            //Act
+            const actual = await requester.post("/accounts/login").send(testLogins.withEmail);
+            
+            //Assert
+            assert.equal(actual.status, 500);
+            
+            //Clean-up
+            await database.connect();
+        });
     })
 });
