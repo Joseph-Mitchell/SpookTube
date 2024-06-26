@@ -174,5 +174,16 @@ describe("Account Controller", () => {
             //Assert
             sinon.assert.calledWith(stubbedResponse.status, 404);
         });
+        
+        it("should respond with 500 if _service.getAccountByIdentifier rejects", async () => {
+            //Arrange
+            stubbedService.getAccountByIdentifier.rejects(new Error())
+            
+            //Act
+            await testController.loginAccount(testRequest, stubbedResponse);
+            
+            //Assert
+            sinon.assert.calledWith(stubbedResponse.status, 500);
+        });
     });
 });
