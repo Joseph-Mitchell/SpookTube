@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import LoginModal from "./LoginModal.jsx";
 
 const Navbar = ({ loggedIn, setLoggedIn }) => {
     const navigate = useNavigate();
 
     const [logoColor, setLogoColor] = useState("bg-dark");
+    const [loginModal, setLoginModal] = useState({});
 
     function highlightLogo() {
         setLogoColor("bg-primary");
@@ -22,7 +24,7 @@ const Navbar = ({ loggedIn, setLoggedIn }) => {
                     <div className="collapse collapse-horizontal ms-auto mb-2 mb-lg-0" id="navCollapse">
                         <ul className="navbar-nav fs-5" style={{ width: "170px" }}>
                             <li className="nav-item">
-                                <a className="btn nav-link">Log-In / Sign-Up</a>
+                                <a className="btn nav-link" onClick={() => { loginModal.show(); }}>Log-In / Sign-Up</a>
                             </li>
                         </ul>
                     </div>
@@ -31,6 +33,7 @@ const Navbar = ({ loggedIn, setLoggedIn }) => {
                     </button>
                 </div>
             </nav>
+            <LoginModal loginModal={loginModal} setLoginModal={setLoginModal} />
         </>
     );
 };
