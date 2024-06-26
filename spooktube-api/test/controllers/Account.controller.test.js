@@ -97,5 +97,16 @@ describe("Account Controller", () => {
             //Assert
             sinon.assert.calledWith(stubbedResponse.status, 500);
         });
+        
+        it("should respond with 500 if createAccount rejects", async () => {
+            //Arrange
+            stubbedService.createAccount.rejects(new Error());
+            
+            //Act
+            await testController.registerAccount(testRequest, stubbedResponse);
+            
+            //Assert
+            sinon.assert.calledWith(stubbedResponse.status, 500);
+        });
     });
 });
