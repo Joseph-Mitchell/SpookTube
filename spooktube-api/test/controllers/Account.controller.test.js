@@ -52,5 +52,16 @@ describe("Account Controller", () => {
             sinon.assert.calledWith(stubbedResponse.status, 201);
             assert.equal(jwt.verify(stubbedResponse.json.getCall(0).args[0].token, process.env.SECRET).id, testAccount._id)
         });
+                
+        it("should respond with 409 if getAccountByEmail doesn't resolve null", async () => {
+            //Arrange
+            stubbedService.getAccountByEmail.resolves({});
+            
+            //Act
+            await testController.registerAccount(testRequest, stubbedResponse);
+            
+            //Assert
+            sinon.assert.calledWith(stubbedResponse.status, 409);
+        });
     });
 });
