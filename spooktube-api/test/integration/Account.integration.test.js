@@ -183,5 +183,13 @@ describe("Comment Integration Tests", () => {
             //Assert
             assert.equal(actual.status, 404);
         });
+        
+        it("should respond 404 when password incorrect", async () => {
+            //Act
+            const actual = await requester.post("/accounts/login").send(testLogins.withWrongPass);
+            
+            //Assert
+            assert.equal(actual.status, 404);
+        });
     })
 });
