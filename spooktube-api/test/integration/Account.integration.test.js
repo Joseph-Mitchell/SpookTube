@@ -62,5 +62,13 @@ describe("Comment Integration Tests", () => {
             assert.equal(actual.status, 201);
             assert.isOk(jwt.verify(actual.body.token, process.env.SECRET));
         });
+        
+        it("should respond 400 if username not given", async () => {
+            //Act
+            const actual = await requester.post("/accounts/register").send(newAccounts.noUsername);
+            
+            //Assert
+            assert.equal(actual.status, 400);
+        });
     })
 });

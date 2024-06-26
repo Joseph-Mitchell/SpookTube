@@ -41,5 +41,50 @@ export const newAccounts = {
         username: "newTestUser",
         email: "newTestUser@email.com",
         password: "newTestPass"
-    }
+    },
+    
+    noUsername: {
+        email: "newTestUser@email.com",
+        password: "newTestPass"
+    },
+    emptyUsername: {
+        username: "",
+        email: "newTestUser@email.com",
+        password: "newTestPass"
+    },
+    blankUsername: {
+        username: " ",
+        email: "newTestUser@email.com",
+        password: "newTestPass"
+    },
+    
+    noEmail: {
+        username: "newTestUser",
+        password: "newTestPass"
+    },
+    emptyEmail: {
+        username: "newTestUser",
+        email: "",
+        password: "newTestPass"
+    },
+    blankEmail: {
+        username: "newTestUser",
+        email: " ",
+        password: "newTestPass"
+    },
+    invalidEmail: {
+        username: "newTestUser",
+        email: "newTestUser",
+        password: "newTestPass"
+    },
+    
+    noPassword: {
+        username: "newTestUser",
+        email: "newTestUser@email.com",
+    },
+    emptyPassword: {
+        username: "newTestUser",
+        email: "newTestUser@email.com",
+        password: ""
+    },
 }
