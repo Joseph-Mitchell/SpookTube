@@ -75,5 +75,16 @@ describe("Account Controller", () => {
             //Assert
             sinon.assert.calledWith(stubbedResponse.status, 409);
         });
+        
+        it("should respond with 500 if getAccountByEmail rejects", async () => {
+            //Arrange
+            stubbedService.getAccountByEmail.rejects(new Error());
+            
+            //Act
+            await testController.registerAccount(testRequest, stubbedResponse);
+            
+            //Assert
+            sinon.assert.calledWith(stubbedResponse.status, 500);
+        });
     });
 });
