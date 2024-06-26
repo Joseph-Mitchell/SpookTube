@@ -3,8 +3,8 @@ import Account from "../models/Account.model.js";
 import Service from "./Service.js";
 
 export default class AccountService extends Service {
-    async getAccountByIdentifier(identifier) {
-        return await Account.findOne({ $or: [{ email: identifier }, { username: identifier }] });
+    async getAccountByIdentifierAndPassword(identifier, password) {
+        return await Account.findOne({ $or: [{ email: identifier }, { username: identifier }], password: password });
     }
     
     async getAccountByEmail(email) {
