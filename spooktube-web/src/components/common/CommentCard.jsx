@@ -1,4 +1,9 @@
 const CommentCard = ({ comment = { userId: { username: "", icon: "placeholder" } } }) => {
+
+    if (comment.userId === null) {
+        comment = { userId: { username: "", icon: "placeholder" } };
+    }
+
     return (
         <div className="row bg-secondary-subtle mt-2 p-2">
             <div className="col-3 text-center py-0 ps-4 text-break">

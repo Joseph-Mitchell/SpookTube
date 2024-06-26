@@ -4,14 +4,12 @@ import { Route, Routes } from "react-router-dom";
 import Navbar from "./components/ui/Navbar.jsx";
 import WatchPage from "./components/pages/Watch/WatchPage.jsx";
 
-
-
 function App() {
     const [loggedIn, setLoggedIn] = useState(false);
 
     return (
         <>
-            <Navbar />
+            <Navbar loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
             <Routes>
                 <Route
                     path="/"

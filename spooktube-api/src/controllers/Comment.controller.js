@@ -9,9 +9,9 @@ export default class CommentController extends Controller {
                 return comment._doc;
             })
             
-            res.status(200).json({ comments: mapped });
+            return res.status(200).json({ comments: mapped });
         } catch (e) {
-            res.status(500).json({ message: e.message })
+            return res.status(500).json({ message: e.message })
         }
     }
 }

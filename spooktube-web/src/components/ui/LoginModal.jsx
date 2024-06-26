@@ -1,7 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Modal } from "bootstrap";
+import register from "../../services/register.js";
+import { useNavigate } from "react-router-dom";
 
-const LoginModal = ({ loginModal, setLoginModal }) => {
+const LoginModal = ({ loginModal, setLoginModal, setLoggedIn }) => {
+    const navigate = useNavigate();
 
     const [loginIdentifier, setLoginIdentifier] = useState("");
     const [loginPassword, setLoginPassword] = useState("");
@@ -11,13 +14,65 @@ const LoginModal = ({ loginModal, setLoginModal }) => {
     const [signUpConfirmEmail, setSignUpConfirmEmail] = useState("");
     const [signUpPassword, setSignUpPassword] = useState("");
 
+    const [alert, setAlert] = useState("");
+    const [alertColour, setAlertColour] = useState("danger");
+
     useEffect(() => {
         setLoginModal(new Modal(document.getElementById("loginModal")));
     }, []);
 
+    function clearAll() {
+        document.getElementById("responseAlert").classList.add("d-none");
+        setAlertColour("danger");
+        setAlert("");
+    }
+
     async function login() { }
 
-    async function signUp() { }
+    async function signUp() {
+        clearAll();
+
+        if (signUpUsername === "") {
+            document.getElementById("responseAlert").classList.remove("d-none");
+            setAlertColour("danger");
+            setAlert("Please enter a username");
+            return;
+        }
+
+        if (signUpEmail === "") {
+            document.getElementById("responseAlert").classList.remove("d-none");
+            setAlertColour("danger");
+            setAlert("Please enter an email");
+            return;
+        }
+
+        if (signUpPassword === "") {
+            document.getElementById("responseAlert").classList.remove("d-none");
+            setAlertColour("danger");
+            setAlert("Please enter a password");
+            return;
+        }
+
+        if (signUpEmail !== signUpConfirmEmail) {
+            document.getElementById("responseAlert").classList.remove("d-none");
+            setAlertColour("danger");
+            setAlert("Emails do not match");
+            return;
+        }
+
+        const response = await register(signUpEmail, signUpUsername, signUpPassword);
+
+        if (response.message) {
+            setAlert(response.message);
+            setAlertColour("danger");
+            document.getElementById("responseAlert").classList.remove("d-none");
+        } else {
+            localStorage.setItem("token", response.token);
+            setLoggedIn(true);
+            loginModal.hide();
+            navigate("/");
+        }
+    }
 
     return (
         <div className="modal modal-xl fade" id="loginModal">
@@ -30,15 +85,17 @@ const LoginModal = ({ loginModal, setLoginModal }) => {
                                 <form className="modal-body text-center fs-5 h-100">
                                     <label>E-mail/Username</label><br />
                                     <input
+                                        id="loginIdentifier"
                                         className="mb-4 py-1 px-2 w-75 | border border-1 rounded border-dark-subtle"
                                         type="email"
-                                        placeholder="username/email@example.com"
+                                        placeholder="email@example.com/username"
                                         value={loginIdentifier}
                                         onChange={(e) => { setLoginIdentifier(e.target.value); }}
                                     />
                                     <br />
                                     <label>Password</label><br />
                                     <input
+                                        id="loginPassword"
                                         className="py-1 px-2 w-75 | border border-1 rounded border-dark-subtle"
                                         type="password"
                                         placeholder="Password"
@@ -56,6 +113,7 @@ const LoginModal = ({ loginModal, setLoginModal }) => {
                                     <h1 className="mb-4">Sign-Up</h1>
                                     <label>Username</label><br />
                                     <input
+                                        id="signUpUsername"
                                         className="mb-4 py-1 px-2 w-75 | border border-1 rounded border-dark-subtle"
                                         type="email"
                                         placeholder="username"
@@ -65,6 +123,7 @@ const LoginModal = ({ loginModal, setLoginModal }) => {
                                     <br />
                                     <label>E-mail</label><br />
                                     <input
+                                        id="signUpEmail"
                                         className="mb-4 py-1 px-2 w-75 | border border-1 rounded border-dark-subtle"
                                         type="email"
                                         placeholder="email@example.com"
@@ -74,6 +133,7 @@ const LoginModal = ({ loginModal, setLoginModal }) => {
                                     <br />
                                     <label>Confirm Email</label><br />
                                     <input
+                                        id="signUpEmailConfirm"
                                         className="mb-4 py-1 px-2 w-75 | border border-1 rounded border-dark-subtle"
                                         type="email"
                                         placeholder="email@example.com"
@@ -83,6 +143,7 @@ const LoginModal = ({ loginModal, setLoginModal }) => {
                                     <br />
                                     <label>Password</label><br />
                                     <input
+                                        id="signUpPassword"
                                         className="py-1 px-2 w-75 | border border-1 rounded border-dark-subtle"
                                         type="password"
                                         placeholder="Password"
@@ -96,6 +157,10 @@ const LoginModal = ({ loginModal, setLoginModal }) => {
                                 </form>
                             </div>
                         </div>
+                    </div>
+                    <div className={"alert alert-" + alertColour + " alert-dismissible fade show position-fixed w-50 start-50 top-50 translate-middle d-none"} role="alert" id="responseAlert">
+                        {alert}
+                        <button type="button" className="btn-close" aria-label="Close" onClick={(e) => { e.target.parentElement.classList.add("d-none"); }}></button>
                     </div>
                 </div>
             </div>

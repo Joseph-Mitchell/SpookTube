@@ -7,13 +7,17 @@ import VideoService from './services/Video.service.js';
 import CommentRouter from './routers/Comment.router.js';
 import CommentController from './controllers/Comment.controller.js';
 import CommentService from './services/Comment.service.js';
+import AccountRouter from './routers/Account.router.js';
+import AccountController from './controllers/Account.controller.js';
+import AccountService from './services/Account.service.js';
 
 Config.load();
 const { PORT, HOST, DB_URI } = process.env;
 
 const videoRouter = new VideoRouter(new VideoController(new VideoService())); 
 const commentRouter = new CommentRouter(new CommentController(new CommentService())); 
-const routers = [videoRouter, commentRouter];
+const accountRouter = new AccountRouter(new AccountController(new AccountService())); 
+const routers = [videoRouter, commentRouter, accountRouter];
 
 const server = new Server(PORT, HOST, routers);
 const database = new Database(DB_URI);

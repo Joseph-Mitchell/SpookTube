@@ -16,9 +16,9 @@ export default class VideoController extends Controller {
                 response.push(rest);
             }
 
-            res.status(200).json({ videos: response, pages: pages });
+            return res.status(200).json({ videos: response, pages: pages });
         } catch (e) {
-            res.status(500).json({ message: e.message });
+            return res.status(500).json({ message: e.message });
         }
     }
 }
