@@ -77,4 +77,15 @@ export const newAccounts = {
         email: "newTestUser@email.com",
         password: ""
     },
+    
+    existingUsername: {
+        username: "testuser1",
+        email: "newTestUser@email.com",
+        password: "newTestPass"
+    },
+    existingEmail: {
+        username: "newTestUser",
+        email: "test1@email.com",
+        password: "newTestPass"
+    },
 }
