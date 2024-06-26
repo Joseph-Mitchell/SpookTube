@@ -163,5 +163,16 @@ describe("Account Controller", () => {
             //Assert
             sinon.assert.calledWith(stubbedResponse.status, 404);
         });
+        
+        it("should respond with 404 if passwords don't match", async () => {
+            //Arrange
+            testRequest.body.password = "notPass"
+            
+            //Act
+            await testController.loginAccount(testRequest, stubbedResponse);
+            
+            //Assert
+            sinon.assert.calledWith(stubbedResponse.status, 404);
+        });
     });
 });

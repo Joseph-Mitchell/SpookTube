@@ -27,7 +27,7 @@ export default class AccountController extends Controller {
     async loginAccount(req, res) {
         try {
             const account = await this._service.getAccountByIdentifier(req.body.identifier);
-        
+                    
             if (account === null || !bcrypt.compareSync(req.body.password, account.password))
                 return res.status(404).json({ message: "email or password incorrect" });
             
