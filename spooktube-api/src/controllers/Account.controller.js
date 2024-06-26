@@ -1,5 +1,6 @@
 import Controller from "./Controller.js";
 import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
 
 export default class AccountController extends Controller { 
     async registerAccount(req, res) {
@@ -20,6 +21,21 @@ export default class AccountController extends Controller {
             return res.status(201).json({ token: signedToken });
         } catch (e) {
             return res.status(500).json({ message: e.message });
+        }
+    }
+    
+    async loginAccount(req, res) {
+        try {
+            const account = await this._service.getAccountByIdentifier(req.body.identifier);
+        
+            if (account === null || !bcrypt.compareSync(req.body.password, account.password))
+                return res.status(404).json({ message: "email or password incorrect" });
+            
+            const signedToken = jwt.sign({ id: account._id.toString() }, process.env.SECRET, { expiresIn: "1 week" });
+            res.status(200).json({ token: signedToken });
+        } catch (e) {
+            
+            res.status(500).json({ message: e.message });
         }
     }
 }
