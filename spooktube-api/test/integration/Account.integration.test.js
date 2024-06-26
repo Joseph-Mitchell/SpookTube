@@ -126,5 +126,13 @@ describe("Comment Integration Tests", () => {
             //Assert
             assert.equal(actual.status, 409);
         });
+        
+        it("should respond 409 if email already exists", async () => {
+            //Act
+            const actual = await requester.post("/accounts/register").send(newAccounts.existingEmail);
+            
+            //Assert
+            assert.equal(actual.status, 409);
+        });
     })
 });
