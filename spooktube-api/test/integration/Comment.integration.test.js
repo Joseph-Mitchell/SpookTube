@@ -13,7 +13,7 @@ import Account from "../../src/models/Account.model.js";
 import { existingComments } from "../data/testComments.js";
 import { existingAccounts } from "../data/testAccounts.js";
 
-describe.skip("Comment Integration Tests", () => {
+describe("Comment Integration Tests", () => {
     let server;
     let database;
     let requester;

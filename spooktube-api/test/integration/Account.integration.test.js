@@ -9,11 +9,12 @@ import Server from "../../src/server/Server.js";
 import Database from "../../src/database/Database.js";
 import Account from "../../src/models/Account.model.js";
 
-import { existingAccounts, newAccounts } from "../data/testAccounts.js";
+import { existingAccounts, newAccounts, testLogins } from "../data/testAccounts.js";
 
 import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
 
-describe.skip("Comment Integration Tests", () => {
+describe("Comment Integration Tests", () => {
     let server;
     let database;
     let requester;
@@ -46,7 +47,13 @@ describe.skip("Comment Integration Tests", () => {
             throw new Error();
         }
         try {
-            await Account.insertMany(existingAccounts);
+            let encryptedAccounts = [];
+            existingAccounts.forEach((account) => {
+                account = {...account}; //Clone each account to not overwrite test data
+                account.password = bcrypt.hashSync(account.password, 8);
+                encryptedAccounts.push(account);
+            });
+            await Account.insertMany(encryptedAccounts);
         } catch (e) {
             console.log(e.message);
             throw new Error();
@@ -147,6 +154,17 @@ describe.skip("Comment Integration Tests", () => {
             
             //Clean-up
             await database.connect();
+        });
+    });
+    
+    describe("Login Account", () => {
+        it("should respond 200 when authenticating with email", async () => {
+            //Act
+            const actual = await requester.post("/accounts/login").send(testLogins.withEmail);
+            
+            //Assert
+            assert.equal(actual.status, 200);
+            assert.isOk(jwt.verify(actual.body.token, process.env.SECRET));
         });
     })
 });

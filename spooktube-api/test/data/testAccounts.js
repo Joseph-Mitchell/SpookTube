@@ -36,6 +36,26 @@ export const existingAccounts = [
     }
 ];
 
+
+export const testLogins = {
+    withEmail: {
+        identifier: "test1@email.com",
+        password: "testpass",
+    },
+    withUsername: {
+        identifier: "testuser1",
+        password: "testpass",
+    },
+    withNoMatch: {
+        identifier: "testuser99",
+        password: "testpass",
+    },
+    withWrongPass: {
+        identifier: "testuser1",
+        password: "wrongPass",
+    },
+}
+
 export const newAccounts = {
     valid: {
         username: "newTestUser",
@@ -88,4 +108,4 @@ export const newAccounts = {
         email: "test1@email.com",
         password: "newTestPass"
     },
-}
+};

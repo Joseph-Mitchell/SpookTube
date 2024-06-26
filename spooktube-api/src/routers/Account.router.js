@@ -13,5 +13,8 @@ export default class AccountRouter extends Router {
         this._router.post("/register", AccountMiddleware.validateRegDetails(), (req, res) => {
             this._controller.registerAccount(req, res);
         });
+        this._router.post("/login", (req, res) => {
+            this._controller.loginAccount(req, res);
+        });
     }
 }
