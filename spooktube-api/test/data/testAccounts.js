@@ -52,11 +52,6 @@ export const newAccounts = {
         email: "newTestUser@email.com",
         password: "newTestPass"
     },
-    blankUsername: {
-        username: " ",
-        email: "newTestUser@email.com",
-        password: "newTestPass"
-    },
     
     noEmail: {
         username: "newTestUser",
@@ -65,11 +60,6 @@ export const newAccounts = {
     emptyEmail: {
         username: "newTestUser",
         email: "",
-        password: "newTestPass"
-    },
-    blankEmail: {
-        username: "newTestUser",
-        email: " ",
         password: "newTestPass"
     },
     invalidEmail: {

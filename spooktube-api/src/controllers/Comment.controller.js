@@ -11,7 +11,6 @@ export default class CommentController extends Controller {
             
             res.status(200).json({ comments: mapped });
         } catch (e) {
-            console.log(e.message);
             res.status(500).json({ message: e.message })
         }
     }

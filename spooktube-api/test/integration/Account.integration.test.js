@@ -78,5 +78,13 @@ describe("Comment Integration Tests", () => {
             //Assert
             assert.equal(actual.status, 400);
         });
+        
+        it("should respond 400 if email not given", async () => {
+            //Act
+            const actual = await requester.post("/accounts/register").send(newAccounts.noEmail);
+            
+            //Assert
+            assert.equal(actual.status, 400);
+        });
     })
 });

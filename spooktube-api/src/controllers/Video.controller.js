@@ -18,7 +18,6 @@ export default class VideoController extends Controller {
 
             res.status(200).json({ videos: response, pages: pages });
         } catch (e) {
-            console.log(e.message);
             res.status(500).json({ message: e.message });
         }
     }
