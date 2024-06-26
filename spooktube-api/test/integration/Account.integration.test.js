@@ -9,7 +9,9 @@ import Server from "../../src/server/Server.js";
 import Database from "../../src/database/Database.js";
 import Account from "../../src/models/Account.model.js";
 
-import { existingAccounts } from "../data/testAccounts.js";
+import { existingAccounts, newAccounts } from "../data/testAccounts.js";
+
+import jwt from "jsonwebtoken";
 
 describe("Comment Integration Tests", () => {
     let server;
@@ -50,4 +52,15 @@ describe("Comment Integration Tests", () => {
             throw new Error();
         }
     });
+    
+    describe("Register Account", () => {
+        it("should respond 201 in normal circumstances", async () => {
+            //Act
+            const actual = await requester.post("/accounts/register").send(newAccounts.valid);
+            
+            //Assert
+            assert.equal(actual.status, 201);
+            assert.isOk(jwt.verify(actual.body.token, process.env.SECRET));
+        });
+    })
 });

@@ -35,3 +35,11 @@ export const existingAccounts = [
         icon: 4,
     }
 ];
+
+export const newAccounts = {
+    valid: {
+        username: "newTestUser",
+        email: "newTestUser@email.com",
+        password: "newTestPass"
+    }
+}

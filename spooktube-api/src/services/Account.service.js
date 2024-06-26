@@ -16,6 +16,6 @@ export default class AccountService extends Service {
     }
     
     async createAccount(email, username, password) {
-        return await Account.create({ username: username, email: email, password: bcrypt.hashSync(password, process.env.HASH_ROUNDS) });
+        return await Account.create({ username: username, email: email, password: bcrypt.hashSync(password, Number(process.env.HASH_ROUNDS)) });
     }
 }
