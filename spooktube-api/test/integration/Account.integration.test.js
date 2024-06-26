@@ -94,5 +94,13 @@ describe("Comment Integration Tests", () => {
             //Assert
             assert.equal(actual.status, 400);
         });
+        
+        it("should respond 400 if email invalid", async () => {
+            //Act
+            const actual = await requester.post("/accounts/register").send(newAccounts.invalidEmail);
+            
+            //Assert
+            assert.equal(actual.status, 400);
+        });
     })
 });
