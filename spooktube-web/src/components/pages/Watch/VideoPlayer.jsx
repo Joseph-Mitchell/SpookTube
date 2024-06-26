@@ -1,8 +1,6 @@
 import { useEffect, useRef } from 'react';
-import { useSearchParams } from "react-router-dom";
 
-const VideoPlayer = ({ setVideoHeight }) => {
-    const [searchParams, setSearchParams] = useSearchParams();
+const VideoPlayer = ({ setVideoHeight, videoId }) => {
     const cloudinaryRef = useRef();
     const videoRef = useRef();
 
@@ -30,7 +28,7 @@ const VideoPlayer = ({ setVideoHeight }) => {
         <div id="video-container" className="d-flex justify-content-end h-100">
             <video
                 ref={videoRef}
-                data-cld-public-id={searchParams.get("id")}
+                data-cld-public-id={videoId}
                 controls
                 fluid="true"
                 data-cld-colors='{ "base": "#000000", "accent": "#fd7e14", "text": "#fff" }'

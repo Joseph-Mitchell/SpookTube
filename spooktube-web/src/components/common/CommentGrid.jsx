@@ -4,7 +4,7 @@ import CommentCard from "./CommentCard.jsx";
 const CommentGrid = ({ comments = [], videoHeight }) => {
 
     let commentList = [];
-    for (let i = 0; i < 20; i++) {
+    for (let i = 0; i < comments.length; i++) {
         commentList.push(<CommentCard key={i} comment={comments[i]} />);
     }
 

@@ -1,19 +1,28 @@
-import { useSearchParams } from "react-router-dom";
-
 import VideoPlayer from "./VideoPlayer.jsx";
 import CommentGrid from "../../common/CommentGrid.jsx";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import getVideoComments from "../../../services/getVideoComments.js";
+
+import { useSearchParams } from "react-router-dom";
 
 const WatchPage = () => {
-    let [searchParams, setSearchParams] = useSearchParams();
+    const [comments, setComments] = useState([]);
+    const [searchParams, setSearchParams] = useSearchParams();
     const [videoHeight, setVideoHeight] = useState(0);
 
-    console.log(videoHeight);
+    async function loadComments() {
+        let loadedData = await getVideoComments(searchParams.get("id"));
+        setComments(loadedData.comments);
+    }
+
+    useEffect(() => {
+        loadComments();
+    }, []);
 
     return (
         <div className="row row-cols-lg-2 video-player mx-auto pe-2 overflow-hidden">
-            <VideoPlayer setVideoHeight={setVideoHeight} />
-            <CommentGrid videoHeight={videoHeight} />
+            <VideoPlayer videoId={searchParams.get("id")} setVideoHeight={setVideoHeight} />
+            <CommentGrid comments={comments} videoHeight={videoHeight} />
         </div>
     );
 };

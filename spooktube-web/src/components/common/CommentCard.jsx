@@ -1,12 +1,12 @@
-const CommentCard = ({ comment }) => {
+const CommentCard = ({ comment = { userId: { username: "", icon: "placeholder" } } }) => {
     return (
         <div className="row bg-secondary-subtle mt-2 p-2">
-            <div className="col-2 text-center p-0">
-                <img className="border border-4 border-dark rounded-5 mx-auto d-block" src="icon-placeholder.png" />
-                EpicGamer
+            <div className="col-3 text-center py-0 ps-4 text-break">
+                <img className="border border-4 border-dark rounded-5 mx-auto d-block" src={`icon-${comment.userId.icon}.png`} />
+                {comment.userId.username}
             </div>
-            <div className="col-10">
-                Epic comment moment I wrote an epic comment and I really think its very epic :)
+            <div className="col-9">
+                {comment.comment}
             </div>
         </div>
     );
