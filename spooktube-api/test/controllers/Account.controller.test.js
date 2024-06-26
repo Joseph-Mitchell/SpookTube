@@ -152,5 +152,16 @@ describe("Account Controller", () => {
             sinon.assert.calledWith(stubbedResponse.status, 200);
             assert.equal(jwt.verify(stubbedResponse.json.getCall(0).args[0].token, process.env.SECRET).id, testAccount._id)
         });
+        
+        it("should respond with 404 if _service.getAccountByIdentifier resolves null", async () => {
+            //Arrange
+            stubbedService.getAccountByIdentifier.resolves(null)
+            
+            //Act
+            await testController.loginAccount(testRequest, stubbedResponse);
+            
+            //Assert
+            sinon.assert.calledWith(stubbedResponse.status, 404);
+        });
     });
 });

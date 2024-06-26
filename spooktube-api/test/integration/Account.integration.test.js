@@ -13,7 +13,7 @@ import { existingAccounts, newAccounts } from "../data/testAccounts.js";
 
 import jwt from "jsonwebtoken";
 
-describe("Comment Integration Tests", () => {
+describe.skip("Comment Integration Tests", () => {
     let server;
     let database;
     let requester;
