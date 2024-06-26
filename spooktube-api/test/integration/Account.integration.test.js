@@ -166,5 +166,14 @@ describe("Comment Integration Tests", () => {
             assert.equal(actual.status, 200);
             assert.isOk(jwt.verify(actual.body.token, process.env.SECRET));
         });
+        
+        it("should respond 200 when authenticating with username", async () => {
+            //Act
+            const actual = await requester.post("/accounts/login").send(testLogins.withUsername);
+            
+            //Assert
+            assert.equal(actual.status, 200);
+            assert.isOk(jwt.verify(actual.body.token, process.env.SECRET));
+        });
     })
 });
