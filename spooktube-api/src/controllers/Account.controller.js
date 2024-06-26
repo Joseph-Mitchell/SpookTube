@@ -1,4 +1,3 @@
-import Account from "../models/Account.model.js";
 import Controller from "./Controller.js";
 import jwt from "jsonwebtoken";
 
