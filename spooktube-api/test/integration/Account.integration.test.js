@@ -70,5 +70,13 @@ describe("Comment Integration Tests", () => {
             //Assert
             assert.equal(actual.status, 400);
         });
+        
+        it("should respond 400 if username empty", async () => {
+            //Act
+            const actual = await requester.post("/accounts/register").send(newAccounts.emptyUsername);
+            
+            //Assert
+            assert.equal(actual.status, 400);
+        });
     })
 });
