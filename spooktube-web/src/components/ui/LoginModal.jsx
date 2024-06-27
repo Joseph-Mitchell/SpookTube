@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Modal } from "bootstrap";
 import register from "../../services/register.js";
 import { useNavigate } from "react-router-dom";
+import login from "../../services/login.js";
 
 const LoginModal = ({ loginModal, setLoginModal, setLoggedIn }) => {
     const navigate = useNavigate();
@@ -21,16 +22,45 @@ const LoginModal = ({ loginModal, setLoginModal, setLoggedIn }) => {
         setLoginModal(new Modal(document.getElementById("loginModal")));
     }, []);
 
-    function clearAll() {
+    function clearAlert() {
         document.getElementById("responseAlert").classList.add("d-none");
         setAlertColour("danger");
         setAlert("");
     }
 
-    async function login() { }
+    async function sendLogin() {
+        clearAlert();
 
-    async function signUp() {
-        clearAll();
+        if (loginIdentifier === "") {
+            document.getElementById("responseAlert").classList.remove("d-none");
+            setAlertColour("danger");
+            setAlert("Please enter your username/email");
+            return;
+        }
+
+        if (loginPassword === "") {
+            document.getElementById("responseAlert").classList.remove("d-none");
+            setAlertColour("danger");
+            setAlert("Please enter your password");
+            return;
+        }
+
+        const response = await login(loginIdentifier, loginPassword);
+
+        if (response.message) {
+            setAlert(response.message);
+            setAlertColour("danger");
+            document.getElementById("responseAlert").classList.remove("d-none");
+        } else {
+            localStorage.setItem("token", response.token);
+            setLoggedIn(true);
+            loginModal.hide();
+            navigate("/");
+        }
+    }
+
+    async function sendRegister() {
+        clearAlert();
 
         if (signUpUsername === "") {
             document.getElementById("responseAlert").classList.remove("d-none");
@@ -104,7 +134,7 @@ const LoginModal = ({ loginModal, setLoginModal, setLoggedIn }) => {
                                     />
                                     <br /><br />
                                     <div className="d-flex | justify-content-evenly | mt-3 mb-4">
-                                        <button className="btn btn-primary w-25 fs-6 text-light" type="button" onClick={login}>Log-In</button>
+                                        <button className="btn btn-primary w-25 fs-6 text-light" type="button" onClick={sendLogin}>Log-In</button>
                                     </div>
                                 </form>
                             </div>
@@ -152,7 +182,7 @@ const LoginModal = ({ loginModal, setLoginModal, setLoggedIn }) => {
                                     />
                                     <br /><br />
                                     <div className="d-flex | justify-content-evenly | mt-3 mb-4">
-                                        <button className="btn btn-outline-primary w-25 fs-6" type="button" onClick={signUp}>Sign-Up</button>
+                                        <button className="btn btn-outline-primary w-25 fs-6" type="button" onClick={sendRegister}>Sign-Up</button>
                                     </div>
                                 </form>
                             </div>
