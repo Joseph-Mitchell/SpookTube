@@ -214,5 +214,20 @@ describe("Comment Integration Tests", () => {
             //Assert
             assert.equal(actual.status, 400);
         });
+        
+        it("should respond 400 with timeCode < 0", async () => {
+            //Act
+            const actual = await requester
+                .post("/comments/post")
+                .send({
+                    comment: newComments.lowTimeCode.comment,
+                    videoId: newComments.lowTimeCode.videoId,
+                    timeCode: newComments.lowTimeCode.timeCode
+                })
+                .set("authentication", jwt.sign({ id: newComments.lowTimeCode.userId }, process.env.SECRET));
+            
+            //Assert
+            assert.equal(actual.status, 400);
+        });
     });
 });
