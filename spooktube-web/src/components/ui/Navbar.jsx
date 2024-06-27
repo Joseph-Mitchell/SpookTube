@@ -1,9 +1,7 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import LoginModal from "./LoginModal.jsx";
 
-const Navbar = ({ loggedIn, setLoggedIn }) => {
-    const navigate = useNavigate();
+const Navbar = ({ loggedIn, setLoggedIn, navigate }) => {
 
     const [logoColor, setLogoColor] = useState("bg-dark");
     const [loginModal, setLoginModal] = useState({});
@@ -16,6 +14,12 @@ const Navbar = ({ loggedIn, setLoggedIn }) => {
         setLogoColor("bg-dark");
     }
 
+    function logOut() {
+        setLoggedIn(false);
+        localStorage.removeItem("token");
+        navigate("/");
+    }
+
     return (
         <>
             <nav className="navbar vw-100 bg-body-secondary z-3">
@@ -26,6 +30,13 @@ const Navbar = ({ loggedIn, setLoggedIn }) => {
                             !loggedIn && (
                                 <li className="nav-item">
                                     <a className="btn nav-link" onClick={() => { loginModal.show(); }}>Log-In / Sign-Up</a>
+                                </li>
+                            )
+                        }
+                        {
+                            loggedIn && (
+                                <li className="nav-item">
+                                    <a className="btn nav-link" onClick={logOut}>Log-Out</a>
                                 </li>
                             )
                         }
