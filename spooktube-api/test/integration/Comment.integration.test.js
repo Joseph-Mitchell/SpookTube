@@ -139,5 +139,20 @@ describe("Comment Integration Tests", () => {
             //Assert
             assert.equal(actual.status, 401);
         });
+        
+        it("should respond 400 with empty comment", async () => {
+            //Act
+            const actual = await requester
+                .post("/comments/post")
+                .send({
+                    comment: newComments.empty.comment,
+                    videoId: newComments.empty.videoId,
+                    timeCode: newComments.empty.timeCode
+                })
+                .set("authentication", jwt.sign({ id: newComments.empty.userId }, process.env.SECRET));
+            
+            //Assert
+            assert.equal(actual.status, 400);
+        });
     });
 });
