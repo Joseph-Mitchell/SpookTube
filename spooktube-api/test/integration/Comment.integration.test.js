@@ -123,5 +123,21 @@ describe("Comment Integration Tests", () => {
             //Assert
             assert.equal(actual.status, 401);
         });
+        
+        it("should respond 401 with invalid token", async () => {
+            //Act
+            const actual = await requester
+                .post("/comments/post")
+                .send({
+                    comment: newComments.valid.comment,
+                    videoId: newComments.valid.videoId,
+                    timeCode: newComments.valid.timeCode
+                })
+                .set("authentication", { id: newComments.valid.userId });
+
+            
+            //Assert
+            assert.equal(actual.status, 401);
+        });
     });
 });
