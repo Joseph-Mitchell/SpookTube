@@ -185,7 +185,7 @@ describe("Comment Integration Tests", () => {
             assert.equal(actual.status, 400);
         });
         
-        it("should respond 400 with empty videoId", async () => {
+        it("should respond 400 with no videoId", async () => {
             //Act
             const actual = await requester
                 .post("/comments/post")
@@ -195,6 +195,21 @@ describe("Comment Integration Tests", () => {
                     timeCode: newComments.emptyVideoId.timeCode
                 })
                 .set("authentication", jwt.sign({ id: newComments.emptyVideoId.userId }, process.env.SECRET));
+            
+            //Assert
+            assert.equal(actual.status, 400);
+        });
+        
+        it("should respond 400 with empty videoId", async () => {
+            //Act
+            const actual = await requester
+                .post("/comments/post")
+                .send({
+                    comment: newComments.noVideoId.comment,
+                    videoId: newComments.noVideoId.videoId,
+                    timeCode: newComments.noVideoId.timeCode
+                })
+                .set("authentication", jwt.sign({ id: newComments.noVideoId.userId }, process.env.SECRET));
             
             //Assert
             assert.equal(actual.status, 400);
