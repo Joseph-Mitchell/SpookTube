@@ -16,7 +16,7 @@ const CommentCard = ({ comment = { userId: { username: "", icon: "placeholder" }
                 <img className="border border-4 border-dark rounded-5 mx-auto d-block" src={`icon-${comment.userId.icon}.png`} />
                 {comment.userId.username}
             </div>
-            <div className="col-9">
+            <div className="col-9 text-break">
                 {comment.comment}
             </div>
         </div>
