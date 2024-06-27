@@ -104,9 +104,24 @@ describe("Comment Integration Tests", () => {
                     timeCode: newComments.valid.timeCode
                 })
                 .set("authentication", jwt.sign({ id: newComments.valid.userId }, process.env.SECRET));
+            
             //Assert
             assert.equal(actual.status, 201);
             assert.deepEqual(actual.body.comment.comment, newComments.valid.comment);
+        });
+        
+        it("should respond 401 with no authentication header", async () => {
+            //Act
+            const actual = await requester
+                .post("/comments/post")
+                .send({
+                    comment: newComments.valid.comment,
+                    videoId: newComments.valid.videoId,
+                    timeCode: newComments.valid.timeCode
+                })
+            
+            //Assert
+            assert.equal(actual.status, 401);
         });
     });
 });
