@@ -54,5 +54,19 @@ describe("Middleware: ", () => {
             //Assert
             sinon.assert.calledWith(stubbedRes.status, 401);
         });
+                
+        it("should respond with 401 if jwt.verify had errors", () => {
+            //Arrange
+            sinon.stub(jwt, "verify").callsArgWith(2, 1, { token: 1 });
+            
+            //Act
+            AccountValidator.authenticateToken(testReq, stubbedRes, nextStub);
+            
+            //Assert
+            sinon.assert.calledWith(stubbedRes.status, 401);
+            
+            //Cleanup
+            jwt.verify.restore();
+        });
     });
 });
