@@ -33,8 +33,7 @@ export default class AccountController extends Controller {
             
             const signedToken = jwt.sign({ id: account._id.toString() }, process.env.SECRET, { expiresIn: "1 week" });
             res.status(200).json({ token: signedToken });
-        } catch (e) {
-            
+        } catch (e) {     
             res.status(500).json({ message: e.message });
         }
     }

@@ -15,7 +15,7 @@ Config.load();
 const { PORT, HOST, DB_URI } = process.env;
 
 const videoRouter = new VideoRouter(new VideoController(new VideoService())); 
-const commentRouter = new CommentRouter(new CommentController(new CommentService())); 
+const commentRouter = new CommentRouter(new CommentController(new CommentService(), new AccountService())); 
 const accountRouter = new AccountRouter(new AccountController(new AccountService())); 
 const routers = [videoRouter, commentRouter, accountRouter];
 

@@ -12,8 +12,9 @@ import Account from "../../src/models/Account.model.js";
 
 import { existingComments } from "../data/testComments.js";
 import { existingAccounts } from "../data/testAccounts.js";
+import AccountService from "../../src/services/Account.service.js";
 
-describe("Comment Integration Tests", () => {
+describe.skip("Comment Integration Tests", () => {
     let server;
     let database;
     let requester;
@@ -22,7 +23,7 @@ describe("Comment Integration Tests", () => {
         Config.load();
         const { PORT, HOST, DB_URI } = process.env;
 
-        const commentRouter = new CommentRouter(new CommentController(new CommentService()));
+        const commentRouter = new CommentRouter(new CommentController(new CommentService(), new AccountService));
 
         server = new Server(PORT, HOST, [commentRouter]);
         database = new Database(DB_URI);

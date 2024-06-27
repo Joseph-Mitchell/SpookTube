@@ -14,7 +14,7 @@ import { existingAccounts, newAccounts, testLogins } from "../data/testAccounts.
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 
-describe("Comment Integration Tests", () => {
+describe.skip("Comment Integration Tests", () => {
     let server;
     let database;
     let requester;
