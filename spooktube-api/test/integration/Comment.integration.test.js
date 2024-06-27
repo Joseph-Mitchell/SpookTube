@@ -259,5 +259,20 @@ describe("Comment Integration Tests", () => {
             //Assert
             assert.equal(actual.status, 400);
         });
+        
+        it("should respond 401 with no matching account", async () => {
+            //Act
+            const actual = await requester
+                .post("/comments/post")
+                .send({
+                    comment: newComments.noMatchingUser.comment,
+                    videoId: newComments.noMatchingUser.videoId,
+                    timeCode: newComments.noMatchingUser.timeCode
+                })
+                .set("authentication", jwt.sign({ id: newComments.noMatchingUser.userId }, process.env.SECRET));
+            
+            //Assert
+            assert.equal(actual.status, 401);
+        });
     });
 });
