@@ -274,5 +274,26 @@ describe("Comment Integration Tests", () => {
             //Assert
             assert.equal(actual.status, 401);
         });
+        
+        it("should respond 500 if database offline", async () => {
+            //Arrange
+            await database.close();
+            
+            //Act
+            const actual = await requester
+                .post("/comments/post")
+                .send({
+                    comment: newComments.valid.comment,
+                    videoId: newComments.valid.videoId,
+                    timeCode: newComments.valid.timeCode
+                })
+                .set("authentication", jwt.sign({ id: newComments.valid.userId }, process.env.SECRET));
+            
+            //Assert
+            assert.equal(actual.status, 500);
+            
+            //Clean-up
+            await database.connect();
+        });
     });
 });
