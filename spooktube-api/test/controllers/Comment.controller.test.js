@@ -114,5 +114,16 @@ describe("Comment Controller", () => {
             //Assert
             sinon.assert.calledWith(stubbedResponse.status, 401);
         });
+        
+        it("should respond with 400 if commentService.createComment resolves null", async () => {
+            //Arrange
+            stubbedCommentService.createComment.resolves(null);
+            
+            //Act
+            await testController.makeComment(testRequest, stubbedResponse);
+            
+            //Assert
+            sinon.assert.calledWith(stubbedResponse.status, 400);
+        });
     });
 });
