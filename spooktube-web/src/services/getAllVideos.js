@@ -1,23 +1,8 @@
-import axios from "axios";
+import basicService from "./basicService.js";
 
-export default async function getAllVideos(min, max) {    
-    try {
-        const apiUrl = import.meta.env.VITE_APP_BACKEND_URL;
-        
-        const response = await axios({
-            method: "get",
-            url: apiUrl + "/videos/all/" + min + "/" + max,
-        });
-
-        return response.data;
-    } catch (e) {
-        if (e.response.data) {
-            if (e.response.data.errors)
-                return { message: e.response.data.errors[0].msg };
-            else
-                return { message: e.response.data.message };
-        }
-        else
-            return { message: "Sorry, something went wrong, please try again later." };
-    }
+export default async function getAllVideos(min, max) {
+    const method = "get";
+    const url = "/videos/all/" + min + "/" + max;
+    
+    return await basicService(method, url);
 }
