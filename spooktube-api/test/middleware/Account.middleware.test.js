@@ -40,6 +40,19 @@ describe("Middleware: ", () => {
             //Assert
             sinon.assert.called(nextStub);
             assert.equal(testReq.body.userId, "75643");
+        });  
+                
+        it("should respond with 401 if no token provided in header", () => {           
+            //Arrange
+            testReq = {
+                headers: {}
+            };
+            
+            //Act
+            AccountValidator.authenticateToken(testReq, stubbedRes, nextStub);
+            
+            //Assert
+            sinon.assert.calledWith(stubbedRes.status, 401);
         });
     });
 });
