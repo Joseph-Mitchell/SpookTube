@@ -38,6 +38,11 @@ export const newComments = {
         userId: "667a088f1d6a5c44d340c587",
         timeCode: 40,
     },
+    noComment: {
+        videoId: "grhujedai",
+        userId: "667a088f1d6a5c44d340c587",
+        timeCode: 40,
+    },
     empty: {
         comment: "",
         videoId: "grhujedai",

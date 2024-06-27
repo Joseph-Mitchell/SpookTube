@@ -140,6 +140,21 @@ describe("Comment Integration Tests", () => {
             assert.equal(actual.status, 401);
         });
         
+        it("should respond 400 with no comment", async () => {
+            //Act
+            const actual = await requester
+                .post("/comments/post")
+                .send({
+                    comment: newComments.noComment.comment,
+                    videoId: newComments.noComment.videoId,
+                    timeCode: newComments.noComment.timeCode
+                })
+                .set("authentication", jwt.sign({ id: newComments.noComment.userId }, process.env.SECRET));
+            
+            //Assert
+            assert.equal(actual.status, 400);
+        });
+        
         it("should respond 400 with empty comment", async () => {
             //Act
             const actual = await requester
