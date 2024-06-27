@@ -29,3 +29,7 @@ body,
 .video-player {
     max-width: 180vh
 }
+
+#comment-list {
+    height: 90%;
+}

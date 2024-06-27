@@ -1,5 +1,5 @@
 import VideoPlayer from "./VideoPlayer.jsx";
-import CommentGrid from "../../common/CommentGrid.jsx";
+import CommentGrid from "./CommentGrid.jsx";
 import { useEffect, useState } from "react";
 import getVideoComments from "../../../services/getVideoComments.js";
 
