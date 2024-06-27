@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import Homepage from "./components/pages/Homepage/Homepage.jsx";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import Navbar from "./components/ui/Navbar.jsx";

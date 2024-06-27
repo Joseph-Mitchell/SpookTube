@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 
-const VideoPlayer = ({ setVideoHeight, videoId }) => {
+const VideoPlayer = ({ setVideoHeight, videoId, setCurrentVideoTime }) => {
     const cloudinaryRef = useRef();
     const videoRef = useRef();
 
@@ -11,6 +11,12 @@ const VideoPlayer = ({ setVideoHeight, videoId }) => {
         setVideoHeight(video.offsetHeight);
     }
 
+    function updateTime() {
+        console.log(document.getElementById("video-container").getElementsByTagName("video")[0].currentTime);
+        setCurrentVideoTime(document.getElementById("video-container").getElementsByTagName("video")[0].currentTime);
+    }
+
+    //Load video from cm
     useEffect(() => {
         const cloud_name = import.meta.env.VITE_APP_CLOUDINARY_NAME;
 
@@ -19,6 +25,7 @@ const VideoPlayer = ({ setVideoHeight, videoId }) => {
         cloudinaryRef.current.videoPlayer(videoRef.current, { cloud_name: cloud_name });
     }, []);
 
+    //
     useEffect(() => {
         const video = document.getElementById("video-container");
         setVideoHeight(video.offsetHeight * 1.8);
@@ -34,6 +41,7 @@ const VideoPlayer = ({ setVideoHeight, videoId }) => {
                 data-cld-colors='{ "base": "#000000", "accent": "#fd7e14", "text": "#fff" }'
                 data-cld-hide-context-menu="true"
                 data-cld-show-logo="false"
+                onTimeUpdate={updateTime}
             />
         </div>
     );
