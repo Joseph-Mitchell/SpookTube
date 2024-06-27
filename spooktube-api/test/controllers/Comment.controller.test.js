@@ -128,6 +128,17 @@ describe("Comment Controller", () => {
         
         it("should respond with 500 if accountService.getAccountById rejects", async () => {
             //Arrange
+            stubbedAccountService.getAccountById.rejects(new Error());
+            
+            //Act
+            await testController.makeComment(testRequest, stubbedResponse);
+            
+            //Assert
+            sinon.assert.calledWith(stubbedResponse.status, 500);
+        });
+        
+        it("should respond with 500 if commentService.createComment rejects", async () => {
+            //Arrange
             stubbedCommentService.createComment.rejects(new Error());
             
             //Act
