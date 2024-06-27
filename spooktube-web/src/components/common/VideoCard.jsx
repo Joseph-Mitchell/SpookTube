@@ -15,7 +15,7 @@ const VideoCard = ({ video }) => {
     }
 
     return (
-        <div className="col d-flex justify-content-center">
+        <div className="col-12 col-md-6 col-lg-4 d-flex justify-content-center">
             <a className="btn btn-link" onClick={goToVideo} ><img className="img rounded-4 border border-5 border-primary" src={source} /></a>
         </div>
     );
