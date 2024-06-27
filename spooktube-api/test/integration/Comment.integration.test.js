@@ -10,11 +10,13 @@ import Database from "../../src/database/Database.js";
 import Comment from "../../src/models/Comment.model.js";
 import Account from "../../src/models/Account.model.js";
 
-import { existingComments } from "../data/testComments.js";
+import { existingComments, newComments } from "../data/testComments.js";
 import { existingAccounts } from "../data/testAccounts.js";
 import AccountService from "../../src/services/Account.service.js";
 
-describe.skip("Comment Integration Tests", () => {
+import jwt from "jsonwebtoken";
+
+describe("Comment Integration Tests", () => {
     let server;
     let database;
     let requester;
@@ -88,6 +90,23 @@ describe.skip("Comment Integration Tests", () => {
             
             //Cleanup
             await database.connect();
+        });
+    });
+    
+    describe("makeComment", () => {
+        it("should respond 201 in normal circumstances", async () => {
+            //Act
+            const actual = await requester
+                .post("/comments/post")
+                .send({
+                    comment: newComments.valid.comment,
+                    videoId: newComments.valid.videoId,
+                    timeCode: newComments.valid.timeCode
+                })
+                .set("authentication", jwt.sign({ id: newComments.valid.userId }, process.env.SECRET));
+            //Assert
+            assert.equal(actual.status, 201);
+            assert.deepEqual(actual.body.comment.comment, newComments.valid.comment);
         });
     });
 });

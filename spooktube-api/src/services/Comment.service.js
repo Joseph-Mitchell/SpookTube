@@ -8,6 +8,6 @@ export default class CommentService extends Service {
     }
     
     async createComment(comment, videoId, userId, timeCode) {
-        return await Comment.create({comment: comment, videoId: videoId, userId: userId, timeCode: timeCode});
+        return (await Comment.create({comment: comment, videoId: videoId, userId: userId, timeCode: timeCode}));
     }
 }

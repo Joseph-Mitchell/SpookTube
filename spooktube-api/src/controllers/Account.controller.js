@@ -32,9 +32,9 @@ export default class AccountController extends Controller {
                 return res.status(404).json({ message: "username or password incorrect" });
             
             const signedToken = jwt.sign({ id: account._id.toString() }, process.env.SECRET, { expiresIn: "1 week" });
-            res.status(200).json({ token: signedToken });
-        } catch (e) {     
-            res.status(500).json({ message: e.message });
+            return res.status(200).json({ token: signedToken });
+        } catch (e) {      
+            return res.status(500).json({ message: e.message });
         }
     }
 }

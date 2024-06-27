@@ -30,3 +30,12 @@ export const existingComments = [
         timeCode: 57,
     }
 ];
+
+export const newComments = {
+    valid: {
+        comment: "newComment",
+        videoId: "grhujedai",
+        userId: "667a088f1d6a5c44d340c587",
+        timeCode: 40,
+    }
+}

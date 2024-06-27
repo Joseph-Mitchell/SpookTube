@@ -16,7 +16,7 @@ describe("Middleware: ", () => {
             nextStub = sinon.stub();
             testReq = {
                 headers: {
-                    "Authentication": testToken
+                    "authentication": testToken
                 },
                 body: {}
             };
