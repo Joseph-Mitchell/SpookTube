@@ -49,5 +49,11 @@ export const newComments = {
         videoId: "grhujedai",
         userId: "667a088f1d6a5c44d340c587",
         timeCode: 40,
-    }
+    },
+    emptyVideoId: {
+        comment: "newComment",
+        videoId: "",
+        userId: "667a088f1d6a5c44d340c587",
+        timeCode: 40,
+    },
 }
