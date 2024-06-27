@@ -78,7 +78,7 @@ describe("Comment Controller", () => {
             testComment = { comment: "hi", videoId: 1, userId: 1, timeCode: 5 };
             testRequest = { body: testComment };
             
-            stubbedAccountService.getAccountById.resolves(testAccount)
+            stubbedAccountService.getAccountById.resolves(testAccount);
             stubbedCommentService.createComment.resolves(testComment);
         });
         
@@ -102,6 +102,17 @@ describe("Comment Controller", () => {
                 testComment.comment, testComment.videoId, testComment.userId, testComment.timeCode);
             sinon.assert.calledWith(stubbedResponse.status, 201);
             sinon.assert.calledWith(stubbedResponse.json, { comment: testComment });
+        });
+        
+        it("should respond with 401 if accountService.getAccountById resolves null", async () => {
+            //Arrange
+            stubbedAccountService.getAccountById.resolves(null);
+            
+            //Act
+            await testController.makeComment(testRequest, stubbedResponse);
+            
+            //Assert
+            sinon.assert.calledWith(stubbedResponse.status, 401);
         });
     });
 });
