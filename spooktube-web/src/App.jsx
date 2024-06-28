@@ -4,6 +4,7 @@ import { Route, Routes, useNavigate } from "react-router-dom";
 import Navbar from "./components/ui/Navbar.jsx";
 import WatchPage from "./components/pages/Watch/WatchPage.jsx";
 import loginWithToken from "./services/loginWithToken.js";
+import UploadPage from "./components/pages/Upload/UploadPage.jsx";
 
 function App() {
     const navigate = useNavigate();
@@ -43,6 +44,12 @@ function App() {
                     path="/watch"
                     element={
                         <WatchPage loggedIn={loggedIn} />
+                    }
+                />
+                <Route
+                    path="/upload"
+                    element={
+                        <UploadPage loggedIn={loggedIn} navigate={navigate} />
                     }
                 />
             </Routes>

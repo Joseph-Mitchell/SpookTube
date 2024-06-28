@@ -34,7 +34,7 @@ const Navbar = ({ loggedIn, setLoggedIn, setUsername, icon, setIcon, navigate })
                         SPÖÖK <span className={`${logoColor} rounded-2 text-light px-3 pb-1`}>TUBE</span>
                     </a>
                     <div className="collapse collapse-horizontal ms-auto mb-lg-0 " id="navCollapse">
-                        <ul className="navbar-nav fs-5 list-group list-group-horizontal d-flex justify-content-end" style={{ width: "420px" }}>
+                        <ul className="navbar-nav fs-6 list-group list-group-horizontal d-flex justify-content-end" style={{ width: "420px" }}>
                             {
                                 !loggedIn && (
                                     <>
@@ -48,13 +48,16 @@ const Navbar = ({ loggedIn, setLoggedIn, setUsername, icon, setIcon, navigate })
                                 loggedIn && (
                                     <>
                                         <li className="nav-item list-group-item bg-transparent border-0">
-                                            <a className="btn nav-link" onClick={logOut}>Log-Out</a>
-                                        </li>
-                                        <li className="nav-item list-group-item bg-transparent border-0">
                                             <a className="btn nav-link" onClick={() => { }}>My Content</a>
                                         </li>
                                         <li className="nav-item list-group-item bg-transparent border-0">
+                                            <a className="btn nav-link" onClick={() => { navigate("/upload"); }}>Upload</a>
+                                        </li>
+                                        <li className="nav-item list-group-item bg-transparent border-0">
                                             <a className="btn nav-link" onClick={() => { }}>Profile</a>
+                                        </li>
+                                        <li className="nav-item list-group-item bg-transparent border-0">
+                                            <a className="btn nav-link" onClick={logOut}>Log-Out</a>
                                         </li>
                                     </>
                                 )

@@ -33,3 +33,7 @@ body,
 #comment-list {
     height: 90%;
 }
+
+#drop_zone {
+    height: 400px;
+}
