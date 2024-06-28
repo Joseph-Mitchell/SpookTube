@@ -143,7 +143,7 @@ describe("Account Controller", () => {
             testAccount = undefined;
         });
         
-        it("should respond with 201 in normal circumstances", async () => {
+        it("should respond with 200 in normal circumstances", async () => {
             //Act
             await testController.loginAccount(testRequest, stubbedResponse);
             
@@ -186,4 +186,43 @@ describe("Account Controller", () => {
             sinon.assert.calledWith(stubbedResponse.status, 500);
         });
     });
+    
+    describe("loginWithToken", () => {       
+        beforeEach(() => {
+            process.env.SECRET = "333BA566A25119A247F6FD4845E98";
+            
+            stubbedService = {
+                getAccountById: sinon.stub(),
+            };
+            stubbedResponse = {
+                status: sinon.stub().returnsThis(),
+                json: sinon.stub()
+            };
+            
+            testController = new AccountController(stubbedService);
+            testAccount = { _id: 1, username: "testUsername", icon: "0"};       
+            testRequest = { body: { userId: "1" } };
+            
+            stubbedService.getAccountById.resolves(testAccount);
+        });
+        
+        afterEach(() => {
+            process.env.SECRET = undefined;
+            stubbedService = undefined;
+            stubbedResponse = undefined;
+            testController = undefined;
+            testRequest = undefined;
+            testAccount = undefined;
+        });
+        
+        it("should respond with 200 in normal circumstances", async () => {
+            //Act
+            await testController.loginWithToken(testRequest, stubbedResponse);
+            
+            //Assert
+            sinon.assert.calledWith(stubbedService.getAccountById, "1");
+            sinon.assert.calledWith(stubbedResponse.status, 200);
+            assert.equal(stubbedResponse.json.getCall(0).args[0].username, testAccount.username)
+        });
+    })
 });
