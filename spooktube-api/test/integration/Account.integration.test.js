@@ -14,7 +14,7 @@ import { existingAccounts, newAccounts, testLogins } from "../data/testAccounts.
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 
-describe.skip("Comment Integration Tests", () => {
+describe("Comment Integration Tests", () => {
     let server;
     let database;
     let requester;
@@ -49,7 +49,7 @@ describe.skip("Comment Integration Tests", () => {
         try {
             let encryptedAccounts = [];
             existingAccounts.forEach((account) => {
-                account = {...account}; //Clone each account to not overwrite test data
+                account = { ...account }; //Clone each account to not overwrite test data
                 account.password = bcrypt.hashSync(account.password, 8);
                 encryptedAccounts.push(account);
             });
@@ -205,5 +205,17 @@ describe.skip("Comment Integration Tests", () => {
             //Clean-up
             await database.connect();
         });
-    })
+    });
+    
+    describe("Login With Token", () => {
+        it("should respond 200 when authenticating with email", async () => {
+            //Act
+            const actual = await requester
+                .post("/accounts/token-login")
+                .set("authentication", jwt.sign({ id: existingAccounts[0]._id }, process.env.SECRET));
+            
+            //Assert
+            assert.equal(actual.status, 200);
+        });
+    });
 });
