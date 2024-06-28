@@ -217,5 +217,15 @@ describe("Comment Integration Tests", () => {
             //Assert
             assert.equal(actual.status, 200);
         });
+                
+        it("should respond 404 with unmatching id", async () => {
+            //Act
+            const actual = await requester
+                .post("/accounts/token-login")
+                .set("authentication", jwt.sign({ id: "667a07de7ef68e8b25ffa8d9" }, process.env.SECRET));
+            
+            //Assert
+            assert.equal(actual.status, 404);
+        });
     });
 });
