@@ -2,7 +2,7 @@ import basicService from "./basicService.js";
 
 export default async function postComment(comment, videoId, timeCode, token) {
     const method = "post";
-    const url = "/comment/post/";
+    const url = "/comments/post/";
     const body = {
         comment: comment,
         videoId: videoId,
@@ -11,6 +11,6 @@ export default async function postComment(comment, videoId, timeCode, token) {
     const headers = {
         authentication: token
     }
-    
+
     return await basicService(method, url, body, headers);
 }

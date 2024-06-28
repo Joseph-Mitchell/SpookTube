@@ -4,10 +4,10 @@ import Service from "./Service.js";
 
 export default class CommentService extends Service {
     async getVideoComments(videoId) {
-        return await Comment.find({ videoId: videoId }).select("-_id comment videoId userId timeCode").populate("userId", "-_id username icon");
+        return await Comment.find({ videoId: videoId }).sort({ timeCode: 1 }).select("-_id comment videoId userId timeCode").populate("userId", "-_id username icon");
     }
     
     async createComment(comment, videoId, userId, timeCode) {
-        return (await Comment.create({comment: comment, videoId: videoId, userId: userId, timeCode: timeCode}));
+        return (await Comment.create({comment: comment, videoId: videoId, userId: userId, timeCode: timeCode})).populate("userId", "-_id username icon");
     }
 }

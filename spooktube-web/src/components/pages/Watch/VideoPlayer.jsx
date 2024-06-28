@@ -12,7 +12,6 @@ const VideoPlayer = ({ setVideoHeight, videoId, setCurrentVideoTime }) => {
     }
 
     function updateTime() {
-        console.log(document.getElementById("video-container").getElementsByTagName("video")[0].currentTime);
         setCurrentVideoTime(document.getElementById("video-container").getElementsByTagName("video")[0].currentTime);
     }
 

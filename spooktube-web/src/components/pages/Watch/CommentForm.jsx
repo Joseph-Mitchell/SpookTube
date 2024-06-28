@@ -1,8 +1,18 @@
-const CommentForm = () => {
+const CommentForm = ({ newComment, setNewComment, sendComment }) => {
     return (
         <form className="d-flex mt-3">
-            <input className="form-control ms-3" type="text" />
-            <input className="btn btn-primary text-light mx-4" type="submit" />
+            <input
+                className="form-control ms-1"
+                type="text"
+                value={newComment}
+                onChange={(e) => { setNewComment(e.target.value); }}
+            />
+            <input
+                className="btn btn-primary text-light ms-3 me-4"
+                type="button"
+                value="Post"
+                onClick={sendComment}
+            />
         </form>
     );
 };

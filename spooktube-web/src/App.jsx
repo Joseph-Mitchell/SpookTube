@@ -7,6 +7,8 @@ import WatchPage from "./components/pages/Watch/WatchPage.jsx";
 function App() {
     const navigate = useNavigate();
     const [loggedIn, setLoggedIn] = useState(false);
+    const [userName, setUserName] = useState("");
+    const [icon, setIcon] = useState("");
 
     return (
         <>
