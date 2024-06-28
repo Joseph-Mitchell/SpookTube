@@ -224,5 +224,16 @@ describe("Account Controller", () => {
             sinon.assert.calledWith(stubbedResponse.status, 200);
             assert.equal(stubbedResponse.json.getCall(0).args[0].username, testAccount.username)
         });
+        
+        it("should respond with 404 if getAccountById resolves null", async () => {
+            //Arrange
+            stubbedService.getAccountById.resolves(null);
+            
+            //Act
+            await testController.loginWithToken(testRequest, stubbedResponse);
+            
+            //Assert
+            sinon.assert.calledWith(stubbedResponse.status, 404);
+        });
     })
 });
