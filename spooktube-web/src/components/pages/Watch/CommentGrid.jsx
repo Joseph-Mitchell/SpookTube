@@ -6,10 +6,11 @@ import CommentForm from "./CommentForm.jsx";
 import getVideoComments from "../../../services/getVideoComments.js";
 import postComment from "../../../services/postComment.js";
 
-const CommentGrid = ({ videoHeight, currentVideoTime, videoId }) => {
+const CommentGrid = ({ videoHeight, currentVideoTime, videoId, loggedIn }) => {
     const [comments, setComments] = useState([]);
     const [newComment, setNewComment] = useState("");
     const [commentList, setCommentList] = useState([]);
+    const oldScrollHeight = useRef(0);
 
     async function loadComments() {
         let loadedData = await getVideoComments(videoId);
@@ -23,6 +24,7 @@ const CommentGrid = ({ videoHeight, currentVideoTime, videoId }) => {
         comments.sort(sortCommentList);
         setComments(comments);
 
+        setNewComment("");
         populateCommentList();
     }
 
@@ -49,24 +51,32 @@ const CommentGrid = ({ videoHeight, currentVideoTime, videoId }) => {
         populateCommentList();
     }, []);
 
+    //Lock comment section height to video height
     useEffect(() => {
         document.getElementById("comment-section").style.height = videoHeight + "px";
     }, [videoHeight]);
 
+    //Refresh comments on video time change and auto scroll to bottom
     useEffect(() => {
+        const commentListHolder = document.getElementById("comment-list");
+        const scrollPos = commentListHolder.scrollTop;
+
         populateCommentList();
 
-        const commentListHolder = document.getElementById("comment-list");
-        commentListHolder.scrollTo(0, commentListHolder.scrollHeight);
+        if (scrollPos === oldScrollHeight.current - commentListHolder.offsetHeight)
+            commentListHolder.scrollTo(0, commentListHolder.scrollHeight);
+
+        oldScrollHeight.current = commentListHolder.scrollHeight;
     }, [currentVideoTime]);
 
     return (
         <div id="comment-section" className="p-0">
             <div id="comment-list" className="overflow-y-scroll w-100">
                 {commentList}
-                {console.log("render", commentList)}
             </div>
-            <CommentForm newComment={newComment} setNewComment={setNewComment} sendComment={sendComment} />
+            {
+                loggedIn && (<CommentForm newComment={newComment} setNewComment={setNewComment} sendComment={sendComment} />)
+            }
         </div>
     );
 };

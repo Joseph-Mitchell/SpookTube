@@ -1,10 +1,10 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Modal } from "bootstrap";
 import register from "../../services/register.js";
 import { useNavigate } from "react-router-dom";
 import login from "../../services/login.js";
 
-const LoginModal = ({ loginModal, setLoginModal, setLoggedIn }) => {
+const LoginModal = ({ loginModal, setLoginModal, setLoggedIn, setUsername, setIcon }) => {
     const navigate = useNavigate();
 
     const [loginIdentifier, setLoginIdentifier] = useState("");
@@ -28,34 +28,52 @@ const LoginModal = ({ loginModal, setLoginModal, setLoggedIn }) => {
         setAlert("");
     }
 
+    function clearForm() {
+        setLoginIdentifier("");
+        setLoginPassword("");
+        setSignUpUsername("");
+        setSignUpEmail("");
+        setSignUpConfirmEmail("");
+        setSignUpPassword("");
+    }
+
+    function applyLogin(response) {
+        clearForm();
+
+        localStorage.setItem("token", response.token);
+        setLoggedIn(true);
+        setUsername(response.username);
+        setIcon(response.icon);
+
+        loginModal.hide();
+        navigate("/");
+    }
+
+    function showAlert(message) {
+        document.getElementById("responseAlert").classList.remove("d-none");
+        setAlertColour("danger");
+        setAlert(message);
+    }
+
     async function sendLogin() {
         clearAlert();
 
         if (loginIdentifier === "") {
-            document.getElementById("responseAlert").classList.remove("d-none");
-            setAlertColour("danger");
-            setAlert("Please enter your username/email");
+            showAlert("Please enter your username/email");
             return;
         }
 
         if (loginPassword === "") {
-            document.getElementById("responseAlert").classList.remove("d-none");
-            setAlertColour("danger");
-            setAlert("Please enter your password");
+            showAlert("Please enter your password");
             return;
         }
 
         const response = await login(loginIdentifier, loginPassword);
 
         if (response.message) {
-            setAlert(response.message);
-            setAlertColour("danger");
-            document.getElementById("responseAlert").classList.remove("d-none");
+            showAlert(response.message);
         } else {
-            localStorage.setItem("token", response.token);
-            setLoggedIn(true);
-            loginModal.hide();
-            navigate("/");
+            applyLogin(response);
         }
     }
 
@@ -63,44 +81,31 @@ const LoginModal = ({ loginModal, setLoginModal, setLoggedIn }) => {
         clearAlert();
 
         if (signUpUsername === "") {
-            document.getElementById("responseAlert").classList.remove("d-none");
-            setAlertColour("danger");
-            setAlert("Please enter a username");
+            showAlert("Please enter a username");
             return;
         }
 
         if (signUpEmail === "") {
-            document.getElementById("responseAlert").classList.remove("d-none");
-            setAlertColour("danger");
-            setAlert("Please enter an email");
+            showAlert("Please enter an email");
             return;
         }
 
         if (signUpPassword === "") {
-            document.getElementById("responseAlert").classList.remove("d-none");
-            setAlertColour("danger");
-            setAlert("Please enter a password");
+            showAlert("Please enter a password");
             return;
         }
 
         if (signUpEmail !== signUpConfirmEmail) {
-            document.getElementById("responseAlert").classList.remove("d-none");
-            setAlertColour("danger");
-            setAlert("Emails do not match");
+            showAlert("Emails do not match");
             return;
         }
 
         const response = await register(signUpEmail, signUpUsername, signUpPassword);
 
         if (response.message) {
-            setAlert(response.message);
-            setAlertColour("danger");
-            document.getElementById("responseAlert").classList.remove("d-none");
+            showAlert(response.message);
         } else {
-            localStorage.setItem("token", response.token);
-            setLoggedIn(true);
-            loginModal.hide();
-            navigate("/");
+            applyLogin(response);
         }
     }
 
@@ -145,7 +150,7 @@ const LoginModal = ({ loginModal, setLoginModal, setLoggedIn }) => {
                                     <input
                                         id="signUpUsername"
                                         className="mb-4 py-1 px-2 w-75 | border border-1 rounded border-dark-subtle"
-                                        type="email"
+                                        type="text"
                                         placeholder="username"
                                         value={signUpUsername}
                                         onChange={(e) => { setSignUpUsername(e.target.value); }}

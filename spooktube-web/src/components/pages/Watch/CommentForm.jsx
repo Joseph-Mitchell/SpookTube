@@ -1,6 +1,6 @@
 const CommentForm = ({ newComment, setNewComment, sendComment }) => {
     return (
-        <form className="d-flex mt-3">
+        <form className="d-flex mt-3" onSubmit={(e) => { e.preventDefault(); }}>
             <input
                 className="form-control ms-1"
                 type="text"

@@ -1,6 +1,6 @@
 import basicService from "./basicService.js";
 
-export default async function login(token) {
+export default async function loginWithToken(token) {
     const method = "post";
     const url = "/accounts/token-login";
     const headers = {
