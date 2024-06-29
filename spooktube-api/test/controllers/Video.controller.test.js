@@ -168,5 +168,17 @@ describe("Controller", () => {
             //Assert
             sinon.assert.calledOnceWithExactly(stubbedResponse.status, 500);
         });
+        
+        it("should call res.status with 500 if service.createVideo resolves null", async () => {
+            //Arrange
+            stubbedVideoService.createVideo.resolves(null);
+            
+            //Act
+            await testController.uploadVideo(testRequest, stubbedResponse);
+            
+            //Assert
+            sinon.assert.calledWith(stubbedContentManagerService.deleteVideo, testUploadResult.public_id);
+            sinon.assert.calledOnceWithExactly(stubbedResponse.status, 500);
+        });
     });
 });
