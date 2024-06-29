@@ -1,14 +1,19 @@
-import Controller from "./Controller.js";
-
-export default class VideoController extends Controller {
+export default class VideoController {
+    
+    #videoService;
+    
+    constructor(videoService) {
+        this.#videoService = videoService;
+    }
+    
     async getAllVideos(req, res) {
         try {
             const VIDEOS_PER_PAGE = 18;
             
-            const count = await this._service.getVideosCount();
+            const count = await this.#videoService.getVideosCount();
             const pages = Math.floor(count / VIDEOS_PER_PAGE) + 1;
             
-            const videos = await this._service.getAllVideos();
+            const videos = await this.#videoService.getAllVideos();
 
             let response = []
             for (let i = Math.max(req.params.rangeMin, 0); (i < videos.length) && (i < req.params.rangeMax); i++) {

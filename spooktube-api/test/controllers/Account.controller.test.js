@@ -16,8 +16,7 @@ describe("Account Controller", () => {
             process.env.SECRET = "333BA566A25119A247F6FD4845E98";
             
             stubbedService = {
-                getAccountByEmail: sinon.stub(),
-                getAccountByUsername: sinon.stub(),
+                getAccountByIdentifier: sinon.stub(),
                 createAccount: sinon.stub()
             };
             stubbedResponse = {
@@ -29,8 +28,7 @@ describe("Account Controller", () => {
             testAccount = { _id: 1, username: "testUsername", email: "test@email.com", password: "testPass" };       
             testRequest = { body: testAccount };
             
-            stubbedService.getAccountByEmail.resolves(null);
-            stubbedService.getAccountByUsername.resolves(null);
+            stubbedService.getAccountByIdentifier.resolves(null);
             stubbedService.createAccount.resolves(testAccount);
         });
         
@@ -48,16 +46,15 @@ describe("Account Controller", () => {
             await testController.registerAccount(testRequest, stubbedResponse);
             
             //Assert
-            sinon.assert.calledWith(stubbedService.getAccountByEmail, testAccount.email);
-            sinon.assert.calledWith(stubbedService.getAccountByUsername, testAccount.username);
+            sinon.assert.calledWith(stubbedService.getAccountByIdentifier, testAccount.email);
             sinon.assert.calledWith(stubbedService.createAccount, testAccount.email, testAccount.username, testAccount.password);
             sinon.assert.calledWith(stubbedResponse.status, 201);
             assert.equal(jwt.verify(stubbedResponse.json.getCall(0).args[0].token, process.env.SECRET).id, testAccount._id)
         });
                 
-        it("should respond with 409 if getAccountByEmail doesn't resolve null", async () => {
+        it("should respond with 409 if getAccountByIdentifier doesn't resolve null", async () => {
             //Arrange
-            stubbedService.getAccountByEmail.resolves({});
+            stubbedService.getAccountByIdentifier.resolves({});
             
             //Act
             await testController.registerAccount(testRequest, stubbedResponse);
@@ -66,31 +63,9 @@ describe("Account Controller", () => {
             sinon.assert.calledWith(stubbedResponse.status, 409);
         });
         
-        it("should respond with 409 if getAccountByUsername doesn't resolve null", async () => {
+        it("should respond with 500 if getAccountByIdentifier rejects", async () => {
             //Arrange
-            stubbedService.getAccountByUsername.resolves({});
-            
-            //Act
-            await testController.registerAccount(testRequest, stubbedResponse);
-            
-            //Assert
-            sinon.assert.calledWith(stubbedResponse.status, 409);
-        });
-        
-        it("should respond with 500 if getAccountByEmail rejects", async () => {
-            //Arrange
-            stubbedService.getAccountByEmail.rejects(new Error());
-            
-            //Act
-            await testController.registerAccount(testRequest, stubbedResponse);
-            
-            //Assert
-            sinon.assert.calledWith(stubbedResponse.status, 500);
-        });
-        
-        it("should respond with 500 if getAccountByUsername rejects", async () => {
-            //Arrange
-            stubbedService.getAccountByUsername.rejects(new Error());
+            stubbedService.getAccountByIdentifier.rejects(new Error());
             
             //Act
             await testController.registerAccount(testRequest, stubbedResponse);

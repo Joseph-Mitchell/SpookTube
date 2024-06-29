@@ -1,21 +1,27 @@
-import Controller from "./Controller.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 
-export default class AccountController extends Controller { 
+export default class AccountController { 
+    
+    #accountService
+    
+    constructor(accountService) {
+        this.#accountService = accountService;
+    }
+    
     async registerAccount(req, res) {
         try {
-            const existingEmailAccount = await this._service.getAccountByEmail(req.body.email);
+            const existingEmailAccount = await this.#accountService.getAccountByIdentifier(req.body.email);
             
             if (existingEmailAccount !== null)
                 return res.status(409).json({ message: "An account with this email already exists" });
             
-            const existingUsernameAccount = await this._service.getAccountByUsername(req.body.username);
+            const existingUsernameAccount = await this.#accountService.getAccountByIdentifier(req.body.username);
     
             if (existingUsernameAccount !== null)
                 return res.status(409).json({ message: "An account with this username already exists" });
             
-            const newAccount = await this._service.createAccount(req.body.email, req.body.username, req.body.password)
+            const newAccount = await this.#accountService.createAccount(req.body.email, req.body.username, req.body.password)
             const signedToken = jwt.sign({ id: newAccount._id.toString() }, process.env.SECRET, { expiresIn: "1 week" });
             return res.status(201).json({ token: signedToken, username: newAccount.username, icon: newAccount.icon });
         } catch (e) {
@@ -25,7 +31,7 @@ export default class AccountController extends Controller {
     
     async loginAccount(req, res) {
         try {
-            const account = await this._service.getAccountByIdentifier(req.body.identifier);
+            const account = await this.#accountService.getAccountByIdentifier(req.body.identifier);
                     
             if (account === null || !bcrypt.compareSync(req.body.password, account.password))
                 return res.status(404).json({ message: "username or password incorrect" });
@@ -39,7 +45,7 @@ export default class AccountController extends Controller {
     
     async loginWithToken(req, res) {
         try {
-            const account = await this._service.getAccountById(req.body.userId);
+            const account = await this.#accountService.getAccountById(req.body.userId);
                     
             if (account === null)
                 return res.status(404).json({ message: "No account with this id" });

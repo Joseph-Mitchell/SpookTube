@@ -1,17 +1,15 @@
-import Controller from "./Controller.js";
-
-export default class CommentController extends Controller { 
-    #accountService
+export default class CommentController { 
+    #commentService;
+    #accountService;
     
     constructor(commentService, accountService) {
-        super(commentService);
-        
+        this.#commentService = commentService;        
         this.#accountService = accountService;
     }
     
     async getVideoComments(req, res) {
         try {
-            const comments = await this._service.getVideoComments(req.params.videoId);
+            const comments = await this.#commentService.getVideoComments(req.params.videoId);
 
             const mapped = comments.map((comment) => {
                 return comment._doc;
@@ -31,7 +29,7 @@ export default class CommentController extends Controller {
                 return res.status(401).json({ message: "No matching account found" });
             }
             
-            const newComment = await this._service.createComment(
+            const newComment = await this.#commentService.createComment(
                 req.body.comment,
                 req.body.videoId,
                 req.body.userId,

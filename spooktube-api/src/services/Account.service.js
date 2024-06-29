@@ -1,22 +1,13 @@
 import * as bcrypt from "bcrypt"
 import Account from "../models/Account.model.js";
-import Service from "./Service.js";
 
-export default class AccountService extends Service {
+export default class AccountService {
     async getAccountById(id) {
         return await Account.findById(id);
     }
     
     async getAccountByIdentifier(identifier) {
         return await Account.findOne({ $or: [{ email: identifier }, { username: identifier }]});
-    }
-    
-    async getAccountByEmail(email) {
-                return await Account.findOne({ email: email });
-    }
-    
-    async getAccountByUsername(username) {
-                return await Account.findOne({ username: username });
     }
     
     async createAccount(email, username, password) {
