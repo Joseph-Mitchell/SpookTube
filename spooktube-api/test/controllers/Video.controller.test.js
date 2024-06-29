@@ -157,5 +157,16 @@ describe("Controller", () => {
             sinon.assert.calledWith(stubbedVideoService.createVideo, testUploadResult.public_id);
             sinon.assert.calledOnceWithExactly(stubbedResponse.status, 201);
         });
+        
+        it("should call res.status with 500 if service.uploadVideo resolves without public_id field", async () => {
+            //Arrange
+            testUploadResult.public_id = undefined;
+            
+            //Act
+            await testController.uploadVideo(testRequest, stubbedResponse);
+            
+            //Assert
+            sinon.assert.calledOnceWithExactly(stubbedResponse.status, 500);
+        });
     });
 });
