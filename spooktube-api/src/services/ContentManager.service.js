@@ -9,4 +9,8 @@ export default class ContentManagerService {
             overwrite: false
         });
     }
+    
+    async deleteVideo(videoId) {
+        return await cloudinary.uploader.destroy(videoId, { resource_type: "video" })
+    }
 }
