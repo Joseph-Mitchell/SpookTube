@@ -1,9 +1,11 @@
 export default class VideoController {
     
     #videoService;
+    #contentManagerService
     
-    constructor(videoService) {
+    constructor(videoService, contentManagerService) {
         this.#videoService = videoService;
+        this.#contentManagerService = contentManagerService;
     }
     
     async getAllVideos(req, res) {
@@ -22,6 +24,27 @@ export default class VideoController {
             }
 
             return res.status(200).json({ videos: response, pages: pages });
+        } catch (e) {
+            return res.status(500).json({ message: e.message });
+        }
+    }
+    
+    async uploadVideo(req, res) {
+        try {
+            const result = await this.#contentManagerService.uploadVideo(req.body.videoFile);
+            
+            if (!result.public_id) {
+                return res.status(500).json({ message: "Content Manager not available" });
+            }
+            
+            const newVideo = await this.#videoService.createVideo(result.public_id, req.body.userId);
+            
+            if (newVideo === null) {
+                await this.#contentManagerService.deleteVideo(result.public_id);
+                return res.status(500).json({ message: "Server Error" });
+            }
+            
+            return res.status(201).json({ videoId: result.public_id });
         } catch (e) {
             return res.status(500).json({ message: e.message });
         }

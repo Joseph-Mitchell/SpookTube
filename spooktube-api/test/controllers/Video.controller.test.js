@@ -1,16 +1,16 @@
 import sinon from "sinon";
 import VideoController from "../../src/controllers/Video.controller.js";
 
-describe("Controller", () => {
-    let stubbedService;
-    let stubbedResponse;
-    let testController;
-    let testRequest;
-    let testDate;
-    let testVideos;
-    let testResponseVideos;
-    
+describe("Controller", () => {    
     describe("getAllVideos", () => {
+        let stubbedService;
+        let stubbedResponse;
+        let testController;
+        let testRequest;
+        let testDate;
+        let testVideos;
+        let testResponseVideos;
+        
         beforeEach(() => {
             stubbedService = { getAllVideos: sinon.stub(), getVideosCount: sinon.stub() };
             stubbedResponse = { status: sinon.stub().returnsThis(), json: sinon.stub() };
@@ -109,6 +109,53 @@ describe("Controller", () => {
             
             //Assert
             sinon.assert.calledOnceWithExactly(stubbedResponse.status, 500);
+        });
+    });
+    
+    describe("uploadVideo", () => {
+        let stubbedContentManagerService;
+        let stubbedVideoService;
+        let stubbedResponse;
+        let testRequest;
+        let testController;
+        let testDate;
+        let testUploadResult;
+        let testNewVideo;
+        
+        beforeEach(() => {
+            stubbedContentManagerService = { uploadVideo: sinon.stub(), deleteVideo: sinon.stub() };
+            stubbedVideoService = { createVideo: sinon.stub() };
+            stubbedResponse = { status: sinon.stub().returnsThis(), json: sinon.stub() };
+            
+            testController = new VideoController(stubbedVideoService, stubbedContentManagerService);
+            testRequest = { body: { userId: 1, videoFile: "hbfdigsnijk" } };        
+            testDate = Date.now();
+            testUploadResult = { public_id: "gfrd" };
+            testNewVideo = {};
+            
+            stubbedContentManagerService.uploadVideo.resolves(testUploadResult);
+            stubbedVideoService.createVideo.resolves(testNewVideo);
+        });
+        
+        afterEach(() => {
+            stubbedContentManagerService = undefined;
+            stubbedVideoService = undefined;
+            stubbedResponse = undefined;
+            testRequest = undefined;
+            testController = undefined;
+            testDate = undefined;
+            testUploadResult = undefined;
+            testNewVideo = undefined;
+        });
+        
+        it("should call res.status with 201 in normal circumstances", async () => {
+            //Act
+            await testController.uploadVideo(testRequest, stubbedResponse);
+            
+            //Assert
+            sinon.assert.calledWith(stubbedContentManagerService.uploadVideo, testRequest.body.videoFile);
+            sinon.assert.calledWith(stubbedVideoService.createVideo, testUploadResult.public_id);
+            sinon.assert.calledOnceWithExactly(stubbedResponse.status, 201);
         });
     });
 });

@@ -5,7 +5,6 @@ export default class ContentManagerService {
         return await cloudinary.uploader.upload(videoFile, {
             resource_type: "video",
             use_filename: false,
-            unique_filename: true,
             overwrite: false
         });
     }
