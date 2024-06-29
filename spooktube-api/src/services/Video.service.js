@@ -8,4 +8,8 @@ export default class VideoService {
     async getVideosCount() {
         return await Video.find({}).estimatedDocumentCount();
     }
+    
+    async createVideo(videoId, userId) {
+        return await Video.create({ videoId: videoId, userId: userId });
+    }
 }
