@@ -12,14 +12,16 @@ export default class ContentManagerService {
             }, {
                 resource_type: "video",
                 use_filename: false,
-                overwrite: false
+                overwrite: false,
+                folder: process.env.CLOUDINARY_FOLDER
             }).end(Buffer.from(dataUriToBuffer(videoFile).buffer));
         });
     }
     
     async deleteVideo(videoId) {
-        return await cloudinary.uploader.destroy(videoId, {
+        return await cloudinary.v2.uploader.destroy(videoId, {
             resource_type: "video",
+            folder: process.env.CLOUDINARY_FOLDER
         });
     }
 }
