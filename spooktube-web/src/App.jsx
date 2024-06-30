@@ -18,9 +18,9 @@ function App() {
             localStorage.removeItem("token");
         }
         else {
-            setLoggedIn(true);
-            setUsername(response.username);
-            setIcon(response.icon);
+            await setLoggedIn(true);
+            await setUsername(response.username);
+            await setIcon(response.icon);
         }
     }
 

@@ -24,7 +24,7 @@ const Navbar = ({ loggedIn, setLoggedIn, setUsername, icon, setIcon, navigate })
 
     return (
         <>
-            <nav className="navbar vw-100 bg-body-secondary z-3">
+            <nav className="navbar w-100 bg-body-secondary z-3">
                 <div className="container-fluid">
                     <a className="btn btn-link navbar-brand fs-2"
                         onClick={() => navigate("/")}

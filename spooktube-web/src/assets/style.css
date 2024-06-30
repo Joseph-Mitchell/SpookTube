@@ -16,12 +16,6 @@
     }
 }
 
-html,
-body,
-#root {
-    height: 100vh
-}
-
 #root {
     background-color: rgb(215, 215, 215);
 }
@@ -34,6 +28,12 @@ body,
     height: 90%;
 }
 
-#drop_zone {
+#drop-zone {
     height: 400px;
+    width: 400px;
+}
+
+#drop-spinner {
+    width: 5rem;
+    height: 5rem;
 }

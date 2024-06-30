@@ -10,11 +10,12 @@ import CommentService from './services/Comment.service.js';
 import AccountRouter from './routers/Account.router.js';
 import AccountController from './controllers/Account.controller.js';
 import AccountService from './services/Account.service.js';
+import ContentManagerService from './services/ContentManager.service.js';
 
 Config.load();
 const { PORT, HOST, DB_URI } = process.env;
 
-const videoRouter = new VideoRouter(new VideoController(new VideoService())); 
+const videoRouter = new VideoRouter(new VideoController(new VideoService(), new ContentManagerService())); 
 const commentRouter = new CommentRouter(new CommentController(new CommentService(), new AccountService())); 
 const accountRouter = new AccountRouter(new AccountController(new AccountService())); 
 const routers = [videoRouter, commentRouter, accountRouter];
