@@ -9,9 +9,15 @@ import Server from "../../src/server/Server.js";
 import Database from "../../src/database/Database.js";
 import Video from "../../src/models/Video.model.js";
 
-import { existingVideos } from "../data/testVideos.js";
+import jwt from "jsonwebtoken";
 
-describe.skip("Video Integration Tests", () => {
+import { existingVideos } from "../data/testVideos.js";
+import { existingAccounts } from "../data/testAccounts.js";
+import ContentManagerService from "../../src/services/ContentManager.service.js";
+
+import fs from "node:fs/promises";
+
+describe("Video Integration Tests", () => {
     let server;
     let database;
     let requester;
@@ -20,7 +26,7 @@ describe.skip("Video Integration Tests", () => {
         Config.load();
         const { PORT, HOST, DB_URI } = process.env;
 
-        const videoRouter = new VideoRouter(new VideoController(new VideoService()));
+        const videoRouter = new VideoRouter(new VideoController(new VideoService(), new ContentManagerService()));
 
         server = new Server(PORT, HOST, [videoRouter]);
         database = new Database(DB_URI);
@@ -111,6 +117,27 @@ describe.skip("Video Integration Tests", () => {
             
             //Cleanup
             await database.connect();
+        });
+    });
+    
+    describe("uploadVideo", () => {
+        it.skip("should respond 201 in normal circumstances", async () => {
+            //Arrange
+            const file = await fs.readFile("test/data/videos/test.webm", { encoding: "base64url" });
+            const dataUri = "data:video/webm;base64," + file;
+            
+            //Act
+            const actual = await requester
+                .get("/videos/post")
+                .send({ videoFile: dataUri })
+                .set("authentication", jwt.sign({ id: existingAccounts[0]._id }, process.env.SECRET));
+            
+            //Assert
+            assert.equal(actual.status, 201);
+            
+            //Clean-Up
+            // const cms = new ContentManagerService();
+            // console.log(await cms.deleteVideo("cbiehlehm2ymflehneep"));
         });
     });
 });

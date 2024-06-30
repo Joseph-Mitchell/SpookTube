@@ -32,11 +32,11 @@ export default class VideoController {
     async uploadVideo(req, res) {
         try {
             const result = await this.#contentManagerService.uploadVideo(req.body.videoFile);
-            
+
             if (!result.public_id) {
                 return res.status(500).json({ message: "Content Manager not available" });
             }
-            
+
             const newVideo = await this.#videoService.createVideo(result.public_id, req.body.userId);
             
             if (newVideo === null) {
