@@ -120,7 +120,7 @@ describe("Video Integration Tests", () => {
         });
     });
     
-    describe("uploadVideo", () => {
+    describe("Upload Video", () => {
         it.skip("should respond 201 in normal circumstances", async () => {
             //Arrange
             const file = await fs.readFile("test/data/videos/test.webm", { encoding: "base64url" });
@@ -138,6 +138,20 @@ describe("Video Integration Tests", () => {
             //Clean-Up
             // const cms = new ContentManagerService();
             // console.log(await cms.deleteVideo("cbiehlehm2ymflehneep"));
+        });
+        
+        it("should respond 500 with invalid file", async () => {
+            //Arrange
+            const file = "hello:)";
+            
+            //Act
+            const actual = await requester
+                .get("/videos/post")
+                .send({ videoFile: file })
+                .set("authentication", jwt.sign({ id: existingAccounts[0]._id }, process.env.SECRET));
+            
+            //Assert
+            assert.equal(actual.status, 500);
         });
     });
 });
