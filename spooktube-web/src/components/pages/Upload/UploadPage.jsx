@@ -42,6 +42,7 @@ const UploadPage = ({ loggedIn, navigate }) => {
         fileReader.removeEventListener("load", fileLoaded);
 
         const file = fileReader.result;
+
         const video = document.getElementById("upload-video");
 
         video.addEventListener("loadedmetadata", metaDataLoaded);
@@ -63,7 +64,8 @@ const UploadPage = ({ loggedIn, navigate }) => {
         e.target.load();
 
         document.getElementById("drop_zone").classList.add("d-none");
-        e.target.classList.remove("d-none");
+        document.getElementById("upload-video").classList.remove("d-none");
+        document.getElementById("upload-button").classList.remove("d-none");
     }
 
     function fileHovering(e) {
@@ -96,6 +98,7 @@ const UploadPage = ({ loggedIn, navigate }) => {
                     <p className={`user-select-none fs-4 text-${dropZoneColour} text-center`} >{dropZoneText}</p>
                 </div>
                 <video id="upload-video" className="mx-auto w-100 d-none" controls />
+                <button id="upload-button" className="btn btn-primary btn-lg text-light mt-4 w-25 mx-auto d-none">Upload</button>
             </form>
         </div>
     );
