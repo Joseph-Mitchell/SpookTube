@@ -122,22 +122,22 @@ describe("Video Integration Tests", () => {
     
     describe("Upload Video", () => {
         it.skip("should respond 201 in normal circumstances", async () => {
-            //Arrange
-            const file = await fs.readFile("test/data/videos/test.webm", { encoding: "base64url" });
-            const dataUri = "data:video/webm;base64," + file;
+            // //Arrange
+            // const file = await fs.readFile("test/data/videos/test.webm", { encoding: "base64url" });
+            // const dataUri = "data:video/webm;base64," + file;
             
-            //Act
-            const actual = await requester
-                .get("/videos/post")
-                .send({ videoFile: dataUri })
-                .set("authentication", jwt.sign({ id: existingAccounts[0]._id }, process.env.SECRET));
+            // //Act
+            // const actual = await requester
+            //     .get("/videos/post")
+            //     .send({ videoFile: dataUri })
+            //     .set("authentication", jwt.sign({ id: existingAccounts[0]._id }, process.env.SECRET));
             
-            //Assert
-            assert.equal(actual.status, 201);
+            // //Assert
+            // assert.equal(actual.status, 201);
             
             //Clean-Up
-            // const cms = new ContentManagerService();
-            // console.log(await cms.deleteVideo("cbiehlehm2ymflehneep"));
+            const cms = new ContentManagerService();
+            console.log(await cms.deleteVideo("cbiehlehm2ymflehneep"));
         });
         
         it("should respond 500 with invalid file", async () => {
@@ -152,6 +152,25 @@ describe("Video Integration Tests", () => {
             
             //Assert
             assert.equal(actual.status, 500);
+        });
+        
+        it("should respond 500 if database is offline", async () => {
+            //Arrange
+            await database.close();
+            const file = await fs.readFile("test/data/videos/test.webm", { encoding: "base64url" });
+            const dataUri = "data:video/webm;base64," + file;
+            
+            //Act
+            const actual = await requester
+                .get("/videos/post")
+                .send({ videoFile: file })
+                .set("authentication", jwt.sign({ id: existingAccounts[0]._id }, process.env.SECRET));
+            
+            //Assert
+            assert.equal(actual.status, 500);
+            
+            //Cleanup
+            await database.connect();
         });
     });
 });
