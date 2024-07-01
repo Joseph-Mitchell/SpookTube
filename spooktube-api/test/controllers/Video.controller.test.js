@@ -197,6 +197,18 @@ describe("Controller", () => {
             sinon.assert.calledOnceWithExactly(stubbedResponse.status, 200);
             sinon.assert.calledWith(stubbedResponse.json, { videos: testResponseVideos, pages: 1 });
         });
+                     
+        it("should respond with expected array when req.params.rangeMin < Zero", async () => {
+            //Arrange
+            testRequest.params.rangeMin = -5;
+            
+            //Act
+            await testController.getUserVideos(testRequest, stubbedResponse);
+            
+            //Assert
+            sinon.assert.calledOnceWithExactly(stubbedResponse.status, 200);
+            sinon.assert.calledWith(stubbedResponse.json, { videos: testResponseVideos, pages: 1 });
+        });
     });
     
     describe("uploadVideo", () => {
