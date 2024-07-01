@@ -5,10 +5,12 @@ import Navbar from "./components/ui/Navbar.jsx";
 import WatchPage from "./components/pages/Watch/WatchPage.jsx";
 import loginWithToken from "./services/loginWithToken.js";
 import UploadPage from "./components/pages/Upload/UploadPage.jsx";
+import MyContentPage from "./components/pages/My Content/MyContentPage.jsx";
 
 function App() {
     const navigate = useNavigate();
     const [loggedIn, setLoggedIn] = useState(false);
+    const [loginFinished, setLoginFinished] = useState(false);
     const [username, setUsername] = useState("");
     const [icon, setIcon] = useState("default");
 
@@ -22,12 +24,17 @@ function App() {
             await setUsername(response.username);
             await setIcon(response.icon);
         }
+        setLoginFinished(true);
     }
 
     useEffect(() => {
         const token = localStorage.getItem("token");
+
         if (token !== null)
             sendLoginWithToken(token);
+        else
+            setLoginFinished(true);
+
     }, []);
 
     return (
@@ -49,7 +56,13 @@ function App() {
                 <Route
                     path="/upload"
                     element={
-                        <UploadPage loggedIn={loggedIn} navigate={navigate} />
+                        <UploadPage loggedIn={loggedIn} loginFinished={loginFinished} navigate={navigate} />
+                    }
+                />
+                <Route
+                    path="/my-content"
+                    element={
+                        <MyContentPage loggedIn={loggedIn} loginFinished={loginFinished} navigate={navigate} />
                     }
                 />
             </Routes>

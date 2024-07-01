@@ -6,7 +6,7 @@ import CommentForm from "./CommentForm.jsx";
 import getVideoComments from "../../../services/getVideoComments.js";
 import postComment from "../../../services/postComment.js";
 
-const CommentGrid = ({ videoHeight, currentVideoTime, videoId, loggedIn }) => {
+const CommentList = ({ videoHeight, currentVideoTime, videoId, loggedIn }) => {
     const [comments, setComments] = useState([]);
     const [newComment, setNewComment] = useState("");
     const [commentList, setCommentList] = useState([]);
@@ -80,4 +80,4 @@ const CommentGrid = ({ videoHeight, currentVideoTime, videoId, loggedIn }) => {
         </div>
     );
 };
-export default CommentGrid;
+export default CommentList;

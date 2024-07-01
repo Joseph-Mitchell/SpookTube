@@ -48,7 +48,7 @@ const Navbar = ({ loggedIn, setLoggedIn, setUsername, icon, setIcon, navigate })
                                 loggedIn && (
                                     <>
                                         <li className="nav-item list-group-item bg-transparent border-0">
-                                            <a className="btn nav-link" onClick={() => { }}>My Content</a>
+                                            <a className="btn nav-link" onClick={() => { navigate("/my-content"); }}>My Content</a>
                                         </li>
                                         <li className="nav-item list-group-item bg-transparent border-0">
                                             <a className="btn nav-link" onClick={() => { navigate("/upload"); }}>Upload</a>

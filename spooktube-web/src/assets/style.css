@@ -28,12 +28,23 @@
     height: 90%;
 }
 
-#drop-zone {
-    height: 400px;
-    width: 400px;
+#drop-zone,
+#upload-video {
+    height: 420px;
+    width: 420px;
 }
 
 #drop-spinner {
     width: 5rem;
     height: 5rem;
+}
+
+#tabs {
+    height: 65px;
+}
+
+.tab-button {
+    margin-top: 10px;
+    width: 48%;
+    height: 58px;
 }

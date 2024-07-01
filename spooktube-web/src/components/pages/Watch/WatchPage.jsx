@@ -1,5 +1,5 @@
 import VideoPlayer from "./VideoPlayer.jsx";
-import CommentGrid from "./CommentGrid.jsx";
+import CommentList from "./CommentList.jsx";
 import { useState } from "react";
 
 import { useSearchParams } from "react-router-dom";
@@ -12,7 +12,7 @@ const WatchPage = ({ loggedIn }) => {
     return (
         <div className="row row-cols-lg-2 video-player mx-auto pe-2 overflow-hidden">
             <VideoPlayer videoId={searchParams.get("id")} setVideoHeight={setVideoHeight} setCurrentVideoTime={setCurrentVideoTime} />
-            <CommentGrid videoHeight={videoHeight} currentVideoTime={currentVideoTime} videoId={searchParams.get("id")} loggedIn={loggedIn} />
+            <CommentList videoHeight={videoHeight} currentVideoTime={currentVideoTime} videoId={searchParams.get("id")} loggedIn={loggedIn} />
         </div>
     );
 };

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import uploadVideo from "../../../services/uploadVideo.js";
 
-const UploadPage = ({ loggedIn, navigate }) => {
+const UploadPage = ({ loggedIn, loginFinished, navigate }) => {
 
     const [video, setVideo] = useState({});
     const [dropZoneIcon, setDropZoneIcon] = useState("upload");
@@ -11,10 +11,10 @@ const UploadPage = ({ loggedIn, navigate }) => {
     const [disableDrop, setDisableDrop] = useState(false);
 
     useEffect(() => {
-        if (!loggedIn) {
+        if (!loggedIn && loginFinished) {
             navigate("/");
         }
-    });
+    }, [loginFinished]);
 
     function badUpload() {
         setDropZoneColour("danger");
@@ -121,8 +121,8 @@ const UploadPage = ({ loggedIn, navigate }) => {
     }
 
     return (
-        <div className="w-100 mt-5 row">
-            <form className="col-6 offset-3 d-flex flex-column justify-content-center" onSubmit={(e) => { e.preventDefault(); }}>
+        <div className="w-100 mt-5 d-flex flex-column justify-content-center">
+            <form className="d-flex flex-column justify-content-center" onSubmit={(e) => { e.preventDefault(); }}>
                 <h1 className="text-center mb-4">Upload</h1>
                 <div
                     className={`bg-${dropZoneColour} bg-opacity-25 border border-secondary border-opacity-50 rounded-4 d-flex flex-column justify-content-center align-items-center mx-auto`}
@@ -136,7 +136,7 @@ const UploadPage = ({ loggedIn, navigate }) => {
                     <br />
                     <p className={`user-select-none fs-4 text-${dropZoneColour} text-center`} >{dropZoneText}</p>
                 </div>
-                <video id="upload-video" className="mx-auto w-100 d-none" controls />
+                <video id="upload-video" className="mx-auto d-none" controls />
                 <button id="upload-button" className="btn btn-primary btn-lg text-light mt-4 w-25 mx-auto d-none" onClick={sendUploadVideo}>Upload</button>
             </form>
         </div>
