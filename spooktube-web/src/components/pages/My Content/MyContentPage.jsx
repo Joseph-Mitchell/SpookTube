@@ -3,12 +3,12 @@ import VideoGrid from "../../common/VideoGrid.jsx";
 import getAllVideos from "../../../services/getAllVideos.js";
 import Paginator from "../../common/Paginator.jsx";
 import CommentGrid from "./CommentGrid.jsx";
+import getUserVideos from "../../../services/getUserVideos.js";
 
 const MyContentPage = ({ loggedIn, loginFinished, navigate }) => {
     const SELECTED_CLASSES = "border-primary-subtle bg-primary-subtle text-primary z-2";
     const UNSELECTED_CLASSES = "border-body-secondary bg-body-secondary text-body-tertiary z-0";
 
-    const [selected, setSelected] = useState("videos");
     const [videoClasses, setVideoClasses] = useState(SELECTED_CLASSES);
     const [commentClasses, setCommentClasses] = useState(UNSELECTED_CLASSES);
 
@@ -30,7 +30,6 @@ const MyContentPage = ({ loggedIn, loginFinished, navigate }) => {
     function clickVideos() {
         document.getElementById("user-video-grid").classList.remove("d-none");
         document.getElementById("user-comment-grid").classList.add("d-none");
-        setSelected("videos");
         setVideoClasses(SELECTED_CLASSES);
         setCommentClasses(UNSELECTED_CLASSES);
     }
@@ -38,13 +37,12 @@ const MyContentPage = ({ loggedIn, loginFinished, navigate }) => {
     function clickComments() {
         document.getElementById("user-video-grid").classList.add("d-none");
         document.getElementById("user-comment-grid").classList.remove("d-none");
-        setSelected("comments");
         setVideoClasses(UNSELECTED_CLASSES);
         setCommentClasses(SELECTED_CLASSES);
     }
 
     async function refreshVideos() {
-        const res = await getAllVideos(VIDEOS_PER_PAGE * (currentPage - 1), VIDEOS_PER_PAGE * currentPage);
+        const res = await getUserVideos(localStorage.getItem("token"), VIDEOS_PER_PAGE * (currentPage - 1), VIDEOS_PER_PAGE * currentPage);
         setVideos(res.videos);
         setPages(res.pages);
     }
