@@ -313,4 +313,41 @@ describe("Controller", () => {
             sinon.assert.calledOnceWithExactly(stubbedResponse.status, 500);
         });
     });
+    
+    describe("uploadVideo", () => {
+        let stubbedContentManagerService;
+        let stubbedVideoService;
+        let stubbedResponse;
+        let testRequest;
+        let testController;
+        let testDate;
+        let testUploadResult;
+        let testNewVideo;
+        
+        beforeEach(() => {
+            stubbedContentManagerService = { deleteVideo: sinon.stub() };
+            stubbedVideoService = { createVideo: sinon.stub() };
+            stubbedResponse = { status: sinon.stub().returnsThis(), json: sinon.stub() };
+            
+            testController = new VideoController(stubbedVideoService, stubbedContentManagerService);
+            testRequest = { body: { userId: 1, videoFile: "hbfdigsnijk" } };
+            testDate = Date.now();
+            testUploadResult = { public_id: "gfrd" };
+            testNewVideo = {};
+            
+            stubbedContentManagerService.uploadVideo.resolves(testUploadResult);
+            stubbedVideoService.createVideo.resolves(testNewVideo);
+        });
+        
+        afterEach(() => {
+            stubbedContentManagerService = undefined;
+            stubbedVideoService = undefined;
+            stubbedResponse = undefined;
+            testRequest = undefined;
+            testController = undefined;
+            testDate = undefined;
+            testUploadResult = undefined;
+            testNewVideo = undefined;
+        });
+    });
 });

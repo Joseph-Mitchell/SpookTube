@@ -16,4 +16,12 @@ export default class VideoService {
     async createVideo(videoId, userId) {
         return await Video.create({ videoId: videoId, userId: userId });
     }
+    
+    async deleteVideo(videoId) {
+        return await Video.deleteOne({ videoId: videoId });
+    }
+    
+    async checkOwnership(videoId, userId) {
+        return await Video.findOne({ videoId: videoId, userId: userId });
+    }
 }
