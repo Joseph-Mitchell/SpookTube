@@ -185,6 +185,18 @@ describe("Controller", () => {
             sinon.assert.calledOnceWithExactly(stubbedResponse.status, 200);
             sinon.assert.calledWith(stubbedResponse.json, { videos: testResponseVideos, pages: 2 });
         });
+        
+        it("should respond with expected array when req.params.rangeMax > videos in collection", async () => {
+            //Arrange
+            testRequest.params.rangeMax = 25;
+            
+            //Act
+            await testController.getUserVideos(testRequest, stubbedResponse);
+            
+            //Assert
+            sinon.assert.calledOnceWithExactly(stubbedResponse.status, 200);
+            sinon.assert.calledWith(stubbedResponse.json, { videos: testResponseVideos, pages: 1 });
+        });
     });
     
     describe("uploadVideo", () => {
