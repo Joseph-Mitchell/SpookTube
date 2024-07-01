@@ -327,7 +327,7 @@ describe("Controller", () => {
             stubbedResponse = { status: sinon.stub().returnsThis(), json: sinon.stub() };
             
             testController = new VideoController(stubbedVideoService, stubbedContentManagerService);
-            testRequest = { body: { userId: 1, videoId: "gfrd" } };
+            testRequest = { body: { userId: 1, isModerator: false, videoId: "gfrd" } };
             
             stubbedContentManagerService.deleteVideo.resolves({ result: "ok" });
             stubbedVideoService.checkOwnership.resolves({});
@@ -350,6 +350,21 @@ describe("Controller", () => {
             //Assert
             sinon.assert.calledOnceWithExactly(stubbedResponse.status, 204);
             sinon.assert.calledWith(stubbedVideoService.checkOwnership, testRequest.body.videoId, testRequest.body.userId);
+            sinon.assert.calledWith(stubbedVideoService.deleteVideo, testRequest.body.videoId);
+            sinon.assert.calledWith(stubbedContentManagerService.deleteVideo, testRequest.body.videoId);
+            sinon.assert.notCalled(stubbedVideoService.createVideo);
+        });
+        
+        it("should not call checkOwnership if isModerator true", async () => {
+            //Arrange
+            testRequest.body.isModerator = true;
+            
+            //Act
+            await testController.deleteVideo(testRequest, stubbedResponse);
+            
+            //Assert
+            sinon.assert.calledOnceWithExactly(stubbedResponse.status, 204);
+            sinon.assert.notCalled(stubbedVideoService.checkOwnership);
             sinon.assert.calledWith(stubbedVideoService.deleteVideo, testRequest.body.videoId);
             sinon.assert.calledWith(stubbedContentManagerService.deleteVideo, testRequest.body.videoId);
             sinon.assert.notCalled(stubbedVideoService.createVideo);
