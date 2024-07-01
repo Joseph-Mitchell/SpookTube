@@ -11,6 +11,7 @@ export default class VideoController {
     async getAllVideos(req, res) {
         try {
             const count = await this.#videoService.getVideosCount();
+            
             const videosPerPage = (req.params.rangeMax - req.params.rangeMin);
             const pages = Math.floor(count / videosPerPage) + 1;
             
@@ -29,11 +30,11 @@ export default class VideoController {
     }
     
     async getUserVideos(req, res) {
-        try {
-            const VIDEOS_PER_PAGE = 18;
-            
+        try {           
             const count = await this.#videoService.getVideosCount();
-            const pages = Math.floor(count / VIDEOS_PER_PAGE) + 1;
+            
+            const videosPerPage = (req.params.rangeMax - req.params.rangeMin);
+            const pages = Math.floor(count / videosPerPage) + 1;
             
             const videos = await this.#videoService.getUserVideos(req.body.userId);
 
