@@ -73,7 +73,11 @@ export default class VideoController {
     
     async deleteVideo(req, res) {
         try {
+            await this.#videoService.checkOwnership(req.body.videoId, req.body.userId);
+            await this.#videoService.deleteVideo(req.body.videoId);
+            await this.#contentManagerService.deleteVideo(req.body.videoId);
             
+            res.status(204);
         } catch (e) {
             return res.status(500).json({ message: e.message });
         }

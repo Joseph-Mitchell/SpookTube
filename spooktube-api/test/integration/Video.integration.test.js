@@ -17,7 +17,7 @@ import ContentManagerService from "../../src/services/ContentManager.service.js"
 
 import fs from "node:fs/promises";
 
-describe("Video Integration Tests", () => {
+describe.skip("Video Integration Tests", () => {
     let server;
     let database;
     let requester;

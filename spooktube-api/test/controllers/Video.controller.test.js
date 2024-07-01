@@ -320,23 +320,19 @@ describe("Controller", () => {
         let stubbedResponse;
         let testRequest;
         let testController;
-        let testDate;
-        let testUploadResult;
-        let testNewVideo;
         
         beforeEach(() => {
             stubbedContentManagerService = { deleteVideo: sinon.stub() };
-            stubbedVideoService = { createVideo: sinon.stub() };
+            stubbedVideoService = { checkOwnership: sinon.stub(), deleteVideo: sinon.stub(), createVideo: sinon.stub() };
             stubbedResponse = { status: sinon.stub().returnsThis(), json: sinon.stub() };
             
             testController = new VideoController(stubbedVideoService, stubbedContentManagerService);
-            testRequest = { body: { userId: 1, videoFile: "hbfdigsnijk" } };
-            testDate = Date.now();
-            testUploadResult = { public_id: "gfrd" };
-            testNewVideo = {};
+            testRequest = { body: { userId: 1, videoId: "gfrd" } };
             
-            stubbedContentManagerService.uploadVideo.resolves(testUploadResult);
-            stubbedVideoService.createVideo.resolves(testNewVideo);
+            stubbedContentManagerService.deleteVideo.resolves({ result: "ok" });
+            stubbedVideoService.checkOwnership.resolves({});
+            stubbedVideoService.deleteVideo.resolves({});
+            stubbedVideoService.createVideo.resolves({});
         });
         
         afterEach(() => {
@@ -345,9 +341,17 @@ describe("Controller", () => {
             stubbedResponse = undefined;
             testRequest = undefined;
             testController = undefined;
-            testDate = undefined;
-            testUploadResult = undefined;
-            testNewVideo = undefined;
+        });
+        
+        it("should call res.status with 204 in normal circumstances", async () => {
+            //Act
+            await testController.deleteVideo(testRequest, stubbedResponse);
+            
+            //Assert
+            sinon.assert.calledWith(stubbedVideoService.checkOwnership, testRequest.body.videoId, testRequest.body.userId);
+            sinon.assert.calledWith(stubbedVideoService.deleteVideo, testRequest.body.videoId);
+            sinon.assert.calledWith(stubbedContentManagerService.deleteVideo, testRequest.body.videoId);
+            sinon.assert.calledOnceWithExactly(stubbedResponse.status, 204);
         });
     });
 });
