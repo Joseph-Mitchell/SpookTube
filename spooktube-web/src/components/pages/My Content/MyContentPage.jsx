@@ -65,7 +65,7 @@ const MyContentPage = ({ loggedIn, loginFinished, navigate }) => {
             </div>
             <div id="user-content" className="border border-start-0 border-end-0 border-top-2 border-primary-subtle bg-primary-subtle position-relative z-1">
                 <div id="user-video-grid">
-                    <VideoGrid videos={videos} />
+                    <VideoGrid videos={videos} user />
                 </div>
                 <div id="user-comment-grid" className="d-none">
                     <CommentGrid />

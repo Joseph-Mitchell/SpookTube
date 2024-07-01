@@ -21,7 +21,7 @@ const Homepage = () => {
 
     return (
         <>
-            <VideoGrid videos={videos} background />
+            <VideoGrid videos={videos} />
             <Paginator currentPage={currentPage} setCurrentPage={setCurrentPage} pages={pages} />
         </>
     );

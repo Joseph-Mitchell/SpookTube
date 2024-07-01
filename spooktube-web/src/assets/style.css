@@ -48,3 +48,8 @@
     width: 48%;
     height: 58px;
 }
+
+#video-delete-button {
+    top: 18px;
+    right: 35px;
+}
