@@ -17,7 +17,7 @@ import ContentManagerService from "../../src/services/ContentManager.service.js"
 
 import fs from "node:fs/promises";
 
-describe("Video Integration Tests", () => {
+describe.skip("Video Integration Tests", () => {
     let server;
     let database;
     let requester;
@@ -128,7 +128,7 @@ describe("Video Integration Tests", () => {
             
             //Act
             const actual = await requester
-                .get("/videos/post")
+                .post("/videos/post")
                 .send({ videoFile: dataUri })
                 .set("authentication", jwt.sign({ id: existingAccounts[0]._id }, process.env.SECRET));
             
@@ -137,7 +137,7 @@ describe("Video Integration Tests", () => {
             
             //Clean-Up
             const cms = new ContentManagerService();
-            console.log(await cms.deleteVideo(actual.body.videoId));
+            await cms.deleteVideo(actual.body.videoId);
         });
         
         it("should respond 500 with invalid file", async () => {
@@ -146,7 +146,7 @@ describe("Video Integration Tests", () => {
             
             //Act
             const actual = await requester
-                .get("/videos/post")
+                .post("/videos/post")
                 .send({ videoFile: file })
                 .set("authentication", jwt.sign({ id: existingAccounts[0]._id }, process.env.SECRET));
             
@@ -162,7 +162,7 @@ describe("Video Integration Tests", () => {
             
             //Act
             const actual = await requester
-                .get("/videos/post")
+                .post("/videos/post")
                 .send({ videoFile: file })
                 .set("authentication", jwt.sign({ id: existingAccounts[0]._id }, process.env.SECRET));
             

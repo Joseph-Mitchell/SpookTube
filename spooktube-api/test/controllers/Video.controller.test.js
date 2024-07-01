@@ -52,28 +52,28 @@ describe("Controller", () => {
         
         it("should respond with expected array when req.params.rangeMax < videos in collection", async () => {
             //Arrange
-            testRequest.params.rangeMax = 15;
-            testResponseVideos = testResponseVideos.splice(0, 15);
+            testRequest.params.rangeMax = 10;
+            testResponseVideos = testResponseVideos.splice(0, 10);
             
             //Act
             await testController.getAllVideos(testRequest, stubbedResponse);
             
             //Assert
             sinon.assert.calledOnceWithExactly(stubbedResponse.status, 200);
-            sinon.assert.calledWith(stubbedResponse.json, { videos: testResponseVideos, pages: 1 });
+            sinon.assert.calledWith(stubbedResponse.json, { videos: testResponseVideos, pages: 2 });
         });
         
         it("should respond with expected array when req.params.rangeMin > zero", async () => {
             //Arrange
-            testRequest.params.rangeMin = 5;
-            testResponseVideos = testResponseVideos.splice(5, 20);
+            testRequest.params.rangeMin = 10;
+            testResponseVideos = testResponseVideos.splice(10, 20);
             
             //Act
             await testController.getAllVideos(testRequest, stubbedResponse);
             
             //Assert
             sinon.assert.calledOnceWithExactly(stubbedResponse.status, 200);
-            sinon.assert.calledWith(stubbedResponse.json, { videos: testResponseVideos, pages: 1 });
+            sinon.assert.calledWith(stubbedResponse.json, { videos: testResponseVideos, pages: 2 });
         });
         
         it("should respond with expected array when req.params.rangeMax > videos in collection", async () => {
@@ -109,6 +109,55 @@ describe("Controller", () => {
             
             //Assert
             sinon.assert.calledOnceWithExactly(stubbedResponse.status, 500);
+        });
+    });
+    
+    describe("getUserVideos", () => {
+        let stubbedService;
+        let stubbedResponse;
+        let testController;
+        let testRequest;
+        let testDate;
+        let testVideos;
+        let testResponseVideos;
+        
+        beforeEach(() => {
+            stubbedService = { getUserVideos: sinon.stub(), getVideosCount: sinon.stub() };
+            stubbedResponse = { status: sinon.stub().returnsThis(), json: sinon.stub() };
+            
+            testController = new VideoController(stubbedService);
+            testRequest = { params: { rangeMin: 0, rangeMax: 20 }, body: { userId: 1 } };
+            
+            testDate = Date.now();
+            
+            testVideos = [];
+            testResponseVideos = [];
+            for (let i = 0; i < 20; i++) {
+                testVideos.push({ _doc: { videoId: i, userId: i, uploadDate: testDate } });
+                testResponseVideos.push({ videoId: i, userId: i });
+            }
+            
+            stubbedService.getUserVideos.resolves(testVideos);
+            stubbedService.getVideosCount.resolves(10);
+        });
+        
+        afterEach(() => {
+            stubbedService = undefined;
+            stubbedResponse = undefined;
+            testController = undefined;
+            testRequest = undefined;
+            testDate = undefined;
+            testVideos = undefined;
+            testResponseVideos = undefined;
+        });
+        
+        it("should call res.status with 200 in normal circumstances", async () => {
+            //Act
+            await testController.getUserVideos(testRequest, stubbedResponse);
+            
+            //Assert
+            sinon.assert.calledOnceWithExactly(stubbedResponse.status, 200);
+            sinon.assert.calledWith(stubbedResponse.json, { videos: testResponseVideos, pages: 1 });
         });
     });
     
