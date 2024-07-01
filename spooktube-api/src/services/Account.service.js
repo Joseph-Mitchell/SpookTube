@@ -13,4 +13,8 @@ export default class AccountService {
     async createAccount(email, username, password) {
         return await Account.create({ username: username, email: email, password: bcrypt.hashSync(password, Number(process.env.HASH_ROUNDS)) });
     }
+    
+    async getRoleById(id) {
+        return await Account.findById(id).select("role").populate("role");
+    }
 }

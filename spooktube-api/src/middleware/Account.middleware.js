@@ -1,5 +1,7 @@
 import * as expressValidator from "express-validator";
 import jwt from "jsonwebtoken";
+import Account from "../models/Account.model.js";
+import AccountService from "../services/Account.service.js";
 
 export default class AccountMiddleware {
     static authenticateToken = (req, res, next) => {
@@ -17,6 +19,17 @@ export default class AccountMiddleware {
 
             next();
         });
+    }
+    
+    static isModerator = (req, res, next) => {
+        const role = AccountService.getRoleById(req.userId).role;
+        console.log(role);
+        if (role === "moderator")
+            req.body.isModerator = true;
+        else
+            req.body.isModerator = false;
+        
+        next();
     }
     
     static validateRegDetails = () => {
