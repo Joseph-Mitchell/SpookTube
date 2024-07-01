@@ -73,16 +73,25 @@ export default class VideoController {
     
     async deleteVideo(req, res) {
         try {
+            let video;
             if (!req.body.isModerator) {
-                const ownedVideo = await this.#videoService.checkOwnership(req.body.videoId, req.body.userId);
+                video = await this.#videoService.checkOwnership(req.body.videoId, req.body.userId);
                 
-                if (ownedVideo === null) {
-                    return res.status(401).json({ message: "User does not own this video" });
+                if (video === null) {
+                    return res.status(404).json({ message: "Video by this user not found" });
                 }
+            } else {
+                video = await this.#videoService.getVideo(req.body.videoId);
             }
             
             await this.#videoService.deleteVideo(req.body.videoId);
-            await this.#contentManagerService.deleteVideo(req.body.videoId);
+            
+            const deletion = await this.#contentManagerService.deleteVideo(req.body.videoId);
+            
+            if (!deletion.result || deletion.result !== "ok") {
+                await this.#videoService.createVideo(video.videoId, video.userId, video.uploadDate);
+                return res.status(500).json({ message: "Content manager error" });
+            }
 
             return res.status(204);
         } catch (e) {

@@ -13,8 +13,8 @@ export default class VideoService {
         return await Video.find({ userId: userId }).sort({ uploadDate: -1 });
     }
     
-    async createVideo(videoId, userId) {
-        return await Video.create({ videoId: videoId, userId: userId });
+    async createVideo(videoId, userId, uploadDate = Date.now()) {
+        return await Video.create({ videoId: videoId, userId: userId, uploadDate: uploadDate });
     }
     
     async deleteVideo(videoId) {
@@ -23,5 +23,9 @@ export default class VideoService {
     
     async checkOwnership(videoId, userId) {
         return await Video.findOne({ videoId: videoId, userId: userId });
+    }
+    
+    async getVideo(videoId) {
+        return await Video.findOne({ videoId: videoId });
     }
 }
