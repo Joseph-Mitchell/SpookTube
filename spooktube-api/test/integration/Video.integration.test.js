@@ -17,7 +17,7 @@ import ContentManagerService from "../../src/services/ContentManager.service.js"
 
 import fs from "node:fs/promises";
 
-describe.skip("Video Integration Tests", () => {
+describe("Video Integration Tests", () => {
     let server;
     let database;
     let requester;
@@ -57,11 +57,85 @@ describe.skip("Video Integration Tests", () => {
         }
     });
     
-    
     describe("getAllVideos", () => {
         it("should respond 200 in normal circumstances", async () => {
             //Act
-            const actual = await requester.get("/videos/all/0/5");
+            const actual = await requester.get("/videos/all/0/10");
+            
+            //Assert
+            assert.equal(actual.status, 200);
+            assert.equal(actual.body.videos.length, 10);
+        });
+        
+        it("should respond 200 if rangeMax < collection size", async () => {
+            //Act
+            const actual = await requester.get("/videos/all/0/7");
+            
+            //Assert
+            assert.equal(actual.status, 200);
+            assert.equal(actual.body.videos.length, 7);
+        });
+        
+        it("should respond 200 if rangeMin > zero", async () => {
+            //Act
+            const actual = await requester.get("/videos/all/1/10");
+            
+            //Assert
+            assert.equal(actual.status, 200);
+            assert.equal(actual.body.videos.length, 9);
+            assert.isFalse(actual.body.videos.some((video) => video.videoId === existingVideos[0].videoId));
+        });
+        
+        it("should respond 200 if rangeMax > collection size", async () => {
+            //Act
+            const actual = await requester.get("/videos/all/0/11");
+            
+            //Assert
+            assert.equal(actual.status, 200);
+            assert.equal(actual.body.videos.length, 10);
+        });
+        
+        it("should respond 200 if rangeMin < zero", async () => {
+            //Act
+            const actual = await requester.get("/videos/all/-1/10");
+            
+            //Assert
+            assert.equal(actual.status, 200);
+            assert.equal(actual.body.videos.length, 10);
+        });
+        
+        it("should respond 500 if database offline", async () => {
+            //Arrange
+            await database.close();
+            
+            //Act
+            const actual = await requester.get("/videos/all/0/10");
+            
+            //Assert
+            assert.equal(actual.status, 500);
+            
+            //Cleanup
+            await database.connect();
+        });
+    });
+    
+    describe("getUserVideos", () => {
+        it("should respond 200 in normal circumstances", async () => {
+            //Act
+            const actual = await requester
+                .get("/videos/user/0/5")
+                .set("authentication", jwt.sign({ id: existingAccounts[0]._id }, process.env.SECRET));
+            
+            //Assert
+            assert.equal(actual.status, 200);
+            assert.equal(actual.body.videos.length, 5);
+        });
+        
+        it("should respond 200 if rangeMax > number of videos with matching userId", async () => {
+            //Act
+            const actual = await requester
+                .get("/videos/user/0/10")
+                .set("authentication", jwt.sign({ id: existingAccounts[0]._id }, process.env.SECRET));
             
             //Assert
             assert.equal(actual.status, 200);
@@ -70,7 +144,9 @@ describe.skip("Video Integration Tests", () => {
         
         it("should respond 200 if rangeMax < collection size", async () => {
             //Act
-            const actual = await requester.get("/videos/all/0/3");
+            const actual = await requester
+                .get("/videos/user/0/3")
+            .set("authentication", jwt.sign({ id: existingAccounts[0]._id }, process.env.SECRET));
             
             //Assert
             assert.equal(actual.status, 200);
@@ -79,17 +155,21 @@ describe.skip("Video Integration Tests", () => {
         
         it("should respond 200 if rangeMin > zero", async () => {
             //Act
-            const actual = await requester.get("/videos/all/1/5");
+            const actual = await requester
+                .get("/videos/user/1/5")
+                .set("authentication", jwt.sign({ id: existingAccounts[0]._id }, process.env.SECRET));;
             
             //Assert
             assert.equal(actual.status, 200);
             assert.equal(actual.body.videos.length, 4);
-            assert.equal(actual.body.videos[0].videoId, existingVideos[1].videoId);
+            assert.isFalse(actual.body.videos.some((video) => video.videoId === existingVideos[0].videoId));
         });
         
         it("should respond 200 if rangeMax > collection size", async () => {
             //Act
-            const actual = await requester.get("/videos/all/0/6");
+            const actual = await requester
+                .get("/videos/user/0/6")
+                .set("authentication", jwt.sign({ id: existingAccounts[0]._id }, process.env.SECRET));;
             
             //Assert
             assert.equal(actual.status, 200);
@@ -98,7 +178,9 @@ describe.skip("Video Integration Tests", () => {
         
         it("should respond 200 if rangeMin < zero", async () => {
             //Act
-            const actual = await requester.get("/videos/all/-1/5");
+            const actual = await requester
+                .get("/videos/user/-1/5")
+                .set("authentication", jwt.sign({ id: existingAccounts[0]._id }, process.env.SECRET));;
             
             //Assert
             assert.equal(actual.status, 200);
@@ -110,7 +192,9 @@ describe.skip("Video Integration Tests", () => {
             await database.close();
             
             //Act
-            const actual = await requester.get("/videos/all/0/5");
+            const actual = await requester
+                .get("/videos/user/0/5")
+                .set("authentication", jwt.sign({ id: existingAccounts[0]._id }, process.env.SECRET));;
             
             //Assert
             assert.equal(actual.status, 500);
@@ -120,7 +204,7 @@ describe.skip("Video Integration Tests", () => {
         });
     });
     
-    describe("Upload Video", () => {
+    describe.skip("Upload Video", () => {
         it("should respond 201 in normal circumstances", async () => {
             //Arrange
             const file = await fs.readFile("test/data/videos/test.webm", { encoding: "base64url" });
