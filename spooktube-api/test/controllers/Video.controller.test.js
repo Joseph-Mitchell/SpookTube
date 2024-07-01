@@ -348,10 +348,24 @@ describe("Controller", () => {
             await testController.deleteVideo(testRequest, stubbedResponse);
             
             //Assert
+            sinon.assert.calledOnceWithExactly(stubbedResponse.status, 204);
             sinon.assert.calledWith(stubbedVideoService.checkOwnership, testRequest.body.videoId, testRequest.body.userId);
             sinon.assert.calledWith(stubbedVideoService.deleteVideo, testRequest.body.videoId);
             sinon.assert.calledWith(stubbedContentManagerService.deleteVideo, testRequest.body.videoId);
-            sinon.assert.calledOnceWithExactly(stubbedResponse.status, 204);
+            sinon.assert.notCalled(stubbedVideoService.createVideo);
+        });
+        
+        it("should call res.status with 401 if checkOwnership resolves null", async () => {
+            //Arrange
+            stubbedVideoService.checkOwnership.resolves(null);
+            
+            //Act
+            await testController.deleteVideo(testRequest, stubbedResponse);
+            
+            //Assert
+            sinon.assert.calledOnceWithExactly(stubbedResponse.status, 401);
+            sinon.assert.notCalled(stubbedVideoService.deleteVideo);
+            sinon.assert.notCalled(stubbedContentManagerService.deleteVideo);
         });
     });
 });
