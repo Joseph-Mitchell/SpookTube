@@ -397,5 +397,17 @@ describe("Controller", () => {
             sinon.assert.calledOnceWithExactly(stubbedResponse.status, 500);
             sinon.assert.called(stubbedVideoService.createVideo);
         });
+        
+        it("should call res.status with 500 if deleteVideo resolves object with no result !== 'ok'", async () => {
+            //Arrange
+            stubbedContentManagerService.deleteVideo.resolves({ result: "not ok"});
+            
+            //Act
+            await testController.deleteVideo(testRequest, stubbedResponse);
+            
+            //Assert
+            sinon.assert.calledOnceWithExactly(stubbedResponse.status, 500);
+            sinon.assert.called(stubbedVideoService.createVideo);
+        });
     });
 });
