@@ -57,7 +57,7 @@ describe("Video Integration Tests", () => {
         }
     });
     
-    describe("getAllVideos", () => {
+    describe("Get All Videos", () => {
         it("should respond 200 in normal circumstances", async () => {
             //Act
             const actual = await requester.get("/videos/all/0/10");
@@ -119,7 +119,7 @@ describe("Video Integration Tests", () => {
         });
     });
     
-    describe("getUserVideos", () => {
+    describe("Get User Videos", () => {
         it("should respond 200 in normal circumstances", async () => {
             //Act
             const actual = await requester
