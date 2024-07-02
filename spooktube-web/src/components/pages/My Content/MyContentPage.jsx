@@ -7,6 +7,7 @@ import DeleteModal from "../../ui/DeleteModal.jsx";
 import deleteVideo from "../../../services/deleteVideo.js";
 import EditCommentModal from "../../ui/EditModal.jsx";
 import editComment from "../../../services/editComment.js";
+import deleteComment from "../../../services/deleteComment.js";
 
 const MyContentPage = ({ loggedIn, loginFinished, navigate }) => {
     const SELECTED_CLASSES = "border-primary-subtle bg-primary-subtle text-primary z-2";
@@ -105,16 +106,14 @@ const MyContentPage = ({ loggedIn, loginFinished, navigate }) => {
     }
 
     async function confirmDeleteComment() {
-        console.log("confirm");
         document.getElementById("delete-modal-cancel").setAttribute("disabled", true);
         document.getElementById("delete-modal-confirm").setAttribute("disabled", true);
-        // await deleteVideo(toBeDeleted, localStorage.getItem("token"));
+        console.log(await deleteComment(commentEditing, localStorage.getItem("token")));
         setToBeDeleted("");
         window.location.reload();
     }
 
     function cancelDeleteComment() {
-        console.log("cancel");
         deleteCommentModal.hide();
         editModal.show();
     }
