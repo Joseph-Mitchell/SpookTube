@@ -454,5 +454,20 @@ describe("Comment Integration Tests", () => {
             assert.isNotNull(comment);
             assert.equal(actual.status, 404);
         });
+        
+        it("should respond 204 with moderator userId", async () => {
+            //Act
+            const actual = await requester
+                .delete("/comments")
+                .send({
+                    id: existingComments[4]._id,
+                })
+                .set("authentication", jwt.sign({ id: existingComments[0].userId }, process.env.SECRET));
+            
+            //Assert
+            const comment = await Comment.findById(existingComments[4]._id);
+            assert.isNull(comment);
+            assert.equal(actual.status, 204);
+        });
     })
 });
