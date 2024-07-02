@@ -439,5 +439,20 @@ describe("Comment Integration Tests", () => {
             assert.isNull(comment);
             assert.equal(actual.status, 204);
         });
+        
+        it("should respond 404 with incorrect userId", async () => {
+            //Act
+            const actual = await requester
+                .delete("/comments")
+                .send({
+                    id: existingComments[4]._id,
+                })
+                .set("authentication", jwt.sign({ id: existingComments[5].userId }, process.env.SECRET));
+            
+            //Assert
+            const comment = await Comment.findById(existingComments[4]._id);
+            assert.isNotNull(comment);
+            assert.equal(actual.status, 404);
+        });
     })
 });
