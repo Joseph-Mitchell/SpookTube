@@ -382,15 +382,31 @@ describe("Comment Integration Tests", () => {
             const actual = await requester
                 .put("/comments")
                 .send({
-                    id: existingComments[0]._id,
+                    id: existingComments[4]._id,
                     newComment: newComments.valid.comment
                 })
-                .set("authentication", jwt.sign({ id: existingComments[0].userId }, process.env.SECRET));
+                .set("authentication", jwt.sign({ id: existingComments[4].userId }, process.env.SECRET));
             
             //Assert
-            const comment = await Comment.findById(existingComments[0]._id);
+            const comment = await Comment.findById(existingComments[4]._id);
             assert.equal(actual.status, 204);
             assert.equal(comment.comment, newComments.valid.comment);
+        });
+        
+        it("should respond 404 if userId is wrong", async () => {
+            //Act
+            const actual = await requester
+                .put("/comments")
+                .send({
+                    id: existingComments[4]._id,
+                    newComment: newComments.valid.comment
+                })
+                .set("authentication", jwt.sign({ id: existingComments[5].userId }, process.env.SECRET));
+            
+            //Assert
+            const comment = await Comment.findById(existingComments[4]._id);
+            assert.equal(actual.status, 404);
+            assert.equal(comment.comment, existingComments[4].comment);
         });
     })
 });

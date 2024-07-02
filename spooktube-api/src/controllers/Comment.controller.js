@@ -75,7 +75,7 @@ export default class CommentController {
             if (role !== "moderator") {
                 comment = await this.#commentService.checkOwnership(req.body.id, req.body.userId);
             }
-            
+
             if (comment === null) {
                 return res.status(404).json({ message: "No comment with given id by given user" })
             }

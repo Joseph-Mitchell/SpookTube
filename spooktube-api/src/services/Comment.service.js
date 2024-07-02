@@ -1,3 +1,5 @@
+import { Types } from "mongoose";
+
 import Comment from "../models/Comment.model.js";
 import Account from "../models/Account.model.js";
 
@@ -23,6 +25,6 @@ export default class CommentService {
     }
     
     async checkOwnership(id, userId) {
-        return await Comment.findOne({ _id: id, userId: userId });
+        return await Comment.findOne({ _id: new Types.ObjectId(id), userId: userId });
     }
 }
