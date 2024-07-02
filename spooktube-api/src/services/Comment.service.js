@@ -17,4 +17,12 @@ export default class CommentService {
     async createComment(comment, videoId, userId, timeCode) {
         return (await Comment.create({comment: comment, videoId: videoId, userId: userId, timeCode: timeCode})).populate("userId", "-_id username icon");
     }
+    
+    async editComment(id, newComment) {
+        return await Comment.findByIdAndUpdate(id, { comment: newComment });
+    }
+    
+    async checkOwnership(id, userId) {
+        return await Comment.findOne({ _id: id, userId: userId });
+    }
 }

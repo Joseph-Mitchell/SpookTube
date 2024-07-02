@@ -66,4 +66,15 @@ export default class CommentController {
             return res.status(500).json({ message: e.message })
         }
     }
+    
+    async editComment(req, res) {
+        try {
+            await this.#commentService.checkOwnership(req.body.id, req.body.userId);
+            await this.#commentService.editComment(req.body.id, req.body.newComment);
+
+            return res.status(204).json();
+        } catch (e) {
+            return res.status(500).json({ message: e.message })
+        }
+    }
 }

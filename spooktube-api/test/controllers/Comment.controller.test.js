@@ -1,5 +1,6 @@
 import sinon from "sinon";
 import CommentController from "../../src/controllers/Comment.controller.js";
+import { existingComments } from "../data/testComments.js";
 
 describe("Comment Controller", () => {    
     describe("getVideoComments", () => {
@@ -256,6 +257,48 @@ describe("Comment Controller", () => {
             
             //Assert
             sinon.assert.calledWith(stubbedResponse.status, 500);
+        });
+    });
+    
+    describe("getVideoComments", () => {
+        let stubbedService;
+        let stubbedResponse;
+        let testController;
+        let testRequest;
+        let testComments;
+        
+        beforeEach(() => {
+            stubbedService = { checkOwnership: sinon.stub(), editComment: sinon.stub() };
+            stubbedResponse = { status: sinon.stub().returnsThis(), json: sinon.stub() };
+            
+            testController = new CommentController(stubbedService);
+            testRequest = { body: { id: existingComments[0]._id, newComment: "test", userId: existingComments[0].userId } };
+
+            testComments = [];
+            for (let i = 0; i < 20; i++) {
+                testComments.push({ _doc: { comment: "hi", videoId: i, userId: i, timeCode: i } });
+            }
+            
+            stubbedService.editComment.resolves(testComments);
+            stubbedService.checkOwnership.resolves({});
+        });
+        
+        afterEach(() => {
+            stubbedService = undefined;
+            stubbedResponse = undefined;
+            testController = undefined;
+            testRequest = undefined;
+            testComments = undefined;
+        });
+        
+        it("should respond with 204 in normal conditions", async () => {
+            //Act
+            await testController.editComment(testRequest, stubbedResponse);
+            
+            //Assert
+            sinon.assert.calledWith(stubbedService.checkOwnership, existingComments[0]._id, existingComments[0].userId);
+            sinon.assert.calledWith(stubbedService.editComment, existingComments[0]._id, "test");
+            sinon.assert.calledWith(stubbedResponse.status, 204);
         });
     });
 });
