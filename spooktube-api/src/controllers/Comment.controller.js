@@ -23,7 +23,6 @@ export default class CommentController {
     
     async getUserComments(req, res) {
         try {           
-            console.log("comments");
             const count = await this.#commentService.getUserCommentsCount(req.body.userId);
             
             const commentsPerPage = (req.params.rangeMax - req.params.rangeMin);

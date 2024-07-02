@@ -111,19 +111,42 @@ describe("Comment Integration Tests", () => {
                 },
                 timeCode: 43,
             });
+        });
             
-            it("should respond 200 if rangeMax > number of comments with matching userId", async () => {
+        it("should respond 200 if rangeMax > number of comments with matching userId", async () => {
             //Act
             const actual = await requester
                 .get("/comments/user/0/10")
                 .set("authentication", jwt.sign({ id: existingAccounts[0]._id }, process.env.SECRET));
-            
+        
             //Assert
             assert.equal(actual.status, 200);
-            assert.equal(actual.body.videos.length, 5);
+            assert.equal(actual.body.comments.length, 5);
         });
+    
+        it("should respond 200 if rangeMax < collection size", async () => {
+            //Act
+            const actual = await requester
+                .get("/comments/user/0/3")
+                .set("authentication", jwt.sign({ id: existingAccounts[0]._id }, process.env.SECRET));
+        
+            //Assert
+            assert.equal(actual.status, 200);
+            assert.equal(actual.body.comments.length, 3);
         });
-    })
+        
+        it("should respond 200 if rangeMin > zero", async () => {
+            //Act
+            const actual = await requester
+                .get("/comments/user/1/5")
+                .set("authentication", jwt.sign({ id: existingAccounts[0]._id }, process.env.SECRET));;
+
+            //Assert
+            assert.equal(actual.status, 200);
+            assert.equal(actual.body.comments.length, 4);
+            assert.isFalse(actual.body.comments.some((comment) => comment.comment === existingComments[5].comment));
+        });
+    });
     
     describe("makeComment", () => {
         it("should respond 201 in normal circumstances", async () => {
