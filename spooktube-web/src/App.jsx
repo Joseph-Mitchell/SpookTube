@@ -13,6 +13,7 @@ function App() {
     const [loginFinished, setLoginFinished] = useState(false);
     const [username, setUsername] = useState("");
     const [icon, setIcon] = useState("default");
+    const [role, setRole] = useState("user");
 
     async function sendLoginWithToken(token) {
         const response = await loginWithToken(token);
@@ -23,6 +24,7 @@ function App() {
             await setLoggedIn(true);
             await setUsername(response.username);
             await setIcon(response.icon);
+            await setRole(response.role);
         }
         setLoginFinished(true);
     }
@@ -39,9 +41,18 @@ function App() {
 
     return (
         <>
-            <Navbar loggedIn={loggedIn} setLoggedIn={setLoggedIn} setUsername={setUsername} icon={icon} setIcon={setIcon} navigate={navigate} />
-
+            <Navbar loggedIn={loggedIn} setLoggedIn={setLoggedIn} setUsername={setUsername} icon={icon} setIcon={setIcon} navigate={navigate} role={role} />
             <Routes>
+                <Route
+                    path="*"
+                    element={
+                        <>{
+                            useEffect(() => {
+                                navigate("/");
+                            }, [])
+                        }</>
+                    }
+                />
                 <Route
                     path="/"
                     element={
@@ -63,7 +74,13 @@ function App() {
                 <Route
                     path="/my-content"
                     element={
-                        <MyContentPage loggedIn={loggedIn} loginFinished={loginFinished} navigate={navigate} />
+                        <MyContentPage loggedIn={loggedIn} loginFinished={loginFinished} navigate={navigate} role={role} />
+                    }
+                />
+                <Route
+                    path="/moderation"
+                    element={
+                        <MyContentPage loggedIn={loggedIn} loginFinished={loginFinished} navigate={navigate} role={role} />
                     }
                 />
             </Routes>

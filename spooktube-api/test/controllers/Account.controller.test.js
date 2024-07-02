@@ -16,6 +16,7 @@ describe("Account Controller", () => {
             process.env.SECRET = "333BA566A25119A247F6FD4845E98";
             
             stubbedService = {
+                getRoleById: sinon.stub(),
                 getAccountByIdentifier: sinon.stub(),
                 createAccount: sinon.stub()
             };
@@ -28,6 +29,7 @@ describe("Account Controller", () => {
             testAccount = { _id: 1, username: "testUsername", email: "test@email.com", password: "testPass" };       
             testRequest = { body: testAccount };
             
+            stubbedService.getRoleById.resolves({ role: { roleName: "" } });
             stubbedService.getAccountByIdentifier.resolves(null);
             stubbedService.createAccount.resolves(testAccount);
         });
@@ -102,7 +104,7 @@ describe("Account Controller", () => {
             
             testController = new AccountController(stubbedService);
             testPass = "testPass";
-            testAccount = { _id: 1, username: "testUsername", email: "test@email.com", password: bcrypt.hashSync("testPass", 8) };       
+            testAccount = { _id: 1, username: "testUsername", email: "test@email.com", password: bcrypt.hashSync("testPass", 8), role: { roleName: ""} };       
             testRequest = { body: { identifier: "testUsername", password: "testPass" } };
             
             stubbedService.getAccountByIdentifier.resolves(testAccount);
@@ -175,7 +177,7 @@ describe("Account Controller", () => {
             };
             
             testController = new AccountController(stubbedService);
-            testAccount = { _id: 1, username: "testUsername", icon: "0"};       
+            testAccount = { _id: 1, username: "testUsername", icon: "0", role: { roleName: "" }};       
             testRequest = { body: { userId: "1" } };
             
             stubbedService.getAccountById.resolves(testAccount);

@@ -24,7 +24,7 @@ import { dataUriToBuffer } from "data-uri-to-buffer";
 
 import cloudinary from "cloudinary";
 
-describe.skip("Video Integration Tests", () => {
+describe("Video Integration Tests", () => {
     let server;
     let database;
     let requester;

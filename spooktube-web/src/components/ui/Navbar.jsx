@@ -1,7 +1,7 @@
 import { useState } from "react";
 import LoginModal from "./LoginModal.jsx";
 
-const Navbar = ({ loggedIn, setLoggedIn, setUsername, icon, setIcon, navigate }) => {
+const Navbar = ({ loggedIn, setLoggedIn, setUsername, icon, setIcon, navigate, role }) => {
 
     const [logoColor, setLogoColor] = useState("bg-dark");
     const [loginModal, setLoginModal] = useState({});
@@ -45,7 +45,16 @@ const Navbar = ({ loggedIn, setLoggedIn, setUsername, icon, setIcon, navigate })
                                 )
                             }
                             {
-                                loggedIn && (
+                                loggedIn && role === "moderator" && (
+                                    <>
+                                        <li className="nav-item list-group-item bg-transparent border-0">
+                                            <a className="btn nav-link" onClick={() => { navigate("/moderation"); }}>Moderation</a>
+                                        </li>
+                                    </>
+                                )
+                            }
+                            {
+                                loggedIn && role !== "moderator" && (
                                     <>
                                         <li className="nav-item list-group-item bg-transparent border-0">
                                             <a className="btn nav-link" onClick={() => { navigate("/my-content"); }}>My Content</a>
@@ -56,6 +65,12 @@ const Navbar = ({ loggedIn, setLoggedIn, setUsername, icon, setIcon, navigate })
                                         <li className="nav-item list-group-item bg-transparent border-0">
                                             <a className="btn nav-link" onClick={() => { }}>Profile</a>
                                         </li>
+                                    </>
+                                )
+                            }
+                            {
+                                loggedIn && (
+                                    <>
                                         <li className="nav-item list-group-item bg-transparent border-0">
                                             <a className="btn nav-link" onClick={logOut}>Log-Out</a>
                                         </li>

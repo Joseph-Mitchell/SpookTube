@@ -21,10 +21,12 @@ export default class AccountController {
             if (existingUsernameAccount !== null)
                 return res.status(409).json({ message: "An account with this username already exists" });
             
-            const newAccount = await this.#accountService.createAccount(req.body.email, req.body.username, req.body.password)
+            const newAccount = await this.#accountService.createAccount(req.body.email, req.body.username, req.body.password);
+            const role = (await this.#accountService.getRoleById(newAccount._id)).role.roleName;
             const signedToken = jwt.sign({ id: newAccount._id.toString() }, process.env.SECRET, { expiresIn: "1 week" });
-            return res.status(201).json({ token: signedToken, username: newAccount.username, icon: newAccount.icon });
+            return res.status(201).json({ token: signedToken, username: newAccount.username, icon: newAccount.icon, role: role });
         } catch (e) {
+            console.log(e.message)
             return res.status(500).json({ message: e.message });
         }
     }
@@ -37,7 +39,7 @@ export default class AccountController {
                 return res.status(404).json({ message: "username or password incorrect" });
             
             const signedToken = jwt.sign({ id: account._id.toString() }, process.env.SECRET, { expiresIn: "1 week" });
-            return res.status(200).json({ token: signedToken, username: account.username, icon: account.icon });
+            return res.status(200).json({ token: signedToken, username: account.username, icon: account.icon, role: account.role.roleName });
         } catch (e) {      
             return res.status(500).json({ message: e.message });
         }
@@ -50,7 +52,7 @@ export default class AccountController {
             if (account === null)
                 return res.status(404).json({ message: "No account with this id" });
             
-            return res.status(200).json({ username: account.username, icon: account.icon });
+            return res.status(200).json({ username: account.username, icon: account.icon, role: account.role.roleName });
         } catch (e) {      
             return res.status(500).json({ message: e.message });
         }

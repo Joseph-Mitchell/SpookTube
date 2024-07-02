@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import CommentCard from "../Watch/CommentCard.jsx";
 import getUserComments from "../../../services/getUserComments.js";
 
-const CommentGrid = ({ currentPage, clickEditComment }) => {
+const CommentGrid = ({ currentPage, clickEditComment, role }) => {
     const COMMENTS_PER_PAGE = 18;
 
     const [comments, setComments] = useState([]);

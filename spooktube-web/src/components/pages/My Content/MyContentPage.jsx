@@ -8,8 +8,9 @@ import deleteVideo from "../../../services/deleteVideo.js";
 import EditCommentModal from "../../ui/EditModal.jsx";
 import editComment from "../../../services/editComment.js";
 import deleteComment from "../../../services/deleteComment.js";
+import getAllVideos from "../../../services/getAllVideos.js";
 
-const MyContentPage = ({ loggedIn, loginFinished, navigate }) => {
+const MyContentPage = ({ loggedIn, loginFinished, navigate, role }) => {
     const SELECTED_CLASSES = "border-primary-subtle bg-primary-subtle text-primary z-2";
     const UNSELECTED_CLASSES = "border-body-secondary bg-body-secondary text-body-tertiary z-0";
 
@@ -39,6 +40,30 @@ const MyContentPage = ({ loggedIn, loginFinished, navigate }) => {
         refreshVideos();
     }, [currentPage]);
 
+    function clickVideos() {
+        document.getElementById("user-video-grid").classList.remove("d-none");
+        document.getElementById("user-comment-grid").classList.add("d-none");
+        setVideoClasses(SELECTED_CLASSES);
+        setCommentClasses(UNSELECTED_CLASSES);
+    }
+
+    function clickComments() {
+        document.getElementById("user-video-grid").classList.add("d-none");
+        document.getElementById("user-comment-grid").classList.remove("d-none");
+        setVideoClasses(UNSELECTED_CLASSES);
+        setCommentClasses(SELECTED_CLASSES);
+    }
+
+    async function refreshVideos() {
+        let response;
+        if (role === "moderator")
+            response = await getAllVideos(VIDEOS_PER_PAGE * (currentPage - 1), VIDEOS_PER_PAGE * currentPage);
+        else
+            response = await getUserVideos(localStorage.getItem("token"), VIDEOS_PER_PAGE * (currentPage - 1), VIDEOS_PER_PAGE * currentPage);
+
+        setVideos(response.videos);
+        setPages(response.pages);
+    }
 
     function clickEditComment(id, comment) {
         setNewComment(comment);
@@ -60,26 +85,6 @@ const MyContentPage = ({ loggedIn, loginFinished, navigate }) => {
         setNewComment("");
         setCommentEditing("");
         editModal.hide();
-    }
-
-    function clickVideos() {
-        document.getElementById("user-video-grid").classList.remove("d-none");
-        document.getElementById("user-comment-grid").classList.add("d-none");
-        setVideoClasses(SELECTED_CLASSES);
-        setCommentClasses(UNSELECTED_CLASSES);
-    }
-
-    function clickComments() {
-        document.getElementById("user-video-grid").classList.add("d-none");
-        document.getElementById("user-comment-grid").classList.remove("d-none");
-        setVideoClasses(UNSELECTED_CLASSES);
-        setCommentClasses(SELECTED_CLASSES);
-    }
-
-    async function refreshVideos() {
-        const res = await getUserVideos(localStorage.getItem("token"), VIDEOS_PER_PAGE * (currentPage - 1), VIDEOS_PER_PAGE * currentPage);
-        setVideos(res.videos);
-        setPages(res.pages);
     }
 
     function clickDeleteVideo(videoId) {
@@ -149,7 +154,7 @@ const MyContentPage = ({ loggedIn, loginFinished, navigate }) => {
                     <VideoGrid videos={videos} clickDeleteVideo={clickDeleteVideo} user />
                 </div>
                 <div id="user-comment-grid" className="d-none">
-                    <CommentGrid currentPage={currentPage} clickEditComment={clickEditComment} />
+                    <CommentGrid currentPage={currentPage} clickEditComment={clickEditComment} role={role} />
                 </div>
                 <Paginator currentPage={currentPage} setCurrentPage={setCurrentPage} pages={pages} />
             </div>

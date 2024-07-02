@@ -4,11 +4,11 @@ import Role from "../models/Role.model.js";
 
 export default class AccountService {
     async getAccountById(id) {
-        return await Account.findById(id);
+        return await Account.findById(id).populate("role");
     }
     
     async getAccountByIdentifier(identifier) {
-        return await Account.findOne({ $or: [{ email: identifier }, { username: identifier }]});
+        return await Account.findOne({ $or: [{ email: identifier }, { username: identifier }]}).populate("role");
     }
     
     async createAccount(email, username, password) {
