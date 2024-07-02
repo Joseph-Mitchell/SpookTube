@@ -300,5 +300,17 @@ describe("Comment Controller", () => {
             sinon.assert.calledWith(stubbedService.editComment, existingComments[0]._id, "test");
             sinon.assert.calledWith(stubbedResponse.status, 204);
         });
+        
+        it("should respond with 404 if checkOwnership resolves null", async () => {
+            //Arrange
+            stubbedService.checkOwnership.resolves(null)
+            
+            //Act
+            await testController.editComment(testRequest, stubbedResponse);
+            
+            //Assert
+            sinon.assert.notCalled(stubbedService.editComment);
+            sinon.assert.calledWith(stubbedResponse.status, 404);
+        });
     });
 });

@@ -69,7 +69,12 @@ export default class CommentController {
     
     async editComment(req, res) {
         try {
-            await this.#commentService.checkOwnership(req.body.id, req.body.userId);
+            const comment = await this.#commentService.checkOwnership(req.body.id, req.body.userId);
+            
+            if (comment === null) {
+                return res.status(404).json({ message: "No comment with given id by given user" })
+            }
+            
             await this.#commentService.editComment(req.body.id, req.body.newComment);
 
             return res.status(204).json();
