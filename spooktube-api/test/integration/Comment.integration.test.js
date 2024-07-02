@@ -157,6 +157,17 @@ describe("Comment Integration Tests", () => {
             assert.equal(actual.status, 200);
             assert.equal(actual.body.comments.length, 5);
         });
+        
+        it("should respond 200 if rangeMin < zero", async () => {
+            //Act
+            const actual = await requester
+                .get("/comments/user/-1/5")
+                .set("authentication", jwt.sign({ id: existingAccounts[0]._id }, process.env.SECRET));;
+            
+            //Assert
+            assert.equal(actual.status, 200);
+            assert.equal(actual.body.comments.length, 5);
+        });
     });
     
     describe("makeComment", () => {
