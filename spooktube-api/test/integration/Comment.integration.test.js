@@ -146,6 +146,17 @@ describe("Comment Integration Tests", () => {
             assert.equal(actual.body.comments.length, 4);
             assert.isFalse(actual.body.comments.some((comment) => comment.comment === existingComments[5].comment));
         });
+        
+        it("should respond 200 if rangeMax > collection size", async () => {
+            //Act
+            const actual = await requester
+                .get("/comments/user/0/6")
+                .set("authentication", jwt.sign({ id: existingAccounts[0]._id }, process.env.SECRET));;
+            
+            //Assert
+            assert.equal(actual.status, 200);
+            assert.equal(actual.body.comments.length, 5);
+        });
     });
     
     describe("makeComment", () => {
