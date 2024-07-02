@@ -16,7 +16,7 @@ import AccountService from "../../src/services/Account.service.js";
 
 import jwt from "jsonwebtoken";
 
-describe.skip("Comment Integration Tests", () => {
+describe("Comment Integration Tests", () => {
     let server;
     let database;
     let requester;
@@ -420,6 +420,23 @@ describe.skip("Comment Integration Tests", () => {
                 .set("authentication", jwt.sign({ id: existingAccounts[1]._id }, process.env.SECRET));
             
             //Assert
+            assert.equal(actual.status, 204);
+        });
+    });
+    
+    describe("Delete Comment", () => {
+        it("should respond 204 in normal circumstances", async () => {
+            //Act
+            const actual = await requester
+                .delete("/comments")
+                .send({
+                    id: existingComments[4]._id,
+                })
+                .set("authentication", jwt.sign({ id: existingComments[4].userId }, process.env.SECRET));
+            
+            //Assert
+            const comment = await Comment.findById(existingComments[4]._id);
+            assert.isNull(comment);
             assert.equal(actual.status, 204);
         });
     })

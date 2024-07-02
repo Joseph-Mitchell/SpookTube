@@ -33,5 +33,12 @@ export default class CommentRouter extends Router {
                 this._controller.editComment(req, res);
             }
         );
+        this._router.delete(
+            "/",
+            AccountMiddleware.authenticateToken,
+            (req, res) => {
+                this._controller.deleteComment(req, res);
+            }
+        );
     }
 }
