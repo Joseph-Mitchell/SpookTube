@@ -408,5 +408,19 @@ describe("Comment Integration Tests", () => {
             assert.equal(actual.status, 404);
             assert.equal(comment.comment, existingComments[4].comment);
         });
+        
+        it("should respond 204 if user is moderator", async () => {
+            //Act
+            const actual = await requester
+                .put("/comments")
+                .send({
+                    id: existingComments[4]._id,
+                    newComment: newComments.valid.comment
+                })
+                .set("authentication", jwt.sign({ id: existingAccounts[1]._id }, process.env.SECRET));
+            
+            //Assert
+            assert.equal(actual.status, 204);
+        });
     })
 });
