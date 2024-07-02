@@ -58,7 +58,113 @@ describe("Comment Controller", () => {
         });
     });
     
-    describe("getVideoComments", () => {
+    describe("getUserComments", () => {
+        let stubbedService;
+        let stubbedResponse;
+        let testController;
+        let testRequest;
+        let testComments;
+        let testResponseComments;
+        
+        beforeEach(() => {
+            stubbedService = { getUserCommentsCount: sinon.stub(), getUserComments: sinon.stub() };
+            stubbedResponse = { status: sinon.stub().returnsThis(), json: sinon.stub() };
+            
+            testController = new CommentController(stubbedService);
+            testRequest = { params: { rangeMin: 0, rangeMax: 20 }, body: { userId: 1 } };
+
+            testComments = [];
+            testResponseComments = [];
+            for (let i = 0; i < 20; i++) {
+                testComments.push({ _doc: { comment: "hi", videoId: i, userId: i, timeCode: i } });
+                testResponseComments.push({ comment: "hi", videoId: i, userId: i, timeCode: i });
+            }
+            
+            stubbedService.getUserCommentsCount.resolves(20);
+            stubbedService.getUserComments.resolves(testComments);
+        });
+        
+        afterEach(() => {
+            stubbedService = undefined;
+            stubbedResponse = undefined;
+            testController = undefined;
+            testRequest = undefined;
+            testComments = undefined;
+            testResponseComments = undefined;
+        });
+        
+        it("should call res.status with 200 in normal circumstances", async () => {
+            //Act
+            await testController.getUserComments(testRequest, stubbedResponse);
+            
+            //Assert
+            sinon.assert.calledOnceWithExactly(stubbedResponse.status, 200);
+            sinon.assert.calledWith(stubbedResponse.json, { comments: testResponseComments, pages: 1 });
+        });
+        
+        it("should respond with expected array when req.params.rangeMax < comments in collection", async () => {
+            //Arrange
+            testRequest.params.rangeMax = 10;
+            testResponseComments = testResponseComments.splice(0, 10);
+            
+            //Act
+            await testController.getUserComments(testRequest, stubbedResponse);
+            
+            //Assert
+            sinon.assert.calledOnceWithExactly(stubbedResponse.status, 200);
+            sinon.assert.calledWith(stubbedResponse.json, { comments: testResponseComments, pages: 2 });
+        });
+           
+        it("should respond with expected array when req.params.rangeMin > zero", async () => {
+            //Arrange
+            testRequest.params.rangeMin = 10;
+            testResponseComments = testResponseComments.splice(10, 20);
+            
+            //Act
+            await testController.getUserComments(testRequest, stubbedResponse);
+            
+            //Assert
+            sinon.assert.calledOnceWithExactly(stubbedResponse.status, 200);
+            sinon.assert.calledWith(stubbedResponse.json, { comments: testResponseComments, pages: 2 });
+        });
+        
+        it("should respond with expected array when req.params.rangeMax > comments in collection", async () => {
+            //Arrange
+            testRequest.params.rangeMax = 25;
+            
+            //Act
+            await testController.getUserComments(testRequest, stubbedResponse);
+            
+            //Assert
+            sinon.assert.calledOnceWithExactly(stubbedResponse.status, 200);
+            sinon.assert.calledWith(stubbedResponse.json, { comments: testResponseComments, pages: 1 });
+        });
+                     
+        it("should respond with expected array when req.params.rangeMin < Zero", async () => {
+            //Arrange
+            testRequest.params.rangeMin = -5;
+            
+            //Act
+            await testController.getUserComments(testRequest, stubbedResponse);
+            
+            //Assert
+            sinon.assert.calledOnceWithExactly(stubbedResponse.status, 200);
+            sinon.assert.calledWith(stubbedResponse.json, { comments: testResponseComments, pages: 1 });
+        });
+                         
+        it("should respond with 500 if service rejects an error", async () => {
+            //Arrange
+            stubbedService.getUserComments.rejects(new Error());
+            
+            //Act
+            await testController.getUserComments(testRequest, stubbedResponse);
+            
+            //Assert
+            sinon.assert.calledOnceWithExactly(stubbedResponse.status, 500);
+        });
+    });
+        
+    describe("makeComment", () => {
         let stubbedCommentService;
         let stubbedAccountService;
         let stubbedResponse;
@@ -98,8 +204,12 @@ describe("Comment Controller", () => {
             
             //Assert
             sinon.assert.calledWith(stubbedAccountService.getAccountById, testComment.userId);
-            sinon.assert.calledWith(stubbedCommentService.createComment,
-                testComment.comment, testComment.videoId, testComment.userId, testComment.timeCode);
+            sinon.assert.calledWith(
+                stubbedCommentService.createComment,
+                testComment.comment,
+                testComment.videoId,
+                testComment.userId,
+                testComment.timeCode);
             sinon.assert.calledWith(stubbedResponse.status, 201);
             sinon.assert.calledWith(stubbedResponse.json, { comment: testComment });
         });

@@ -1,6 +1,10 @@
 import Video from "../models/Video.model.js";
 
 export default class VideoService {
+    async getUserVideosCount(userId) {
+        return await Video.find({ userId: userId }).estimatedDocumentCount();
+    }
+    
     async getVideosCount() {
         return await Video.find({}).estimatedDocumentCount();
     } 

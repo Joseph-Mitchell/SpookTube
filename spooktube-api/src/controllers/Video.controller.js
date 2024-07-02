@@ -33,7 +33,7 @@ export default class VideoController {
     
     async getUserVideos(req, res) {
         try {           
-            const count = await this.#videoService.getVideosCount();
+            const count = await this.#videoService.getUserVideosCount(req.body.userId);
             
             const videosPerPage = (req.params.rangeMax - req.params.rangeMin);
             const pages = Math.floor(count / videosPerPage) + 1;
@@ -48,6 +48,7 @@ export default class VideoController {
 
             return res.status(200).json({ videos: response, pages: pages });
         } catch (e) {
+            console.log(e.message)
             return res.status(500).json({ message: e.message });
         }
     }

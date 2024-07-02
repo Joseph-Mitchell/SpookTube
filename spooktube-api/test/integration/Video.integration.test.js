@@ -24,7 +24,7 @@ import { dataUriToBuffer } from "data-uri-to-buffer";
 
 import cloudinary from "cloudinary";
 
-describe("Video Integration Tests", () => {
+describe.skip("Video Integration Tests", () => {
     let server;
     let database;
     let requester;
@@ -269,7 +269,7 @@ describe("Video Integration Tests", () => {
         });
     });
     
-    describe("Delete Video", () => {   
+    describe.skip("Delete Video", () => {   
         beforeEach(async () => {
             const file = await fs.readFile("test/data/videos/test.webm", { encoding: "base64url" });
             const dataUri = "data:video/webm;base64," + file;

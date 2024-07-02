@@ -1,7 +1,7 @@
 import sinon from "sinon";
 import VideoController from "../../src/controllers/Video.controller.js";
 
-describe("Controller", () => {    
+describe("Video Controller", () => {    
     describe("getAllVideos", () => {
         let stubbedService;
         let stubbedResponse;
@@ -122,7 +122,7 @@ describe("Controller", () => {
         let testResponseVideos;
         
         beforeEach(() => {
-            stubbedService = { getUserVideos: sinon.stub(), getVideosCount: sinon.stub() };
+            stubbedService = { getUserVideos: sinon.stub(), getUserVideosCount: sinon.stub() };
             stubbedResponse = { status: sinon.stub().returnsThis(), json: sinon.stub() };
             
             testController = new VideoController(stubbedService);
@@ -138,7 +138,7 @@ describe("Controller", () => {
             }
             
             stubbedService.getUserVideos.resolves(testVideos);
-            stubbedService.getVideosCount.resolves(10);
+            stubbedService.getUserVideosCount.resolves(10);
         });
         
         afterEach(() => {
