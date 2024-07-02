@@ -1,5 +1,6 @@
 import * as bcrypt from "bcrypt"
 import Account from "../models/Account.model.js";
+import Role from "../models/Role.model.js";
 
 export default class AccountService {
     async getAccountById(id) {

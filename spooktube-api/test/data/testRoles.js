@@ -1,4 +1,4 @@
-export const existingAccounts = [
+export const roles = [
     {
         _id: "667b4c31215f0508c26f0df8",
         roleName: "user",

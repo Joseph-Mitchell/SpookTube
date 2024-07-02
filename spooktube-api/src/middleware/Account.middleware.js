@@ -6,7 +6,7 @@ import AccountService from "../services/Account.service.js";
 export default class AccountMiddleware {
     static authenticateToken = (req, res, next) => {
         let token = req.headers["authentication"];
-
+        
         if (!token) {
             return res.status(401).send({ message: "No token provided" });
         }
@@ -14,22 +14,11 @@ export default class AccountMiddleware {
         jwt.verify(token, process.env.SECRET, (err, decoded) => {
             if (err)
                 return res.status(401).send({ message: "Token not recognized" });
-
+            
             req.body.userId = decoded.id;
 
             next();
         });
-    }
-    
-    static isModerator = (req, res, next) => {
-        const role = AccountService.getRoleById(req.userId).role;
-        console.log(role);
-        if (role === "moderator")
-            req.body.isModerator = true;
-        else
-            req.body.isModerator = false;
-        
-        next();
     }
     
     static validateRegDetails = () => {

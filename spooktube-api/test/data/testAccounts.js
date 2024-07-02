@@ -5,6 +5,7 @@ export const existingAccounts = [
         username: "testuser1",
         password: "testpass",
         icon: 0,
+        role: "667b4c31215f0508c26f0df8",
     },
     {
         _id: "667a088b9c6f69cef857c71f",
@@ -12,6 +13,7 @@ export const existingAccounts = [
         username: "testuser2",
         password: "testpass",
         icon: 1,
+        role: "667b4c78215f0508c26f0df9",
     },
     {
         _id: "667a088f1d6a5c44d340c587",
@@ -19,6 +21,7 @@ export const existingAccounts = [
         username: "testuser3",
         password: "testpass",
         icon: 2,
+        role: "667b4c31215f0508c26f0df8",
     },
     {
         _id: "667a0892ac12e6c3b167fe15",
@@ -26,6 +29,7 @@ export const existingAccounts = [
         username: "testuser4",
         password: "testpass",
         icon: 3,
+        role: "667b4c31215f0508c26f0df8",
     },
     {
         _id: "667a08958a1fb3fde2cf583f",
@@ -33,6 +37,7 @@ export const existingAccounts = [
         username: "testuser5",
         password: "testpass",
         icon: 4,
+        role: "667b4c31215f0508c26f0df8",
     }
 ];
 

@@ -314,22 +314,34 @@ describe("Controller", () => {
         });
     });
     
-    describe("uploadVideo", () => {
+    describe("deleteVideo", () => {
         let stubbedContentManagerService;
         let stubbedVideoService;
+        let stubbedAccountService;
         let stubbedResponse;
         let testRequest;
         let testController;
         
         beforeEach(() => {
             stubbedContentManagerService = { deleteVideo: sinon.stub() };
-            stubbedVideoService = { checkOwnership: sinon.stub(), deleteVideo: sinon.stub(), createVideo: sinon.stub(), getVideo: sinon.stub() };
+            stubbedVideoService = {
+                checkOwnership: sinon.stub(),
+                deleteVideo: sinon.stub(),
+                createVideo: sinon.stub(),
+                getVideo: sinon.stub()
+            };
+            stubbedAccountService = { getRoleById: sinon.stub() }
             stubbedResponse = { status: sinon.stub().returnsThis(), json: sinon.stub() };
             
-            testController = new VideoController(stubbedVideoService, stubbedContentManagerService);
-            testRequest = { body: { userId: 1, isModerator: false, videoId: "gfrd" } };
+            testController = new VideoController(
+                stubbedVideoService,
+                stubbedContentManagerService,
+                stubbedAccountService
+            );
+            testRequest = { body: { userId: 1, videoId: "gfrd" } };
             
             stubbedContentManagerService.deleteVideo.resolves({ result: "ok" });
+            stubbedAccountService.getRoleById.resolves({ role: { roleName: "user" } });
             stubbedVideoService.checkOwnership.resolves({ videoId: 1, userId: 1, uploadDate: 1 });
             stubbedVideoService.deleteVideo.resolves({});
             stubbedVideoService.createVideo.resolves({});
@@ -339,6 +351,7 @@ describe("Controller", () => {
         afterEach(() => {
             stubbedContentManagerService = undefined;
             stubbedVideoService = undefined;
+            stubbedAccountService = undefined;
             stubbedResponse = undefined;
             testRequest = undefined;
             testController = undefined;
@@ -357,9 +370,9 @@ describe("Controller", () => {
             sinon.assert.notCalled(stubbedVideoService.createVideo);
         });
         
-        it("should not call checkOwnership if isModerator true", async () => {
+        it("should not call checkOwnership if role is moderator", async () => {
             //Arrange
-            testRequest.body.isModerator = true;
+            stubbedAccountService.getRoleById.resolves({ role: { roleName: "moderator" } });
             
             //Act
             await testController.deleteVideo(testRequest, stubbedResponse);

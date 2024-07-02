@@ -2,10 +2,12 @@ export default class VideoController {
     
     #videoService;
     #contentManagerService
+    #accountService;
     
-    constructor(videoService, contentManagerService) {
+    constructor(videoService, contentManagerService, accountService) {
         this.#videoService = videoService;
         this.#contentManagerService = contentManagerService;
+        this.#accountService = accountService;
     }
     
     async getAllVideos(req, res) {
@@ -73,15 +75,17 @@ export default class VideoController {
     
     async deleteVideo(req, res) {
         try {
+            let role = (await this.#accountService.getRoleById(req.body.userId)).role.roleName;
+
             let video;
-            if (!req.body.isModerator) {
+            if (role === "moderator") {
+                video = await this.#videoService.getVideo(req.body.videoId);
+            } else {
                 video = await this.#videoService.checkOwnership(req.body.videoId, req.body.userId);
                 
                 if (video === null) {
                     return res.status(404).json({ message: "Video by this user not found" });
                 }
-            } else {
-                video = await this.#videoService.getVideo(req.body.videoId);
             }
             
             await this.#videoService.deleteVideo(req.body.videoId);
@@ -93,7 +97,7 @@ export default class VideoController {
                 return res.status(500).json({ message: "Content manager error" });
             }
 
-            return res.status(204);
+            return res.status(204).json();
         } catch (e) {
             return res.status(500).json({ message: e.message });
         }
