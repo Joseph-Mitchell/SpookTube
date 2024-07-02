@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import VideoGrid from "../../common/VideoGrid.jsx";
-import getAllVideos from "../../../services/getAllVideos.js";
 import Paginator from "../../common/Paginator.jsx";
 import CommentGrid from "./CommentGrid.jsx";
 import getUserVideos from "../../../services/getUserVideos.js";
 import DeleteModal from "../../ui/DeleteModal.jsx";
 import deleteVideo from "../../../services/deleteVideo.js";
 import EditCommentModal from "../../ui/EditModal.jsx";
+import editComment from "../../../services/editComment.js";
 
 const MyContentPage = ({ loggedIn, loginFinished, navigate }) => {
     const SELECTED_CLASSES = "border-primary-subtle bg-primary-subtle text-primary z-2";
@@ -20,7 +20,8 @@ const MyContentPage = ({ loggedIn, loginFinished, navigate }) => {
     const [currentPage, setCurrentPage] = useState(1);
     const [videos, setVideos] = useState([]);
 
-    const [deleteModal, setDeleteModal] = useState({});
+    const [deleteVideoModal, setDeleteVideoModal] = useState({});
+    const [deleteCommentModal, setDeleteCommentModal] = useState({});
     const [toBeDeleted, setToBeDeleted] = useState("");
 
     const [newComment, setNewComment] = useState("");
@@ -44,12 +45,17 @@ const MyContentPage = ({ loggedIn, loginFinished, navigate }) => {
         editModal.show();
     }
 
-    function confirmEditComment() {
-        console.log("confirm");
+    async function confirmEditComment() {
+        document.getElementById("edit-comment-modal-confirm").setAttribute("disabled", true);
+        document.getElementById("edit-comment-modal-cancel").setAttribute("disabled", true);
+
+        await editComment(commentEditing, newComment, localStorage.getItem("token"));
+        setNewComment("");
+        setCommentEditing("");
+        window.location.reload();
     }
 
     function cancelEditComment() {
-        console.log("cancel");
         setNewComment("");
         setCommentEditing("");
         editModal.hide();
@@ -77,31 +83,53 @@ const MyContentPage = ({ loggedIn, loginFinished, navigate }) => {
 
     function clickDeleteVideo(videoId) {
         setToBeDeleted(videoId);
-        deleteModal.show();
+        deleteVideoModal.show();
     }
 
     async function confirmDeleteVideo() {
         document.getElementById("delete-modal-cancel").setAttribute("disabled", true);
         document.getElementById("delete-modal-confirm").setAttribute("disabled", true);
-        const response = await deleteVideo(toBeDeleted, localStorage.getItem("token"));
+        await deleteVideo(toBeDeleted, localStorage.getItem("token"));
         setToBeDeleted("");
         window.location.reload();
     }
 
     function cancelDeleteVideo() {
         setToBeDeleted("");
-        deleteModal.hide();
+        deleteVideoModal.hide();
+    }
+
+    function clickDeleteComment() {
+        editModal.hide();
+        deleteCommentModal.show();
+    }
+
+    async function confirmDeleteComment() {
+        console.log("confirm");
+        document.getElementById("delete-modal-cancel").setAttribute("disabled", true);
+        document.getElementById("delete-modal-confirm").setAttribute("disabled", true);
+        // await deleteVideo(toBeDeleted, localStorage.getItem("token"));
+        setToBeDeleted("");
+        window.location.reload();
+    }
+
+    function cancelDeleteComment() {
+        console.log("cancel");
+        deleteCommentModal.hide();
+        editModal.show();
     }
 
     return (
         <>
-            <DeleteModal message="Delete this video?" setDeleteModal={setDeleteModal} confirmDelete={confirmDeleteVideo} cancelDelete={cancelDeleteVideo} />
+            <DeleteModal id="video" setDeleteModal={setDeleteVideoModal} confirmDelete={confirmDeleteVideo} cancelDelete={cancelDeleteVideo} />
+            <DeleteModal id="comment" setDeleteModal={setDeleteCommentModal} confirmDelete={confirmDeleteComment} cancelDelete={cancelDeleteComment} />
             <EditCommentModal
                 setEditModal={setEditModal}
                 confirmEdit={confirmEditComment}
                 cancelEdit={cancelEditComment}
                 newComment={newComment}
                 setNewComment={setNewComment}
+                clickDeleteComment={clickDeleteComment}
             />
             <div id="tabs" className="d-flex justify-content-evenly w-100">
                 <button
