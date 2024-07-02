@@ -384,5 +384,17 @@ describe("Comment Controller", () => {
             //Assert
             sinon.assert.calledWith(stubbedResponse.status, 404);
         });
+        
+        it("should respond with 204 if getRoleById resolves with role 'moderator'", async () => {
+            //Arrange
+            stubbedAccountService.getRoleById.resolves({ role: { roleName: "moderator" } });
+            
+            //Act
+            await testController.deleteComment(testRequest, stubbedResponse);
+            
+            //Assert
+            sinon.assert.notCalled(stubbedCommentService.checkOwnership);
+            sinon.assert.calledWith(stubbedResponse.status, 204);
+        }); 
     });
 });
