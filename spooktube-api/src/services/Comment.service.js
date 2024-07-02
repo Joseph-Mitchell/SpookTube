@@ -7,11 +7,11 @@ export default class CommentService {
     }
     
     async getVideoComments(videoId) {
-        return await Comment.find({ videoId: videoId }).sort({ timeCode: 1 }).select("-_id comment videoId userId timeCode").populate("userId", "-_id username icon");
+        return await Comment.find({ videoId: videoId }).sort({ timeCode: 1 }).select("comment videoId userId timeCode").populate("userId", "-_id username icon");
     }
     
     async getUserComments(userId) {
-        return await Comment.find({ userId: userId }).select("-_id comment videoId userId timeCode").populate("userId", "-_id username icon");
+        return await Comment.find({ userId: userId }).select("comment videoId userId timeCode").populate("userId", "-_id username icon");
     }
     
     async createComment(comment, videoId, userId, timeCode) {

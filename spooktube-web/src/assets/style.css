@@ -51,5 +51,14 @@
 
 #video-delete-button {
     top: 18px;
-    right: 35px;
+    right: 25px;
+}
+
+#comment-edit-button {
+    width: 2.5rem;
+    right: 9px;
+}
+
+#edit-comment-text {
+    min-height: 100px;
 }

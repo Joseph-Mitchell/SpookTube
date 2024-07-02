@@ -1,21 +1,23 @@
 import { useEffect, useState } from "react";
 
 import CommentCard from "../Watch/CommentCard.jsx";
-import getVideoComments from "../../../services/getVideoComments.js";
+import getUserComments from "../../../services/getUserComments.js";
 
-const CommentGrid = () => {
+const CommentGrid = ({ currentPage, clickEditComment }) => {
+    const COMMENTS_PER_PAGE = 18;
+
     const [comments, setComments] = useState([]);
     const [commentList, setCommentList] = useState([]);
 
     async function loadComments() {
-        let loadedData = await getVideoComments("content_warning_112c4908_jfq7xa");
+        let loadedData = await getUserComments(localStorage.getItem("token"), COMMENTS_PER_PAGE * (currentPage - 1), COMMENTS_PER_PAGE * currentPage);
         await setComments(loadedData.comments);
     }
 
     async function populateCommentList() {
         let commentListTemp = [];
         for (let i = 0; i < comments.length; i++) {
-            commentListTemp.push(<CommentCard key={i} comment={comments[i]} currentVideoTime="200" />);
+            commentListTemp.push(<CommentCard key={i} comment={comments[i]} currentVideoTime="200" clickEditComment={clickEditComment} />);
         }
         await setCommentList(commentListTemp);
     }
@@ -29,14 +31,16 @@ const CommentGrid = () => {
     }, [comments]);
 
     return (
-        <div id="comment-section" className="row row-cols-2">
-            <div className="col">
-                {commentList.slice(0, commentList.length / 2)}
+        <>
+            <div id="comment-section" className="row row-cols-2">
+                <div className="col">
+                    {commentList.slice(0, commentList.length / 2)}
+                </div>
+                <div className="col">
+                    {commentList.slice(commentList.length / 2, commentList.length)}
+                </div>
             </div>
-            <div className="col">
-                {commentList.slice(commentList.length / 2, commentList.length)}
-            </div>
-        </div>
+        </>
     );
 };
 export default CommentGrid;

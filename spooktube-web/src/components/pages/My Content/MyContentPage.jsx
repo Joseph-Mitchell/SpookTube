@@ -6,6 +6,7 @@ import CommentGrid from "./CommentGrid.jsx";
 import getUserVideos from "../../../services/getUserVideos.js";
 import DeleteModal from "../../ui/DeleteModal.jsx";
 import deleteVideo from "../../../services/deleteVideo.js";
+import EditCommentModal from "../../ui/EditModal.jsx";
 
 const MyContentPage = ({ loggedIn, loginFinished, navigate }) => {
     const SELECTED_CLASSES = "border-primary-subtle bg-primary-subtle text-primary z-2";
@@ -22,6 +23,10 @@ const MyContentPage = ({ loggedIn, loginFinished, navigate }) => {
     const [deleteModal, setDeleteModal] = useState({});
     const [toBeDeleted, setToBeDeleted] = useState("");
 
+    const [newComment, setNewComment] = useState("");
+    const [commentEditing, setCommentEditing] = useState("");
+    const [editModal, setEditModal] = useState({});
+
     useEffect(() => {
         if (!loggedIn && loginFinished) {
             navigate("/");
@@ -31,6 +36,24 @@ const MyContentPage = ({ loggedIn, loginFinished, navigate }) => {
     useEffect(() => {
         refreshVideos();
     }, [currentPage]);
+
+
+    function clickEditComment(id, comment) {
+        setNewComment(comment);
+        setCommentEditing(id);
+        editModal.show();
+    }
+
+    function confirmEditComment() {
+        console.log("confirm");
+    }
+
+    function cancelEditComment() {
+        console.log("cancel");
+        setNewComment("");
+        setCommentEditing("");
+        editModal.hide();
+    }
 
     function clickVideos() {
         document.getElementById("user-video-grid").classList.remove("d-none");
@@ -72,7 +95,14 @@ const MyContentPage = ({ loggedIn, loginFinished, navigate }) => {
 
     return (
         <>
-            <DeleteModal setDeleteModal={setDeleteModal} confirmDeleteVideo={confirmDeleteVideo} cancelDeleteVideo={cancelDeleteVideo} />
+            <DeleteModal message="Delete this video?" setDeleteModal={setDeleteModal} confirmDelete={confirmDeleteVideo} cancelDelete={cancelDeleteVideo} />
+            <EditCommentModal
+                setEditModal={setEditModal}
+                confirmEdit={confirmEditComment}
+                cancelEdit={cancelEditComment}
+                newComment={newComment}
+                setNewComment={setNewComment}
+            />
             <div id="tabs" className="d-flex justify-content-evenly w-100">
                 <button
                     className={`tab-button btn fs-2 border border-bottom-0 border-2 rounded-top-4 rounded-bottom-0 ${videoClasses}`}
@@ -92,7 +122,7 @@ const MyContentPage = ({ loggedIn, loginFinished, navigate }) => {
                     <VideoGrid videos={videos} clickDeleteVideo={clickDeleteVideo} user />
                 </div>
                 <div id="user-comment-grid" className="d-none">
-                    <CommentGrid />
+                    <CommentGrid currentPage={currentPage} clickEditComment={clickEditComment} />
                 </div>
                 <Paginator currentPage={currentPage} setCurrentPage={setCurrentPage} pages={pages} />
             </div>
