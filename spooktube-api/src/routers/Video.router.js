@@ -19,5 +19,8 @@ export default class VideoRouter extends Router {
         this._router.post("/post", AccountMiddleware.authenticateToken, (req, res) => {
             this._controller.uploadVideo(req, res);
         });
+        this._router.post("/delete", [AccountMiddleware.authenticateToken, AccountMiddleware.isModerator], (req, res) => {
+            this._controller.deleteVideo(req, res);
+        }); 
     }
 }
