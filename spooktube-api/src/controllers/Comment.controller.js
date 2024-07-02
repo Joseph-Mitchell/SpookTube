@@ -23,13 +23,13 @@ export default class CommentController {
     
     async getUserComments(req, res) {
         try {           
+            console.log("comments");
             const count = await this.#commentService.getUserCommentsCount(req.body.userId);
             
             const commentsPerPage = (req.params.rangeMax - req.params.rangeMin);
             const pages = Math.floor((count - 1) / commentsPerPage) + 1;
             
             const comments = await this.#commentService.getUserComments(req.body.userId);
-
             let response = []
             for (let i = Math.max(req.params.rangeMin, 0); (i < comments.length) && (i < req.params.rangeMax); i++) {
                 let { uploadDate, ...rest } = comments[i]._doc;

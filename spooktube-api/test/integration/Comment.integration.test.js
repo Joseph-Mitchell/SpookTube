@@ -16,7 +16,7 @@ import AccountService from "../../src/services/Account.service.js";
 
 import jwt from "jsonwebtoken";
 
-describe.skip("Comment Integration Tests", () => {
+describe("Comment Integration Tests", () => {
     let server;
     let database;
     let requester;
@@ -58,21 +58,20 @@ describe.skip("Comment Integration Tests", () => {
         }
     });
     
-    
-    describe("getVideoComments", () => {
+    describe("Get Video Comments", () => {
         it("should respond 200 in normal circumstances", async () => {
             //Act
             const actual = await requester.get("/comments/video/grhujedai");
             
             //Assert
             assert.equal(actual.status, 200);
-            assert.equal(actual.body.comments.length, 2);
+            assert.equal(actual.body.comments.length, 4);
             assert.deepEqual(actual.body.comments[0], {
                 comment: "Hello",
                 videoId: "grhujedai",
                 userId: {
-                    username: "testuser1",
-                    icon: "0",
+                    username: "testuser2",
+                    icon: "1",
                 },
                 timeCode: 43,
             },);
@@ -92,6 +91,28 @@ describe.skip("Comment Integration Tests", () => {
             await database.connect();
         });
     });
+    
+    describe("Get User Comments", () => {
+        it("should respond 200 in normal circumstances", async () => {
+            //Act
+            const actual = await requester
+                .get("/comments/user/0/5")
+                .set("authentication", jwt.sign({ id: existingAccounts[0]._id }, process.env.SECRET));
+            
+            //Assert
+            assert.equal(actual.status, 200);
+            assert.equal(actual.body.comments.length, 5);
+            assert.deepEqual(actual.body.comments[0], {
+                comment: "Hello2",
+                videoId: "grhujedai",
+                userId: {
+                    username: "testuser1",
+                    icon: "0",
+                },
+                timeCode: 43,
+            },);
+        });
+    })
     
     describe("makeComment", () => {
         it("should respond 201 in normal circumstances", async () => {

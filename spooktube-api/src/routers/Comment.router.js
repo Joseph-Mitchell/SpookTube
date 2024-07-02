@@ -14,6 +14,9 @@ export default class CommentRouter extends Router {
         this._router.get("/video/:videoId", (req, res) => {
             this._controller.getVideoComments(req, res);
         });
+        this._router.get("/user/:rangeMin/:rangeMax", AccountMiddleware.authenticateToken, (req, res) => {
+            this._controller.getUserComments(req, res);
+        });
         this._router.post(
             "/post",
             AccountMiddleware.authenticateToken,
