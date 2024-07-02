@@ -373,5 +373,16 @@ describe("Comment Controller", () => {
             sinon.assert.calledWith(stubbedCommentService.deleteComment, existingComments[0]._id);
             sinon.assert.calledWith(stubbedResponse.status, 204);
         });
+        
+        it("should respond with 404 if checkOwnership resolves null", async () => {
+            //Arrange
+            stubbedCommentService.checkOwnership.resolves(null);
+            
+            //Act
+            await testController.deleteComment(testRequest, stubbedResponse);
+            
+            //Assert
+            sinon.assert.calledWith(stubbedResponse.status, 404);
+        });
     });
 });
