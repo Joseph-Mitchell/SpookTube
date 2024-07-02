@@ -15,7 +15,7 @@ import ContentManagerService from './services/ContentManager.service.js';
 Config.load();
 const { PORT, HOST, DB_URI } = process.env;
 
-const videoRouter = new VideoRouter(new VideoController(new VideoService(), new ContentManagerService())); 
+const videoRouter = new VideoRouter(new VideoController(new VideoService(), new ContentManagerService(), new AccountService())); 
 const commentRouter = new CommentRouter(new CommentController(new CommentService(), new AccountService())); 
 const accountRouter = new AccountRouter(new AccountController(new AccountService())); 
 const routers = [videoRouter, commentRouter, accountRouter];

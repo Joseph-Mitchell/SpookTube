@@ -4,6 +4,8 @@ import getAllVideos from "../../../services/getAllVideos.js";
 import Paginator from "../../common/Paginator.jsx";
 import CommentGrid from "./CommentGrid.jsx";
 import getUserVideos from "../../../services/getUserVideos.js";
+import DeleteModal from "../../ui/DeleteModal.jsx";
+import deleteVideo from "../../../services/deleteVideo.js";
 
 const MyContentPage = ({ loggedIn, loginFinished, navigate }) => {
     const SELECTED_CLASSES = "border-primary-subtle bg-primary-subtle text-primary z-2";
@@ -16,6 +18,9 @@ const MyContentPage = ({ loggedIn, loginFinished, navigate }) => {
     const [pages, setPages] = useState(1);
     const [currentPage, setCurrentPage] = useState(1);
     const [videos, setVideos] = useState([]);
+
+    const [deleteModal, setDeleteModal] = useState({});
+    const [toBeDeleted, setToBeDeleted] = useState("");
 
     useEffect(() => {
         if (!loggedIn && loginFinished) {
@@ -47,8 +52,27 @@ const MyContentPage = ({ loggedIn, loginFinished, navigate }) => {
         setPages(res.pages);
     }
 
+    function clickDeleteVideo(videoId) {
+        setToBeDeleted(videoId);
+        deleteModal.show();
+    }
+
+    async function confirmDeleteVideo() {
+        document.getElementById("delete-modal-cancel").setAttribute("disabled", true);
+        document.getElementById("delete-modal-confirm").setAttribute("disabled", true);
+        const response = await deleteVideo(toBeDeleted, localStorage.getItem("token"));
+        setToBeDeleted("");
+        window.location.reload();
+    }
+
+    function cancelDeleteVideo() {
+        setToBeDeleted("");
+        deleteModal.hide();
+    }
+
     return (
         <>
+            <DeleteModal setDeleteModal={setDeleteModal} confirmDeleteVideo={confirmDeleteVideo} cancelDeleteVideo={cancelDeleteVideo} />
             <div id="tabs" className="d-flex justify-content-evenly w-100">
                 <button
                     className={`tab-button btn fs-2 border border-bottom-0 border-2 rounded-top-4 rounded-bottom-0 ${videoClasses}`}
@@ -65,7 +89,7 @@ const MyContentPage = ({ loggedIn, loginFinished, navigate }) => {
             </div>
             <div id="user-content" className="border border-start-0 border-end-0 border-top-2 border-primary-subtle bg-primary-subtle position-relative z-1">
                 <div id="user-video-grid">
-                    <VideoGrid videos={videos} user />
+                    <VideoGrid videos={videos} clickDeleteVideo={clickDeleteVideo} user />
                 </div>
                 <div id="user-comment-grid" className="d-none">
                     <CommentGrid />

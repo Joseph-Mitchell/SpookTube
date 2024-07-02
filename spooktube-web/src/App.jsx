@@ -40,6 +40,7 @@ function App() {
     return (
         <>
             <Navbar loggedIn={loggedIn} setLoggedIn={setLoggedIn} setUsername={setUsername} icon={icon} setIcon={setIcon} navigate={navigate} />
+
             <Routes>
                 <Route
                     path="/"
