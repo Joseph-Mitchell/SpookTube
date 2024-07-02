@@ -110,7 +110,18 @@ describe("Comment Integration Tests", () => {
                     icon: "0",
                 },
                 timeCode: 43,
-            },);
+            });
+            
+            it("should respond 200 if rangeMax > number of comments with matching userId", async () => {
+            //Act
+            const actual = await requester
+                .get("/comments/user/0/10")
+                .set("authentication", jwt.sign({ id: existingAccounts[0]._id }, process.env.SECRET));
+            
+            //Assert
+            assert.equal(actual.status, 200);
+            assert.equal(actual.body.videos.length, 5);
+        });
         });
     })
     
