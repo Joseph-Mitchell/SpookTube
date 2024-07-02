@@ -16,7 +16,7 @@ import AccountService from "../../src/services/Account.service.js";
 
 import jwt from "jsonwebtoken";
 
-describe.skip("Comment Integration Tests", () => {
+describe("Comment Integration Tests", () => {
     let server;
     let database;
     let requester;
@@ -375,4 +375,22 @@ describe.skip("Comment Integration Tests", () => {
             await database.connect();
         });
     });
+    
+    describe("Edit Comment", () => {
+        it("should respond 204 in normal circumstances", async () => {
+            //Act
+            const actual = await requester
+                .put("/comments")
+                .send({
+                    id: existingComments[0]._id,
+                    newComment: newComments.valid.comment
+                })
+                .set("authentication", jwt.sign({ id: existingComments[0].userId }, process.env.SECRET));
+            
+            //Assert
+            const comment = await Comment.findById(existingComments[0]._id);
+            assert.equal(actual.status, 204);
+            assert.equal(comment.comment, newComments.valid.comment);
+        });
+    })
 });

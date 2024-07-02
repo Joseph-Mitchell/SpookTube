@@ -25,5 +25,13 @@ export default class CommentRouter extends Router {
                 this._controller.makeComment(req, res);
             }
         );
+        this._router.put(
+            "/",
+            AccountMiddleware.authenticateToken,
+            CommentMiddleware.validateEditComment(),
+            (req, res) => {
+                this._controller.editComment(req, res);
+            }
+        );
     }
 }

@@ -1,6 +1,24 @@
 import * as expressValidator from "express-validator";
 
 export default class CommentMiddleware {
+    
+    static validateEditComment = () => {
+        try {
+            return [
+                expressValidator
+                    .body("newComment")
+                    .notEmpty()
+                    .isLength({ min: 0, max: 500 })
+                    .withMessage("Comment must be less than 500 characters")
+                    .escape(),
+                CommentMiddleware.handleValidationErrors,
+            ];
+        } catch (e) {
+            console.log(e);
+            return [];
+        }
+    }
+    
     static validateCommentDetails = () => {
         try {
             return [
@@ -27,7 +45,7 @@ export default class CommentMiddleware {
     
     static handleValidationErrors = (req, res, next) => {
         const errors = expressValidator.validationResult(req);       
-        
+
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
         }
