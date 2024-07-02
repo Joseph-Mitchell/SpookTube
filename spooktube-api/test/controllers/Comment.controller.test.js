@@ -260,18 +260,20 @@ describe("Comment Controller", () => {
         });
     });
     
-    describe("getVideoComments", () => {
-        let stubbedService;
+    describe("editComment", () => {
+        let stubbedCommentService;
+        let stubbedAccountService;
         let stubbedResponse;
         let testController;
         let testRequest;
         let testComments;
         
         beforeEach(() => {
-            stubbedService = { checkOwnership: sinon.stub(), editComment: sinon.stub() };
+            stubbedCommentService = { checkOwnership: sinon.stub(), editComment: sinon.stub() };
+            stubbedAccountService = { getRoleById: sinon.stub() };
             stubbedResponse = { status: sinon.stub().returnsThis(), json: sinon.stub() };
             
-            testController = new CommentController(stubbedService);
+            testController = new CommentController(stubbedCommentService, stubbedAccountService);
             testRequest = { body: { id: existingComments[0]._id, newComment: "test", userId: existingComments[0].userId } };
 
             testComments = [];
@@ -279,12 +281,14 @@ describe("Comment Controller", () => {
                 testComments.push({ _doc: { comment: "hi", videoId: i, userId: i, timeCode: i } });
             }
             
-            stubbedService.editComment.resolves(testComments);
-            stubbedService.checkOwnership.resolves({});
+            stubbedCommentService.editComment.resolves(testComments);
+            stubbedCommentService.checkOwnership.resolves({});
+            stubbedAccountService.getRoleById.resolves({ role: { roleName: "user" } });
         });
         
         afterEach(() => {
-            stubbedService = undefined;
+            stubbedCommentService = undefined;
+            stubbedAccountService = undefined;
             stubbedResponse = undefined;
             testController = undefined;
             testRequest = undefined;
@@ -296,21 +300,34 @@ describe("Comment Controller", () => {
             await testController.editComment(testRequest, stubbedResponse);
             
             //Assert
-            sinon.assert.calledWith(stubbedService.checkOwnership, existingComments[0]._id, existingComments[0].userId);
-            sinon.assert.calledWith(stubbedService.editComment, existingComments[0]._id, "test");
+            sinon.assert.calledWith(stubbedAccountService.getRoleById, existingComments[0].userId);
+            sinon.assert.calledWith(stubbedCommentService.checkOwnership, existingComments[0]._id, existingComments[0].userId);
+            sinon.assert.calledWith(stubbedCommentService.editComment, existingComments[0]._id, "test");
             sinon.assert.calledWith(stubbedResponse.status, 204);
         });
         
         it("should respond with 404 if checkOwnership resolves null", async () => {
             //Arrange
-            stubbedService.checkOwnership.resolves(null)
+            stubbedCommentService.checkOwnership.resolves(null);
             
             //Act
             await testController.editComment(testRequest, stubbedResponse);
             
             //Assert
-            sinon.assert.notCalled(stubbedService.editComment);
+            sinon.assert.notCalled(stubbedCommentService.editComment);
             sinon.assert.calledWith(stubbedResponse.status, 404);
+        });
+
+        it("should respond with 204 if getRoleById resolves 'moderator'", async () => {
+            //Arrange
+            stubbedAccountService.getRoleById.resolves({ role: { roleName: "moderator" } });
+            
+            //Act
+            await testController.editComment(testRequest, stubbedResponse);
+            
+            //Assert
+            sinon.assert.notCalled(stubbedCommentService.checkOwnership);
+            sinon.assert.calledWith(stubbedResponse.status, 204);
         });
     });
 });
