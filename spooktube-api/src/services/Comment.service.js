@@ -27,4 +27,8 @@ export default class CommentService {
     async checkOwnership(id, userId) {
         return await Comment.findOne({ _id: new Types.ObjectId(id), userId: userId });
     }
+    
+    async deleteComment(id) {
+        return await Comment.findByIdAndDelete(id);
+    }
 }

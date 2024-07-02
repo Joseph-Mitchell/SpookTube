@@ -330,4 +330,48 @@ describe("Comment Controller", () => {
             sinon.assert.calledWith(stubbedResponse.status, 204);
         });
     });
+    
+    describe("editComment", () => {
+        let stubbedCommentService;
+        let stubbedAccountService;
+        let stubbedResponse;
+        let testController;
+        let testRequest;
+        
+        beforeEach(() => {
+            stubbedCommentService = { checkOwnership: sinon.stub(), deleteComment: sinon.stub() };
+            stubbedAccountService = { getRoleById: sinon.stub() };
+            stubbedResponse = { status: sinon.stub().returnsThis(), json: sinon.stub() };
+            
+            testController = new CommentController(stubbedCommentService, stubbedAccountService);
+            testRequest = {
+                body: {
+                    id: existingComments[0]._id,
+                    userId: existingComments[0].userId
+                }
+            };
+            
+            stubbedCommentService.checkOwnership.resolves({});
+            stubbedAccountService.getRoleById.resolves({ role: { roleName: "user" } });
+        });
+        
+        afterEach(() => {
+            stubbedCommentService = undefined;
+            stubbedAccountService = undefined;
+            stubbedResponse = undefined;
+            testController = undefined;
+            testRequest = undefined;
+        });
+        
+        it("should respond with 204 in normal conditions", async () => {
+            //Act
+            await testController.deleteComment(testRequest, stubbedResponse);
+            
+            //Assert
+            sinon.assert.calledWith(stubbedAccountService.getRoleById, existingComments[0].userId);
+            sinon.assert.calledWith(stubbedCommentService.checkOwnership, existingComments[0]._id, existingComments[0].userId);
+            sinon.assert.calledWith(stubbedCommentService.deleteComment, existingComments[0]._id);
+            sinon.assert.calledWith(stubbedResponse.status, 204);
+        });
+    });
 });

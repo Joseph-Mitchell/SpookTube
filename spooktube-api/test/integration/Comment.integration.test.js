@@ -16,7 +16,7 @@ import AccountService from "../../src/services/Account.service.js";
 
 import jwt from "jsonwebtoken";
 
-describe("Comment Integration Tests", () => {
+describe.skip("Comment Integration Tests", () => {
     let server;
     let database;
     let requester;

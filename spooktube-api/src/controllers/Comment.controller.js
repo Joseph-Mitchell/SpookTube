@@ -88,4 +88,26 @@ export default class CommentController {
             return res.status(500).json({ message: e.message })
         }
     }
+    
+    async deleteComment(req, res) {
+        try {
+            let comment = {};
+            let role = (await this.#accountService.getRoleById(req.body.userId)).role.roleName;
+            
+            if (role !== "moderator") {
+                comment = await this.#commentService.checkOwnership(req.body.id, req.body.userId);
+            }
+
+            if (comment === null) {
+                return res.status(404).json({ message: "No comment with given id by given user" })
+            }
+            
+            await this.#commentService.deleteComment(req.body.id);
+            
+            return res.status(204).json();
+        } catch (e) {
+            console.log(e.message);
+            return res.status(500).json({ message: e.message });
+        }
+    }
 }
