@@ -306,5 +306,16 @@ describe("Video Integration Tests", () => {
             //Assert
             assert.equal(actual.status, 204);
         });
+                
+        it("should respond 404 with wrong userId", async () => {
+            //Act
+            const actual = await requester
+                .delete("/videos/delete")
+                .send({ videoId: existingVideos[5].videoId })
+                .set("authentication", jwt.sign({ id: existingVideos[2].userId }, process.env.SECRET));
+
+            //Assert
+            assert.equal(actual.status, 404);
+        });
     })
 });
