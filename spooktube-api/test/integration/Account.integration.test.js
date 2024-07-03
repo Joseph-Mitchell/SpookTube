@@ -330,5 +330,18 @@ describe("Account Integration Tests", () => {
             assert.equal(actual.status, 204);
             assert.equal(account.email, newAccounts.valid.email);
         });
+        
+        it("should respond 400 with no oldEmail", async () => {
+            //Act
+            const actual = await requester
+                .put("/accounts/email")
+                .send({ newEmail: newAccounts.valid.email })
+                .set("authentication", jwt.sign({ id: existingAccounts[0]._id }, process.env.SECRET));
+            
+            //Assert
+            const account = await Account.findById(existingAccounts[0]._id);
+            assert.equal(actual.status, 400);
+            assert.equal(account.email, existingAccounts[0].email);
+        });
     });
 });
