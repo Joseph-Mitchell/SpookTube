@@ -81,5 +81,29 @@ describe("Navbar", () => {
 
         //Assert
         expect(screen.getByText("Log-In/Sign-Up")).toBeInTheDocument();
+        expect(screen.queryByText("Log-Out")).toBeNull();
+    });
+
+    it("should display logout button if loggedIn true", () => {
+        //Arrange
+        loggedIn = true;
+
+        //Act
+        render(
+            <Navbar
+                loggedIn={loggedIn}
+                setLoggedIn={setLoggedIn}
+                setUsername={setUsername}
+                icon={icon}
+                setIcon={setIcon}
+                navigate={navigate}
+                role={role}
+                setRole={setRole}
+            />
+        );
+
+        //Assert
+        expect(screen.queryByText("Log-In/Sign-Up")).toBeNull();
+        expect(screen.getByText("Log-Out")).toBeInTheDocument();
     });
 });
