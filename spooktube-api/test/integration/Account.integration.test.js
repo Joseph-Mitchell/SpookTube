@@ -462,5 +462,18 @@ describe("Account Integration Tests", () => {
             assert.equal(actual.status, 404);
             assert.isOk(bcrypt.compareSync(existingAccounts[0].password, account.password));
         });
+        
+        it("should respond 404 if user id does not exist", async () => {
+            //Act
+            const actual = await requester
+                .put("/accounts/password")
+                .send({ oldPassword: existingAccounts[0].password, newPassword: newAccounts.valid.password })
+                .set("authentication", jwt.sign({ id: "66854aae3762df8c163edacf" }, process.env.SECRET));
+            
+            //Assert
+            const account = await Account.findById(existingAccounts[0]._id);
+            assert.equal(actual.status, 404);
+            assert.isOk(bcrypt.compareSync(existingAccounts[0].password, account.password));
+        });
     });
 });
