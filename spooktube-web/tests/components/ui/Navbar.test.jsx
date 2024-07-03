@@ -132,4 +132,56 @@ describe("Navbar", () => {
         expect(screen.getByText("Upload")).toBeInTheDocument();
         expect(screen.getByText("Profile")).toBeInTheDocument();
     });
+
+    it("should display expected buttons if role user", () => {
+        //Arrange
+        loggedIn = true;
+        role = "user";
+
+        //Act
+        render(
+            <Navbar
+                loggedIn={loggedIn}
+                setLoggedIn={setLoggedIn}
+                setUsername={setUsername}
+                icon={icon}
+                setIcon={setIcon}
+                navigate={navigate}
+                role={role}
+                setRole={setRole}
+            />
+        );
+
+        //Assert
+        expect(screen.queryByText("Moderation")).toBeNull();
+        expect(screen.getByText("My Content")).toBeInTheDocument();
+        expect(screen.getByText("Upload")).toBeInTheDocument();
+        expect(screen.getByText("Profile")).toBeInTheDocument();
+    });
+
+    it("should display expected buttons if role moderator", () => {
+        //Arrange
+        loggedIn = true;
+        role = "moderator";
+
+        //Act
+        render(
+            <Navbar
+                loggedIn={loggedIn}
+                setLoggedIn={setLoggedIn}
+                setUsername={setUsername}
+                icon={icon}
+                setIcon={setIcon}
+                navigate={navigate}
+                role={role}
+                setRole={setRole}
+            />
+        );
+
+        //Assert
+        expect(screen.getByText("Moderation")).toBeInTheDocument();
+        expect(screen.queryByText("My Content")).toBeNull();
+        expect(screen.queryByText("Upload")).toBeNull();
+        expect(screen.queryByText("Profile")).toBeNull();
+    });
 });
