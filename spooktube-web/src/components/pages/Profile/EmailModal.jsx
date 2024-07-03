@@ -24,7 +24,6 @@ const EmailModal = ({ setModal }) => {
     function preValidate(e) {
         e.preventDefault();
 
-        console.log("hi");
         if (oldEmail === "" || oldEmail === " ") {
             return wakeAlert("Please enter your current e-mail address", "danger");
         }
@@ -44,7 +43,6 @@ const EmailModal = ({ setModal }) => {
 
     async function sendNewEmail() {
         const response = await updateEmail(localStorage.getItem("token"), oldEmail, newEmail);
-        console.log(response);
 
         if (response.message) {
             return wakeAlert(response.message, "danger");

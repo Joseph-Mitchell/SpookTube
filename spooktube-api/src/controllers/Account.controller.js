@@ -90,12 +90,16 @@ export default class AccountController {
     
     async updatePassword(req, res) {
         try {
-            const account = await this.#accountService.getAccountById(req.body.userId);
+            const account = await this.#accountService.getAccountByEmail(req.body.email);
             
             if (account === null || !bcrypt.compareSync(req.body.oldPassword, account.password))
-                return res.status(404).json({ message: "Password incorrect" });
+                return res.status(404).json({ message: "Email or password incorrect" });
             
-            await this.#accountService.updatePassword(req.body.userId, req.body.newPassword);
+            const result = await this.#accountService.updatePassword(account._id, req.body.newPassword);
+            
+            if (result === null)
+                return res.status(500).json({ message: "There was an internal error, please try again later" });
+            
             return res.status(204).json();
         } catch (e) {
             console.log(e.message)

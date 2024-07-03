@@ -3,7 +3,7 @@ import axios from "axios";
 export default async function basicService(method, url, data = {}, headers = {}) {    
     try {
         const apiUrl = import.meta.env.VITE_APP_BACKEND_URL;
-        
+
         const response = await axios({
             method: method,
             url: apiUrl + url,
