@@ -447,5 +447,18 @@ describe("Comment Controller", () => {
             sinon.assert.called(stubbedCommentService.getCommentsCount);
             sinon.assert.called(stubbedCommentService.getAllComments);
         });
+        
+        it("should respond 403 if getRoleById resolves 'user'", async () => {
+            //Arrange
+            stubbedAccountService.getRoleById.resolves({ role: { roleName: "user" } });
+            
+            //Act
+            await testController.getAllComments(testRequest, stubbedResponse);
+            
+            //Assert
+            sinon.assert.calledWith(stubbedResponse.status, 403);
+            sinon.assert.notCalled(stubbedCommentService.getCommentsCount);
+            sinon.assert.notCalled(stubbedCommentService.getAllComments);
+        });
     });
 });
