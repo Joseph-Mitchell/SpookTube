@@ -21,6 +21,26 @@ export default class AccountMiddleware {
         });
     }
     
+    static validateProfileDetails = () => {
+        try {
+            return [
+                expressValidator
+                    .body("username")
+                    .notEmpty()
+                    .withMessage("Please enter a username")
+                    .escape(),
+                expressValidator
+                    .body("icon")
+                    .notEmpty()
+                    .withMessage("Please choose an icon"),
+                AccountMiddleware.handleValidationErrors,
+            ];
+        } catch (e) {
+            console.log(e);
+            return [];
+        }
+    };
+    
     static validateRegDetails = () => {
         try {
             return [
@@ -48,7 +68,6 @@ export default class AccountMiddleware {
     
     static handleValidationErrors = (req, res, next) => {
         const errors = expressValidator.validationResult(req);
-
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
         }

@@ -19,5 +19,8 @@ export default class AccountRouter extends Router {
         this._router.post("/token-login", AccountMiddleware.authenticateToken, (req, res) => {
             this._controller.loginWithToken(req, res);
         });
+        this._router.put("/profile", [AccountMiddleware.authenticateToken, AccountMiddleware.validateProfileDetails()], (req, res) => {
+            this._controller.updateProfileDetails(req, res);
+        });
     }
 }
