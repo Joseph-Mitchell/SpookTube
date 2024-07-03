@@ -42,7 +42,7 @@ export default class AccountMiddleware {
                 expressValidator
                     .body("newEmail")
                     .isEmail()
-                    .withMessage("Please enter a valid email address"),
+                    .withMessage("New email was invalid"),
                 AccountMiddleware.handleValidationErrors,
             ];
         } catch (e) {

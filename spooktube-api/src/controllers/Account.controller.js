@@ -78,7 +78,7 @@ export default class AccountController {
             const account = await this.#accountService.getAccountByIdAndEmail(req.body.userId, req.body.oldEmail);
                     
             if (account === null)
-                return res.status(404).json({ message: "No account with matching id and email" });
+                return res.status(404).json({ message: "Current email is not correct" });
 
             await this.#accountService.updateEmail(req.body.userId, req.body.newEmail);
             
