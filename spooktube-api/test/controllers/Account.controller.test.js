@@ -306,5 +306,17 @@ describe("Account Controller", () => {
             sinon.assert.calledWith(stubbedService.getAccountByIdAndEmail, testRequest.body.userId, testRequest.body.oldEmail);
             sinon.assert.calledWith(stubbedService.updateEmail, testRequest.body.userId, testRequest.body.newEmail);
         });
+        
+        it("should respond 404 if getAccountByIdAndEmail resolves null", async () => {
+            //Arrange
+            stubbedService.getAccountByIdAndEmail.resolves(null);
+            
+            //Act
+            await testController.updateEmail(testRequest, stubbedResponse);
+            
+            //Assert
+            sinon.assert.calledWith(stubbedResponse.status, 404);
+            sinon.assert.notCalled(stubbedService.updateEmail);
+        });
     });
 });
