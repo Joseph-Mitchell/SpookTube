@@ -46,4 +46,15 @@ describe("VideoCard", () => {
         //Assert
         expect(screen.getByRole("button")).not.toHaveClass("d-none");
     });
+
+    it("should display delete button if clickDeleteVideo is undefined", () => {
+        //Arrange
+        clickDeleteVideo = undefined;
+
+        //Act
+        render(<VideoCard video={video} clickDeleteVideo={clickDeleteVideo} />);
+
+        //Assert
+        expect(screen.getByRole("button")).toHaveClass("d-none");
+    });
 });
