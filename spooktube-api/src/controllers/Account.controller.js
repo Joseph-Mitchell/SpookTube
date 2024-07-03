@@ -72,4 +72,19 @@ export default class AccountController {
             return res.status(500).json({ message: e.message });
         }
     }
+    
+    async updateEmail(req, res) {
+        try {
+            const account = await this.#accountService.getAccountByIdAndEmail(req.body.userId, req.body.oldEmail);
+                    
+            if (account === null)
+                return res.status(404).json({ message: "No account with matching id and email" });
+
+            await this.#accountService.updateEmail(req.body.userId, req.body.newEmail);
+            
+            return res.status(204).json();
+        } catch (e) {      
+            return res.status(500).json({ message: e.message });
+        }
+    }
 }

@@ -165,9 +165,7 @@ describe("Account Controller", () => {
     });
     
     describe("loginWithToken", () => {
-        beforeEach(() => {
-            process.env.SECRET = "333BA566A25119A247F6FD4845E98";
-            
+        beforeEach(() => {           
             stubbedService = {
                 getAccountById: sinon.stub(),
             };
@@ -184,7 +182,6 @@ describe("Account Controller", () => {
         });
         
         afterEach(() => {
-            process.env.SECRET = undefined;
             stubbedService = undefined;
             stubbedResponse = undefined;
             testController = undefined;
@@ -225,10 +222,8 @@ describe("Account Controller", () => {
         });
     });
     
-    describe("loginWithToken", () => {
-        beforeEach(() => {
-            process.env.SECRET = "333BA566A25119A247F6FD4845E98";
-            
+    describe("updateProfileDetails", () => {
+        beforeEach(() => {      
             stubbedService = {
                 getAccountById: sinon.stub(),
                 updateProfileDetails: sinon.stub()
@@ -246,7 +241,6 @@ describe("Account Controller", () => {
         });
         
         afterEach(() => {
-            process.env.SECRET = undefined;
             stubbedService = undefined;
             stubbedResponse = undefined;
             testController = undefined;
@@ -274,6 +268,43 @@ describe("Account Controller", () => {
             //Assert
             sinon.assert.notCalled(stubbedService.updateProfileDetails);
             sinon.assert.calledWith(stubbedResponse.status, 404);
+        });
+    });
+    
+    describe("updateEmail", () => {
+        beforeEach(() => {     
+            stubbedService = {
+                getAccountByIdAndEmail: sinon.stub(),
+                updateEmail: sinon.stub(),
+            };
+            stubbedResponse = {
+                status: sinon.stub().returnsThis(),
+                json: sinon.stub()
+            };
+            
+            testController = new AccountController(stubbedService);
+            testAccount = { _id: 1, username: "testUsername", email: "test@email.com", password: "testPass" };
+            testRequest = { body: { userId: 1, oldEmail: "old@email.com", newEmail: "new@email.com"} };
+            
+            stubbedService.getAccountByIdAndEmail.resolves(testAccount);
+        });
+        
+        afterEach(() => {
+            stubbedService = undefined;
+            stubbedResponse = undefined;
+            testController = undefined;
+            testRequest = undefined;
+            testAccount = undefined;
+        });
+        
+        it("should respond 204 in normal circumstances", async () => {
+            //Act
+            await testController.updateEmail(testRequest, stubbedResponse);
+            
+            //Assert
+            sinon.assert.calledWith(stubbedResponse.status, 204);
+            sinon.assert.calledWith(stubbedService.getAccountByIdAndEmail, testRequest.body.userId, testRequest.body.oldEmail);
+            sinon.assert.calledWith(stubbedService.updateEmail, testRequest.body.userId, testRequest.body.newEmail);
         });
     });
 });
