@@ -27,4 +27,15 @@ describe("VideoCard", () => {
         //Assert
         expect(screen.getByAltText("Video Thumbnail")).toHaveAttribute("src", `https://res.cloudinary.com/drtoipa5f/video/upload/w_250/${video.videoId}.jpg`);
     });
+
+    it("should display thumbnail with expected src if video undefined", () => {
+        //Arrange
+        video = undefined;
+
+        //Act
+        render(<VideoCard video={video} clickDeleteVideo={clickDeleteVideo} />);
+
+        //Assert
+        expect(screen.getByAltText("Video Thumbnail")).toHaveAttribute("src", "thumb-placeholder.png");
+    });
 });
