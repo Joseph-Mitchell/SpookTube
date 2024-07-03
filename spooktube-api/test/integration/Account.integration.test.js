@@ -279,7 +279,7 @@ describe("Account Integration Tests", () => {
             //Act
             const actual = await requester
                 .put("/accounts/profile")
-                .send({ username: newAccounts.emptyUsername.username })
+                .send({ username: newAccounts.valid.username })
                 .set("authentication", jwt.sign({ id: existingAccounts[0]._id }, process.env.SECRET));
             
             //Assert
@@ -294,7 +294,7 @@ describe("Account Integration Tests", () => {
             //Act
             const actual = await requester
                 .put("/accounts/profile")
-                .send({ username: newAccounts.emptyUsername.username, icon: "" })
+                .send({ username: newAccounts.valid.username, icon: "" })
                 .set("authentication", jwt.sign({ id: existingAccounts[0]._id }, process.env.SECRET));
             
             //Assert
@@ -303,6 +303,17 @@ describe("Account Integration Tests", () => {
             assert.equal(actual.status, 400);
             assert.equal(account.username, existingAccounts[0].username);
             assert.equal(account.icon, "0");
+        });
+        
+        it("should respond 404 with unknown user id", async () => {
+            //Act
+            const actual = await requester
+                .put("/accounts/profile")
+                .send({ username: newAccounts.valid.username, icon: "5" })
+                .set("authentication", jwt.sign({ id: "668529d3d52abbef90c9305c" }, process.env.SECRET));
+            
+            //Assert
+            assert.equal(actual.status, 404);
         });
     })
 });
