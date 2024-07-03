@@ -5,7 +5,7 @@ import Account from "../models/Account.model.js";
 
 export default class CommentService {
     async getUserCommentsCount(userId) {
-        return await Comment.find({ userId: userId }).estimatedDocumentCount();
+        return await Comment.find({ userId: userId }).countDocuments();
     }
     
     async getVideoComments(videoId) {

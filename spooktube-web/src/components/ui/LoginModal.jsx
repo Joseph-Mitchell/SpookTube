@@ -4,7 +4,7 @@ import register from "../../services/register.js";
 import { useNavigate } from "react-router-dom";
 import login from "../../services/login.js";
 
-const LoginModal = ({ loginModal, setLoginModal, setLoggedIn, setUsername, setIcon }) => {
+const LoginModal = ({ loginModal, setLoginModal, setLoggedIn, setUsername, setIcon, setRole }) => {
     const navigate = useNavigate();
 
     const [loginIdentifier, setLoginIdentifier] = useState("");
@@ -44,6 +44,7 @@ const LoginModal = ({ loginModal, setLoginModal, setLoggedIn, setUsername, setIc
         setLoggedIn(true);
         setUsername(response.username);
         setIcon(response.icon);
+        setRole(response.role);
 
         loginModal.hide();
         navigate("/");

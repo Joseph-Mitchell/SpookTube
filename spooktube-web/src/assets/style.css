@@ -16,7 +16,7 @@
     }
 }
 
-#root {
+#full-height {
     background-color: rgb(215, 215, 215);
 }
 
@@ -61,4 +61,12 @@
 
 #edit-comment-text {
     min-height: 100px;
+}
+
+#footer {
+    height: 70px;
+}
+
+#profile-icon {
+    width: 250px;
 }

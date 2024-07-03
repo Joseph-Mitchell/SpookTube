@@ -6,6 +6,7 @@ import WatchPage from "./components/pages/Watch/WatchPage.jsx";
 import loginWithToken from "./services/loginWithToken.js";
 import UploadPage from "./components/pages/Upload/UploadPage.jsx";
 import MyContentPage from "./components/pages/My Content/MyContentPage.jsx";
+import Profile from "./components/pages/Profile/Profile.jsx";
 
 function App() {
     const navigate = useNavigate();
@@ -40,8 +41,8 @@ function App() {
     }, []);
 
     return (
-        <>
-            <Navbar loggedIn={loggedIn} setLoggedIn={setLoggedIn} setUsername={setUsername} icon={icon} setIcon={setIcon} navigate={navigate} role={role} />
+        <div id="full-height" className="vh-100">
+            <Navbar loggedIn={loggedIn} setLoggedIn={setLoggedIn} setUsername={setUsername} icon={icon} setIcon={setIcon} navigate={navigate} role={role} setRole={setRole} />
             <Routes>
                 <Route
                     path="/"
@@ -73,8 +74,14 @@ function App() {
                         <MyContentPage loggedIn={loggedIn} loginFinished={loginFinished} navigate={navigate} role={role} />
                     }
                 />
+                <Route
+                    path="/profile"
+                    element={
+                        <Profile loggedIn={loggedIn} loginFinished={loginFinished} icon={icon} username={username} />
+                    }
+                />
             </Routes>
-        </>
+        </div>
     );
 }
 

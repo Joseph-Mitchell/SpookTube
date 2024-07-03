@@ -1,7 +1,7 @@
 import { useState } from "react";
 import LoginModal from "./LoginModal.jsx";
 
-const Navbar = ({ loggedIn, setLoggedIn, setUsername, icon, setIcon, navigate, role }) => {
+const Navbar = ({ loggedIn, setLoggedIn, setUsername, icon, setIcon, navigate, role, setRole }) => {
 
     const [logoColor, setLogoColor] = useState("bg-dark");
     const [loginModal, setLoginModal] = useState({});
@@ -18,6 +18,7 @@ const Navbar = ({ loggedIn, setLoggedIn, setUsername, icon, setIcon, navigate, r
         setLoggedIn(false);
         setUsername("");
         setIcon("default");
+        setRole("user");
         localStorage.removeItem("token");
         navigate("/");
     }
@@ -63,7 +64,7 @@ const Navbar = ({ loggedIn, setLoggedIn, setUsername, icon, setIcon, navigate, r
                                             <a className="btn nav-link" onClick={() => { navigate("/upload"); }}>Upload</a>
                                         </li>
                                         <li className="nav-item list-group-item bg-transparent border-0">
-                                            <a className="btn nav-link" onClick={() => { }}>Profile</a>
+                                            <a className="btn nav-link" onClick={() => { navigate("/profile"); }}>Profile</a>
                                         </li>
                                     </>
                                 )
@@ -84,7 +85,7 @@ const Navbar = ({ loggedIn, setLoggedIn, setUsername, icon, setIcon, navigate, r
                     </button>
                 </div>
             </nav>
-            <LoginModal loginModal={loginModal} setLoginModal={setLoginModal} setLoggedIn={setLoggedIn} setUsername={setUsername} setIcon={setIcon} />
+            <LoginModal loginModal={loginModal} setLoginModal={setLoginModal} setLoggedIn={setLoggedIn} setUsername={setUsername} setIcon={setIcon} setRole={setRole} />
         </>
     );
 };
