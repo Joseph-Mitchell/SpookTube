@@ -106,4 +106,30 @@ describe("Navbar", () => {
         expect(screen.queryByText("Log-In/Sign-Up")).toBeNull();
         expect(screen.getByText("Log-Out")).toBeInTheDocument();
     });
+
+    it("should display expected buttons if role user", () => {
+        //Arrange
+        loggedIn = true;
+        role = "user";
+
+        //Act
+        render(
+            <Navbar
+                loggedIn={loggedIn}
+                setLoggedIn={setLoggedIn}
+                setUsername={setUsername}
+                icon={icon}
+                setIcon={setIcon}
+                navigate={navigate}
+                role={role}
+                setRole={setRole}
+            />
+        );
+
+        //Assert
+        expect(screen.queryByText("Moderation")).toBeNull();
+        expect(screen.getByText("My Content")).toBeInTheDocument();
+        expect(screen.getByText("Upload")).toBeInTheDocument();
+        expect(screen.getByText("Profile")).toBeInTheDocument();
+    });
 });
