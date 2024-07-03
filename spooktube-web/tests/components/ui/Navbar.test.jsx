@@ -60,4 +60,26 @@ describe("Navbar", () => {
         //Assert
         expect(screen.getByAltText("User Icon")).toHaveAttribute("src", "icon-" + icon + ".png");
     });
+
+    it("should display login/signup button if loggedIn false", () => {
+        //Arrange
+        loggedIn = false;
+
+        //Act
+        render(
+            <Navbar
+                loggedIn={loggedIn}
+                setLoggedIn={setLoggedIn}
+                setUsername={setUsername}
+                icon={icon}
+                setIcon={setIcon}
+                navigate={navigate}
+                role={role}
+                setRole={setRole}
+            />
+        );
+
+        //Assert
+        expect(screen.getByText("Log-In/Sign-Up")).toBeInTheDocument();
+    });
 });
