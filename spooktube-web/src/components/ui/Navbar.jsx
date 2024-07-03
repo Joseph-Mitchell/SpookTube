@@ -81,7 +81,7 @@ const Navbar = ({ loggedIn, setLoggedIn, setUsername, icon, setIcon, navigate, r
                         </ul>
                     </div>
                     <button className="btn btn-link" data-bs-toggle="collapse" data-bs-target="#navCollapse" aria-expanded="false" aria-controls="navCollapse">
-                        <img className="border border-4 border-primary rounded-5" src={`icon-${icon}.png`} />
+                        <img className="border border-4 border-primary rounded-5" alt="User Icon" src={`icon-${icon}.png`} />
                     </button>
                 </div>
             </nav>
