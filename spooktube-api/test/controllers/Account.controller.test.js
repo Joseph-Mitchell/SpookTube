@@ -320,7 +320,7 @@ describe("Account Controller", () => {
         });
     });
     
-    describe("updateEmail", () => {
+    describe("updatePassword", () => {
         beforeEach(() => {     
             stubbedService = {
                 getAccountById: sinon.stub(),
@@ -355,6 +355,17 @@ describe("Account Controller", () => {
             sinon.assert.calledWith(stubbedService.getAccountById, testRequest.body.userId);
             sinon.assert.calledWith(stubbedService.updatePassword, testRequest.body.userId, testRequest.body.newPassword);
         });
+        
+        it("should respond 404 if getAccountById resolves null", async () => {
+            //Arrange
+            stubbedService.getAccountById.resolves(null);
+            
+            //Act
+            await testController.updatePassword(testRequest, stubbedResponse);
+            
+            //Assert
+            sinon.assert.calledWith(stubbedResponse.status, 404);
+            sinon.assert.notCalled(stubbedService.updatePassword);
+        });
     });
-
 });

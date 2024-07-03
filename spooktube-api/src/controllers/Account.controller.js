@@ -91,7 +91,7 @@ export default class AccountController {
     async updatePassword(req, res) {
         try {
             const account = await this.#accountService.getAccountById(req.body.userId);
-            console.log(account);
+
             if (account === null || !bcrypt.compareSync(req.body.oldPassword, account.password))
                 return res.status(404).json({ message: "Password incorrect" });
             
