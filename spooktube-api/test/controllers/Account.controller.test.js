@@ -319,4 +319,42 @@ describe("Account Controller", () => {
             sinon.assert.notCalled(stubbedService.updateEmail);
         });
     });
+    
+    describe("updateEmail", () => {
+        beforeEach(() => {     
+            stubbedService = {
+                getAccountById: sinon.stub(),
+                updatePassword: sinon.stub(),
+            };
+            stubbedResponse = {
+                status: sinon.stub().returnsThis(),
+                json: sinon.stub()
+            };
+            
+            testController = new AccountController(stubbedService);
+            testAccount = { _id: 1, username: "testUsername", email: "test@email.com", password: bcrypt.hashSync("testPass", Number(process.env.HASH_ROUNDS)) };
+            testRequest = { body: { userId: 1, oldPassword: "testPass", newPassword: "newPass"} };
+            
+            stubbedService.getAccountById.resolves(testAccount);
+        });
+        
+        afterEach(() => {
+            stubbedService = undefined;
+            stubbedResponse = undefined;
+            testController = undefined;
+            testRequest = undefined;
+            testAccount = undefined;
+        });
+        
+        it("should respond 204 in normal circumstances", async () => {
+            //Act
+            await testController.updatePassword(testRequest, stubbedResponse);
+            
+            //Assert
+            sinon.assert.calledWith(stubbedResponse.status, 204);
+            sinon.assert.calledWith(stubbedService.getAccountById, testRequest.body.userId);
+            sinon.assert.calledWith(stubbedService.updatePassword, testRequest.body.userId, testRequest.body.newPassword);
+        });
+    });
+
 });

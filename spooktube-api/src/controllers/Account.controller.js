@@ -87,4 +87,18 @@ export default class AccountController {
             return res.status(500).json({ message: e.message });
         }
     }
+    
+    async updatePassword(req, res) {
+        try {
+            const account = await this.#accountService.getAccountById(req.body.userId);
+            console.log(account);
+            if (account === null || !bcrypt.compareSync(req.body.oldPassword, account.password))
+                return res.status(404).json({ message: "Password incorrect" });
+            
+            await this.#accountService.updatePassword(req.body.userId, req.body.newPassword);
+            return res.status(204).json();
+        } catch (e) {
+            return res.status(500).json({ message: e.message });
+        }
+    }
 }
