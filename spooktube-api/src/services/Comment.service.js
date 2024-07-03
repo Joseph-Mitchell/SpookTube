@@ -32,7 +32,7 @@ export default class CommentService {
         return await Comment.findByIdAndDelete(id);
     }
     
-    async getCommentCount() {
+    async getCommentsCount() {
         return await Comment.find({}).estimatedDocumentCount();
     }
     

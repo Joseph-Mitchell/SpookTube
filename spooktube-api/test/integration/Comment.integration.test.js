@@ -16,7 +16,7 @@ import AccountService from "../../src/services/Account.service.js";
 
 import jwt from "jsonwebtoken";
 
-describe.skip("Comment Integration Tests", () => {
+describe("Comment Integration Tests", () => {
     let server;
     let database;
     let requester;
@@ -169,6 +169,19 @@ describe.skip("Comment Integration Tests", () => {
             //Assert
             assert.equal(actual.status, 200);
             assert.equal(actual.body.comments.length, 5);
+        });
+    });
+    
+    describe("Get All Comments", () => {
+        it("should respond 200 in normal circumstances", async () => {
+            //Act
+            const actual = await requester
+                .get("/comments/all/0/10")
+                .set("authentication", jwt.sign({ id: existingComments[0].userId }, process.env.SECRET));
+            
+            //Assert
+            assert.equal(actual.status, 200);
+            assert.equal(actual.body.comments.length, 10);
         });
     });
     
@@ -469,5 +482,7 @@ describe.skip("Comment Integration Tests", () => {
             assert.isNull(comment);
             assert.equal(actual.status, 204);
         });
-    })
+    });
+    
+
 });
