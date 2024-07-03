@@ -2,16 +2,26 @@ import { useEffect, useState } from "react";
 
 import CommentCard from "../Watch/CommentCard.jsx";
 import getUserComments from "../../../services/getUserComments.js";
+import getAllComments from "../../../services/getAllComments.js";
 
-const CommentGrid = ({ currentPage, clickEditComment, role }) => {
-    const COMMENTS_PER_PAGE = 18;
+const CommentGrid = ({ currentPage, setPages, clickEditComment, role, loginFinished, currentTab }) => {
+    const COMMENTS_PER_PAGE = 10;
 
+    const [search, setSearch] = useState("");
     const [comments, setComments] = useState([]);
     const [commentList, setCommentList] = useState([]);
 
     async function loadComments() {
-        let loadedData = await getUserComments(localStorage.getItem("token"), COMMENTS_PER_PAGE * (currentPage - 1), COMMENTS_PER_PAGE * currentPage);
+        let loadedData;
+        if (role === "moderator")
+            loadedData = await getAllComments(localStorage.getItem("token"), search, COMMENTS_PER_PAGE * (currentPage - 1), COMMENTS_PER_PAGE * currentPage);
+        else
+            loadedData = await getUserComments(localStorage.getItem("token"), COMMENTS_PER_PAGE * (currentPage - 1), COMMENTS_PER_PAGE * currentPage);
+
         await setComments(loadedData.comments);
+        console.log(loadedData.pages);
+        if (setPages && currentTab === "comments")
+            await setPages(loadedData.pages);
     }
 
     async function populateCommentList() {
@@ -24,7 +34,7 @@ const CommentGrid = ({ currentPage, clickEditComment, role }) => {
 
     useEffect(() => {
         loadComments();
-    }, []);
+    }, [search, loginFinished, currentTab, currentPage]);
 
     useEffect(() => {
         populateCommentList();
@@ -32,6 +42,13 @@ const CommentGrid = ({ currentPage, clickEditComment, role }) => {
 
     return (
         <>
+            {
+                role === "moderator" && (
+                    <div className="w-100 d-flex justify-content-center mt-3">
+                        Search: &nbsp;<input type="text" value={search} onChange={(e) => { setSearch(e.target.value); }} />
+                    </div>
+                )
+            }
             <div id="comment-section" className="row row-cols-2">
                 <div className="col">
                     {commentList.slice(0, commentList.length / 2)}

@@ -33,10 +33,10 @@ export default class CommentService {
     }
     
     async getCommentsCount(searchTerm) {
-        return await Comment.find({ comment: { $regex: searchTerm, $options: "i" } }).estimatedDocumentCount();
+        return await Comment.find({ comment: { $regex: searchTerm, $options: "i" } }).countDocuments();
     }
     
     async getAllComments(searchTerm) {
-        return await Comment.find({ comment: { $regex: searchTerm, $options: "i" } });
+        return await Comment.find({ comment: { $regex: searchTerm, $options: "i" } }).populate("userId", "-_id username icon");
     }
 }

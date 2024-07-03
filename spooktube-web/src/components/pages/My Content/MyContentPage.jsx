@@ -30,6 +30,8 @@ const MyContentPage = ({ loggedIn, loginFinished, navigate, role }) => {
     const [commentEditing, setCommentEditing] = useState("");
     const [editModal, setEditModal] = useState({});
 
+    const [currentTab, setCurrentTab] = useState("videos");
+
     useEffect(() => {
         if (!loggedIn && loginFinished) {
             navigate("/");
@@ -38,13 +40,14 @@ const MyContentPage = ({ loggedIn, loginFinished, navigate, role }) => {
 
     useEffect(() => {
         refreshVideos();
-    }, [currentPage]);
+    }, [currentPage, loginFinished, currentTab]);
 
     function clickVideos() {
         document.getElementById("user-video-grid").classList.remove("d-none");
         document.getElementById("user-comment-grid").classList.add("d-none");
         setVideoClasses(SELECTED_CLASSES);
         setCommentClasses(UNSELECTED_CLASSES);
+        setCurrentTab("videos");
     }
 
     function clickComments() {
@@ -52,6 +55,7 @@ const MyContentPage = ({ loggedIn, loginFinished, navigate, role }) => {
         document.getElementById("user-comment-grid").classList.remove("d-none");
         setVideoClasses(UNSELECTED_CLASSES);
         setCommentClasses(SELECTED_CLASSES);
+        setCurrentTab("comments");
     }
 
     async function refreshVideos() {
@@ -62,7 +66,8 @@ const MyContentPage = ({ loggedIn, loginFinished, navigate, role }) => {
             response = await getUserVideos(localStorage.getItem("token"), VIDEOS_PER_PAGE * (currentPage - 1), VIDEOS_PER_PAGE * currentPage);
 
         setVideos(response.videos);
-        setPages(response.pages);
+        if (currentTab === "videos")
+            setPages(response.pages);
     }
 
     function clickEditComment(id, comment) {
@@ -154,7 +159,7 @@ const MyContentPage = ({ loggedIn, loginFinished, navigate, role }) => {
                     <VideoGrid videos={videos} clickDeleteVideo={clickDeleteVideo} user />
                 </div>
                 <div id="user-comment-grid" className="d-none">
-                    <CommentGrid currentPage={currentPage} clickEditComment={clickEditComment} role={role} />
+                    <CommentGrid currentPage={currentPage} setPages={setPages} clickEditComment={clickEditComment} role={role} loginFinished={loginFinished} currentTab={currentTab} />
                 </div>
                 <Paginator currentPage={currentPage} setCurrentPage={setCurrentPage} pages={pages} />
             </div>

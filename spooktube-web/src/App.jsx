@@ -44,16 +44,6 @@ function App() {
             <Navbar loggedIn={loggedIn} setLoggedIn={setLoggedIn} setUsername={setUsername} icon={icon} setIcon={setIcon} navigate={navigate} role={role} />
             <Routes>
                 <Route
-                    path="*"
-                    element={
-                        <>{
-                            useEffect(() => {
-                                navigate("/");
-                            }, [])
-                        }</>
-                    }
-                />
-                <Route
                     path="/"
                     element={
                         <Homepage />
