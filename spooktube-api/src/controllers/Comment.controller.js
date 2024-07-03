@@ -42,6 +42,31 @@ export default class CommentController {
         }
     }
     
+    async getAllComments(req, res) {
+        try {           
+            let role = (await this.#accountService.getRoleById(req.body.userId)).role.roleName;
+            if (role !== "moderator")
+                return res.status(403).json("user not authorised")
+            
+            const count = await this.#commentService.getCommentsCount();
+            
+            const commentsPerPage = (req.params.rangeMax - req.params.rangeMin);
+            const pages = Math.floor((count - 1) / commentsPerPage) + 1;
+            
+            const comments = await this.#commentService.getAllComments();
+            let response = []
+            for (let i = Math.max(req.params.rangeMin, 0); (i < comments.length) && (i < req.params.rangeMax); i++) {
+                let { uploadDate, ...rest } = comments[i]._doc;
+                response.push(rest);
+            }
+
+            return res.status(200).json({ comments: response, pages: pages });
+        } catch (e) {
+            console.log(e.message);
+            return res.status(500).json({ message: e.message });
+        }
+    }
+    
     async makeComment(req, res) {
         try {
             const account = await this.#accountService.getAccountById(req.body.userId);

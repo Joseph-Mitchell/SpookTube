@@ -397,4 +397,55 @@ describe("Comment Controller", () => {
             sinon.assert.calledWith(stubbedResponse.status, 204);
         }); 
     });
+    
+    describe("getAllComments", () => {
+        let stubbedCommentService;
+        let stubbedAccountService;
+        let stubbedResponse;
+        let testController;
+        let testRequest;
+        let testComments;
+        let testResponseComments;
+        
+        beforeEach(() => {
+            stubbedCommentService = { getAllComments: sinon.stub(), getCommentsCount: sinon.stub() };
+            stubbedAccountService = { getRoleById: sinon.stub() };
+            stubbedResponse = { status: sinon.stub().returnsThis(), json: sinon.stub() };
+            
+            testController = new CommentController(stubbedCommentService, stubbedAccountService);
+            testRequest = { params: { rangeMin: 0, rangeMax: 20 }, body: { userId: 1 } };
+
+            testComments = [];
+            testResponseComments = [];
+            for (let i = 0; i < 20; i++) {
+                testComments.push({ _doc: { comment: "hi", videoId: i, userId: i, timeCode: i } });
+                testResponseComments.push({ comment: "hi", videoId: i, userId: i, timeCode: i });
+            }
+            
+            stubbedCommentService.getAllComments.resolves(testComments);
+            stubbedCommentService.getCommentsCount.resolves(20);
+            stubbedAccountService.getRoleById.resolves({ role: { roleName: "moderator" } });
+        });
+        
+        afterEach(() => {
+            stubbedCommentService = undefined;
+            stubbedAccountService = undefined;
+            stubbedResponse = undefined;
+            testController = undefined;
+            testRequest = undefined;
+            testComments = undefined;
+            testResponseComments = undefined;
+        });
+        
+        it("should respond 200 in normal circumstances", async () => {
+            //Act
+            await testController.getAllComments(testRequest, stubbedResponse);
+            
+            //Assert
+            sinon.assert.calledWith(stubbedResponse.status, 200);
+            sinon.assert.calledWith(stubbedAccountService.getRoleById, testRequest.body.userId);
+            sinon.assert.called(stubbedCommentService.getCommentsCount);
+            sinon.assert.called(stubbedCommentService.getAllComments);
+        });
+    });
 });
