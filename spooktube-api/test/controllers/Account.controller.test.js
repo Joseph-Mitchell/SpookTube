@@ -263,5 +263,17 @@ describe("Account Controller", () => {
             sinon.assert.calledWith(stubbedService.updateProfileDetails, testRequest.body.userId, testRequest.body.username, testRequest.body.icon);
             sinon.assert.calledWith(stubbedResponse.status, 204);
         });
+        
+        it("should respond with 404 if getByAccountId resolves null", async () => {
+            //Arrange
+            stubbedService.getAccountById.resolves(null);
+            
+            //Act
+            await testController.updateProfileDetails(testRequest, stubbedResponse);
+            
+            //Assert
+            sinon.assert.notCalled(stubbedService.updateProfileDetails);
+            sinon.assert.calledWith(stubbedResponse.status, 404);
+        });
     });
 });
