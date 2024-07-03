@@ -21,6 +21,25 @@ export default class AccountMiddleware {
         });
     }
     
+    static validateEmail = () => {
+        try {
+            return [
+                expressValidator
+                    .body("oldEmail")
+                    .isEmail()
+                    .withMessage("Please enter a valid email address"),
+                expressValidator
+                    .body("newEmail")
+                    .isEmail()
+                    .withMessage("Please enter a valid email address"),
+                AccountMiddleware.handleValidationErrors,
+            ];
+        } catch (e) {
+            console.log(e);
+            return [];
+        }
+    };
+    
     static validateProfileDetails = () => {
         try {
             return [

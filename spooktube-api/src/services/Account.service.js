@@ -2,6 +2,8 @@ import * as bcrypt from "bcrypt"
 import Account from "../models/Account.model.js";
 import Role from "../models/Role.model.js";
 
+import { Types } from "mongoose"
+
 export default class AccountService {
     async getAccountById(id) {
         return await Account.findById(id).populate("role");
@@ -32,6 +34,6 @@ export default class AccountService {
     }
     
     async getAccountByIdAndEmail(id, email) {
-        return await Comment.findOne({ _id: new Types.ObjectId(id), email: email });
+        return await Account.findOne({ _id: new Types.ObjectId(id), email: email });
     }
 }

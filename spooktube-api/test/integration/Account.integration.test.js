@@ -14,7 +14,7 @@ import { existingAccounts, newAccounts, testLogins } from "../data/testAccounts.
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 
-describe.skip("Account Integration Tests", () => {
+describe("Account Integration Tests", () => {
     let server;
     let database;
     let requester;
@@ -234,7 +234,7 @@ describe.skip("Account Integration Tests", () => {
             //Act
             const actual = await requester
                 .put("/accounts/profile")
-                .send({ username: newAccounts.valid.username, icon: "5"})
+                .send({ username: newAccounts.valid.username, icon: "5" })
                 .set("authentication", jwt.sign({ id: existingAccounts[0]._id }, process.env.SECRET));
             
             //Assert
@@ -249,7 +249,7 @@ describe.skip("Account Integration Tests", () => {
             //Act
             const actual = await requester
                 .put("/accounts/profile")
-                .send({icon: "5"})
+                .send({ icon: "5" })
                 .set("authentication", jwt.sign({ id: existingAccounts[0]._id }, process.env.SECRET));
             
             //Assert
@@ -264,7 +264,7 @@ describe.skip("Account Integration Tests", () => {
             //Act
             const actual = await requester
                 .put("/accounts/profile")
-                .send({ username: newAccounts.emptyUsername.username, icon: "5"})
+                .send({ username: newAccounts.emptyUsername.username, icon: "5" })
                 .set("authentication", jwt.sign({ id: existingAccounts[0]._id }, process.env.SECRET));
             
             //Assert
@@ -315,5 +315,20 @@ describe.skip("Account Integration Tests", () => {
             //Assert
             assert.equal(actual.status, 404);
         });
-    })
+    });
+    
+    describe("Update Email", () => {
+        it("should respond 204 in normal circumstances", async () => {
+            //Act
+            const actual = await requester
+                .put("/accounts/email")
+                .send({ oldEmail: existingAccounts[0].email, newEmail: newAccounts.valid.email })
+                .set("authentication", jwt.sign({ id: existingAccounts[0]._id }, process.env.SECRET));
+            
+            //Assert
+            const account = await Account.findById(existingAccounts[0]._id);
+            assert.equal(actual.status, 204);
+            assert.equal(account.email, newAccounts.valid.email);
+        });
+    });
 });
