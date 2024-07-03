@@ -356,5 +356,18 @@ describe("Account Integration Tests", () => {
             assert.equal(actual.status, 400);
             assert.equal(account.email, existingAccounts[0].email);
         });
+        
+        it("should respond 400 with invalid newEmail", async () => {
+            //Act
+            const actual = await requester
+                .put("/accounts/email")
+                .send({ oldEmail: existingAccounts[0].email, newEmail: newAccounts.invalidEmail.email })
+                .set("authentication", jwt.sign({ id: existingAccounts[0]._id }, process.env.SECRET));
+            
+            //Assert
+            const account = await Account.findById(existingAccounts[0]._id);
+            assert.equal(actual.status, 400);
+            assert.equal(account.email, existingAccounts[0].email);
+        });
     });
 });
