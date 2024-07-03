@@ -77,7 +77,7 @@ function App() {
                 <Route
                     path="/profile"
                     element={
-                        <Profile loggedIn={loggedIn} loginFinished={loginFinished} icon={icon} username={username} />
+                        <Profile loggedIn={loggedIn} loginFinished={loginFinished} icon={icon} setIcon={setIcon} username={username} />
                     }
                 />
             </Routes>
