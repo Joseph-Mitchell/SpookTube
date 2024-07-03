@@ -57,4 +57,19 @@ export default class AccountController {
             return res.status(500).json({ message: e.message });
         }
     }
+    
+    async updateProfileDetails(req, res) {
+        try {
+            const account = await this.#accountService.getAccountById(req.body.userId);
+                    
+            if (account === null)
+                return res.status(404).json({ message: "No account with this id" });
+            
+            this.#accountService.updateProfileDetails(req.body.userId, req.body.username, req.body.icon);
+            
+            return res.status(204).json();
+        } catch (e) {      
+            return res.status(500).json({ message: e.message });
+        }
+    }
 }

@@ -164,7 +164,7 @@ describe("Account Controller", () => {
         });
     });
     
-    describe("loginWithToken", () => {       
+    describe("loginWithToken", () => {
         beforeEach(() => {
             process.env.SECRET = "333BA566A25119A247F6FD4845E98";
             
@@ -177,7 +177,7 @@ describe("Account Controller", () => {
             };
             
             testController = new AccountController(stubbedService);
-            testAccount = { _id: 1, username: "testUsername", icon: "0", role: { roleName: "" }};       
+            testAccount = { _id: 1, username: "testUsername", icon: "0", role: { roleName: "" } };
             testRequest = { body: { userId: "1" } };
             
             stubbedService.getAccountById.resolves(testAccount);
@@ -199,7 +199,7 @@ describe("Account Controller", () => {
             //Assert
             sinon.assert.calledWith(stubbedService.getAccountById, "1");
             sinon.assert.calledWith(stubbedResponse.status, 200);
-            assert.equal(stubbedResponse.json.getCall(0).args[0].username, testAccount.username)
+            assert.equal(stubbedResponse.json.getCall(0).args[0].username, testAccount.username);
         });
         
         it("should respond with 404 if getAccountById resolves null", async () => {
@@ -223,5 +223,45 @@ describe("Account Controller", () => {
             //Assert
             sinon.assert.calledWith(stubbedResponse.status, 500);
         });
-    })
+    });
+    
+    describe("loginWithToken", () => {
+        beforeEach(() => {
+            process.env.SECRET = "333BA566A25119A247F6FD4845E98";
+            
+            stubbedService = {
+                getAccountById: sinon.stub(),
+                updateProfileDetails: sinon.stub()
+            };
+            stubbedResponse = {
+                status: sinon.stub().returnsThis(),
+                json: sinon.stub()
+            };
+            
+            testController = new AccountController(stubbedService);
+            testAccount = { _id: 1, username: "testUsername", icon: "0", role: { roleName: "" } };
+            testRequest = { body: { userId: "1", username: "testName", icon: "0" } };
+            
+            stubbedService.getAccountById.resolves(testAccount);
+        });
+        
+        afterEach(() => {
+            process.env.SECRET = undefined;
+            stubbedService = undefined;
+            stubbedResponse = undefined;
+            testController = undefined;
+            testRequest = undefined;
+            testAccount = undefined;
+        });
+        
+        it("should respond with 200 in normal circumstances", async () => {
+            //Act
+            await testController.updateProfileDetails(testRequest, stubbedResponse);
+            
+            //Assert
+            sinon.assert.calledWith(stubbedService.getAccountById, testRequest.body.userId);
+            sinon.assert.calledWith(stubbedService.updateProfileDetails, testRequest.body.userId, testRequest.body.username, testRequest.body.icon);
+            sinon.assert.calledWith(stubbedResponse.status, 204);
+        });
+    });
 });

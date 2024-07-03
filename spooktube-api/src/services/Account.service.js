@@ -18,4 +18,16 @@ export default class AccountService {
     async getRoleById(id) {
         return await Account.findById(id).select("role").populate("role");
     }
+    
+    async updateProfileDetails(id, username, icon) {
+        return await Account.findByIdAndUpdate(id, { username: username, icon: icon });
+    }
+    
+    async updateEmail(id, email) {
+        return await Account.findByIdAndUpdate(id, { email: email });
+    }
+    
+    async updatePassword(id, password) {
+        return await Account.findByIdAndUpdate(id, { password: bcrypt.hashSync(password, Number(process.env.HASH_ROUNDS)) });
+    }
 }
