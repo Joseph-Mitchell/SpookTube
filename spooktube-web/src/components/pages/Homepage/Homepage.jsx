@@ -3,7 +3,7 @@ import VideoGrid from "../../common/VideoGrid.jsx";
 import Paginator from "../../common/Paginator.jsx";
 import getAllVideos from "../../../services/getAllVideos.js";
 
-const Homepage = () => {
+const Homepage = ({ setBackgroundHeight }) => {
     const VIDEOS_PER_PAGE = 18;
     const [pages, setPages] = useState(1);
     const [currentPage, setCurrentPage] = useState(1);
@@ -21,7 +21,7 @@ const Homepage = () => {
 
     return (
         <>
-            <VideoGrid videos={videos} />
+            <VideoGrid videos={videos} setBackgroundHeight={setBackgroundHeight} />
             <Paginator currentPage={currentPage} setCurrentPage={setCurrentPage} pages={pages} />
         </>
     );

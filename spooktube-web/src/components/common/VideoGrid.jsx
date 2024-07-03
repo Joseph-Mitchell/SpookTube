@@ -1,25 +1,34 @@
+import { useEffect, useState } from "react";
 import VideoCard from "./VideoCard.jsx";
 
-const VideoGrid = ({ videos = [], clickDeleteVideo, user }) => {
+const VideoGrid = ({ videos = [], clickDeleteVideo, user, setBackgroundHeight }) => {
+    const [videoCards, setVideoCards] = useState([]);
 
-    let videoList = [];
-    for (let i = 0; i < videos.length; i++) {
-        let videoCard;
+    useEffect(() => {
+        let videoList = [];
+        for (let i = 0; i < videos.length; i++) {
+            let videoCard;
 
-        if (user) {
-            videoCard = (<VideoCard key={i} video={videos[i]} clickDeleteVideo={clickDeleteVideo} />);
+            if (user) {
+                videoCard = (<VideoCard key={i} video={videos[i]} clickDeleteVideo={clickDeleteVideo} />);
+            }
+            else
+                videoCard = (<VideoCard key={i} video={videos[i]} />);
+
+            videoList.push(videoCard);
         }
-        else
-            videoCard = (<VideoCard key={i} video={videos[i]} />);
+        setVideoCards(videoList);
+    }, [videos]);
 
-        videoList.push(videoCard);
-    }
+    useEffect(() => {
+        setBackgroundHeight();
+    });
 
     return (
         <>
             <div className="container-fluid d-flex justify-content-center w-100" id="">
                 <div className={`row justify-content-around mt-5 px-5 pb-5 gy-5 bg-${user ? "transparent" : "secondary-subtle"}`} id="video-grid">
-                    {videoList}
+                    {videoCards}
                 </div>
             </div>
         </>

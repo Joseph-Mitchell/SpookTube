@@ -40,14 +40,26 @@ function App() {
 
     }, []);
 
+    function setBackgroundHeight() {
+        document.getElementById("full-height").style.height = "max-content";
+
+        const height = Math.max(document.getElementById("full-height").offsetHeight, window.innerHeight);
+
+        document.getElementById("full-height").style.height = height + "px";
+    }
+
+    useEffect(() => {
+        setBackgroundHeight();
+    });
+
     return (
-        <div id="full-height" className="vh-100">
+        <div id="full-height">
             <Navbar loggedIn={loggedIn} setLoggedIn={setLoggedIn} setUsername={setUsername} icon={icon} setIcon={setIcon} navigate={navigate} role={role} setRole={setRole} />
             <Routes>
                 <Route
                     path="/"
                     element={
-                        <Homepage />
+                        <Homepage setBackgroundHeight={setBackgroundHeight} />
                     }
                 />
                 <Route
@@ -65,13 +77,13 @@ function App() {
                 <Route
                     path="/my-content"
                     element={
-                        <MyContentPage loggedIn={loggedIn} loginFinished={loginFinished} navigate={navigate} role={role} />
+                        <MyContentPage loggedIn={loggedIn} loginFinished={loginFinished} navigate={navigate} role={role} setBackgroundHeight={setBackgroundHeight} />
                     }
                 />
                 <Route
                     path="/moderation"
                     element={
-                        <MyContentPage loggedIn={loggedIn} loginFinished={loginFinished} navigate={navigate} role={role} />
+                        <MyContentPage loggedIn={loggedIn} loginFinished={loginFinished} navigate={navigate} role={role} setBackgroundHeight={setBackgroundHeight} />
                     }
                 />
                 <Route

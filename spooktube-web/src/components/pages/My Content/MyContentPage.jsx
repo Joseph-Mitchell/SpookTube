@@ -10,7 +10,7 @@ import editComment from "../../../services/editComment.js";
 import deleteComment from "../../../services/deleteComment.js";
 import getAllVideos from "../../../services/getAllVideos.js";
 
-const MyContentPage = ({ loggedIn, loginFinished, navigate, role }) => {
+const MyContentPage = ({ loggedIn, loginFinished, navigate, role, setBackgroundHeight }) => {
     const SELECTED_CLASSES = "border-primary-subtle bg-primary-subtle text-primary z-2";
     const UNSELECTED_CLASSES = "border-body-secondary bg-body-secondary text-body-tertiary z-0";
 
@@ -156,10 +156,10 @@ const MyContentPage = ({ loggedIn, loginFinished, navigate, role }) => {
             </div>
             <div id="user-content" className="border border-start-0 border-end-0 border-top-2 border-primary-subtle bg-primary-subtle position-relative z-1">
                 <div id="user-video-grid">
-                    <VideoGrid videos={videos} clickDeleteVideo={clickDeleteVideo} user />
+                    <VideoGrid videos={videos} clickDeleteVideo={clickDeleteVideo} user setBackgroundHeight={setBackgroundHeight} />
                 </div>
                 <div id="user-comment-grid" className="d-none">
-                    <CommentGrid currentPage={currentPage} setPages={setPages} clickEditComment={clickEditComment} role={role} loginFinished={loginFinished} currentTab={currentTab} />
+                    <CommentGrid currentPage={currentPage} setPages={setPages} clickEditComment={clickEditComment} role={role} loginFinished={loginFinished} currentTab={currentTab} setBackgroundHeight={setBackgroundHeight} />
                 </div>
                 <Paginator currentPage={currentPage} setCurrentPage={setCurrentPage} pages={pages} />
             </div>
