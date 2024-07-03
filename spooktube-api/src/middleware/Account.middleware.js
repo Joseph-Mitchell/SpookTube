@@ -21,13 +21,9 @@ export default class AccountMiddleware {
         });
     }
     
-    static validateEmail = () => {
+    static validateNewEmail = () => {
         try {
             return [
-                expressValidator
-                    .body("oldEmail")
-                    .isEmail()
-                    .withMessage("Please enter a valid email address"),
                 expressValidator
                     .body("newEmail")
                     .isEmail()
