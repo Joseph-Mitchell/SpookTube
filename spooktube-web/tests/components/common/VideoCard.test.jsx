@@ -38,4 +38,12 @@ describe("VideoCard", () => {
         //Assert
         expect(screen.getByAltText("Video Thumbnail")).toHaveAttribute("src", "thumb-placeholder.png");
     });
+
+    it("should display delete button if clickDeleteVideo is defined", () => {
+        //Act
+        render(<VideoCard video={video} clickDeleteVideo={clickDeleteVideo} />);
+
+        //Assert
+        expect(screen.getByRole("button")).not.toHaveClass("d-none");
+    });
 });
