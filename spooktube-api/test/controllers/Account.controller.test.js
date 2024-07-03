@@ -367,5 +367,17 @@ describe("Account Controller", () => {
             sinon.assert.calledWith(stubbedResponse.status, 404);
             sinon.assert.notCalled(stubbedService.updatePassword);
         });
+        
+        it("should respond 404 if getAccountById resolves null", async () => {
+            //Arrange
+            testRequest.body.oldPassword = "wrongPass";
+            
+            //Act
+            await testController.updatePassword(testRequest, stubbedResponse);
+            
+            //Assert
+            sinon.assert.calledWith(stubbedResponse.status, 404);
+            sinon.assert.notCalled(stubbedService.updatePassword);
+        });
     });
 });
