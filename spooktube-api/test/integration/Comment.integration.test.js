@@ -183,6 +183,16 @@ describe("Comment Integration Tests", () => {
             assert.equal(actual.status, 200);
             assert.equal(actual.body.comments.length, 10);
         });
+        
+        it("should respond 403 if user not moderator", async () => {
+            //Act
+            const actual = await requester
+                .get("/comments/all/0/10")
+                .set("authentication", jwt.sign({ id: existingComments[5].userId }, process.env.SECRET));
+            
+            //Assert
+            assert.equal(actual.status, 403);
+        });
     });
     
     describe("makeComment", () => {
