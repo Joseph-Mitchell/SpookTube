@@ -382,5 +382,18 @@ describe("Account Integration Tests", () => {
             assert.equal(actual.status, 404);
             assert.equal(account.email, existingAccounts[0].email);
         });
+        
+        it("should respond 404 with non-existent id", async () => {
+            //Act
+            const actual = await requester
+                .put("/accounts/email")
+                .send({ oldEmail:  existingAccounts[0].email, newEmail: newAccounts.valid.email })
+                .set("authentication", jwt.sign({ id: "668536b9ba26846e9f38d2ed" }, process.env.SECRET));
+            
+            //Assert
+            const account = await Account.findById(existingAccounts[0]._id);
+            assert.equal(actual.status, 404);
+            assert.equal(account.email, existingAccounts[0].email);
+        });
     });
 });
