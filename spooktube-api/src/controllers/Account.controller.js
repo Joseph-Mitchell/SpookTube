@@ -83,7 +83,8 @@ export default class AccountController {
             await this.#accountService.updateEmail(req.body.userId, req.body.newEmail);
             
             return res.status(204).json();
-        } catch (e) {      
+        } catch (e) {
+            console.log(e.message)
             return res.status(500).json({ message: e.message });
         }
     }

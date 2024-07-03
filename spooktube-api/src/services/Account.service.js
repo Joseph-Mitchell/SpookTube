@@ -33,6 +33,10 @@ export default class AccountService {
         return await Account.findByIdAndUpdate(id, { password: bcrypt.hashSync(password, Number(process.env.HASH_ROUNDS)) });
     }
     
+    async getAccountByIdAndEmail(id, email) {
+        return await Account.findOne({ _id: new Types.ObjectId(id), email: email });
+    }
+    
     async getAccountByEmail(email) {
         return await Account.findOne({ email: email });
     }

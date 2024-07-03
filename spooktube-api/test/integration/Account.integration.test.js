@@ -415,8 +415,7 @@ describe("Account Integration Tests", () => {
             //Act
             const actual = await requester
                 .put("/accounts/password")
-                .send({ oldPassword: existingAccounts[0].password, newPassword: newAccounts.valid.password })
-                .set("authentication", jwt.sign({ id: existingAccounts[0]._id }, process.env.SECRET));
+                .send({ email: existingAccounts[0].email, oldPassword: existingAccounts[0].password, newPassword: newAccounts.valid.password })
             
             //Assert
             const account = await Account.findById(existingAccounts[0]._id);
@@ -428,8 +427,7 @@ describe("Account Integration Tests", () => {
             //Act
             const actual = await requester
                 .put("/accounts/password")
-                .send({ oldPassword: existingAccounts[0].password })
-                .set("authentication", jwt.sign({ id: existingAccounts[0]._id }, process.env.SECRET));
+                .send({ email: existingAccounts[0].email, oldPassword: existingAccounts[0].password })
             
             //Assert
             const account = await Account.findById(existingAccounts[0]._id);
@@ -441,8 +439,7 @@ describe("Account Integration Tests", () => {
             //Act
             const actual = await requester
                 .put("/accounts/password")
-                .send({ oldPassword: existingAccounts[0].password, newPassword: "" })
-                .set("authentication", jwt.sign({ id: existingAccounts[0]._id }, process.env.SECRET));
+                .send({ email: existingAccounts[0].email, oldPassword: existingAccounts[0].password, newPassword: "" })
             
             //Assert
             const account = await Account.findById(existingAccounts[0]._id);
@@ -454,8 +451,7 @@ describe("Account Integration Tests", () => {
             //Act
             const actual = await requester
                 .put("/accounts/password")
-                .send({ oldPassword: "wrongPass", newPassword: newAccounts.valid.password })
-                .set("authentication", jwt.sign({ id: existingAccounts[0]._id }, process.env.SECRET));
+                .send({ email: existingAccounts[0].email, oldPassword: "wrongPass", newPassword: newAccounts.valid.password })
             
             //Assert
             const account = await Account.findById(existingAccounts[0]._id);
@@ -463,12 +459,11 @@ describe("Account Integration Tests", () => {
             assert.isOk(bcrypt.compareSync(existingAccounts[0].password, account.password));
         });
         
-        it("should respond 404 if user id does not exist", async () => {
+        it("should respond 404 if email does not exist", async () => {
             //Act
             const actual = await requester
                 .put("/accounts/password")
-                .send({ oldPassword: existingAccounts[0].password, newPassword: newAccounts.valid.password })
-                .set("authentication", jwt.sign({ id: "66854aae3762df8c163edacf" }, process.env.SECRET));
+                .send({ email: "nonexistant@email.com", oldPassword: existingAccounts[0].password, newPassword: newAccounts.valid.password })
             
             //Assert
             const account = await Account.findById(existingAccounts[0]._id);

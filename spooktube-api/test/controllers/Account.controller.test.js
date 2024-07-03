@@ -323,7 +323,7 @@ describe("Account Controller", () => {
     describe("updatePassword", () => {
         beforeEach(() => {     
             stubbedService = {
-                getAccountById: sinon.stub(),
+                getAccountByEmail: sinon.stub(),
                 updatePassword: sinon.stub(),
             };
             stubbedResponse = {
@@ -333,9 +333,10 @@ describe("Account Controller", () => {
             
             testController = new AccountController(stubbedService);
             testAccount = { _id: 1, username: "testUsername", email: "test@email.com", password: bcrypt.hashSync("testPass", Number(process.env.HASH_ROUNDS)) };
-            testRequest = { body: { userId: 1, oldPassword: "testPass", newPassword: "newPass"} };
+            testRequest = { body: { email: "test@email.com", oldPassword: "testPass", newPassword: "newPass"} };
             
-            stubbedService.getAccountById.resolves(testAccount);
+            stubbedService.getAccountByEmail.resolves(testAccount);
+            stubbedService.updatePassword.resolves({});
         });
         
         afterEach(() => {
@@ -352,13 +353,13 @@ describe("Account Controller", () => {
             
             //Assert
             sinon.assert.calledWith(stubbedResponse.status, 204);
-            sinon.assert.calledWith(stubbedService.getAccountById, testRequest.body.userId);
-            sinon.assert.calledWith(stubbedService.updatePassword, testRequest.body.userId, testRequest.body.newPassword);
+            sinon.assert.calledWith(stubbedService.getAccountByEmail, testRequest.body.email);
+            sinon.assert.calledWith(stubbedService.updatePassword, testAccount._id, testRequest.body.newPassword);
         });
         
         it("should respond 404 if getAccountById resolves null", async () => {
             //Arrange
-            stubbedService.getAccountById.resolves(null);
+            stubbedService.getAccountByEmail.resolves(null);
             
             //Act
             await testController.updatePassword(testRequest, stubbedResponse);
@@ -368,7 +369,7 @@ describe("Account Controller", () => {
             sinon.assert.notCalled(stubbedService.updatePassword);
         });
         
-        it("should respond 404 if getAccountById resolves null", async () => {
+        it("should respond 404 if password does not match", async () => {
             //Arrange
             testRequest.body.oldPassword = "wrongPass";
             
@@ -378,6 +379,17 @@ describe("Account Controller", () => {
             //Assert
             sinon.assert.calledWith(stubbedResponse.status, 404);
             sinon.assert.notCalled(stubbedService.updatePassword);
+        });
+        
+        it("should respond 500 if updatePassword resolves null", async () => {
+            //Arrange
+            stubbedService.updatePassword.resolves(null);
+            
+            //Act
+            await testController.updatePassword(testRequest, stubbedResponse);
+            
+            //Assert
+            sinon.assert.calledWith(stubbedResponse.status, 500);
         });
     });
 });
