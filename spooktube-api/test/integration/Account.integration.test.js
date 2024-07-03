@@ -249,7 +249,7 @@ describe("Account Integration Tests", () => {
             //Act
             const actual = await requester
                 .put("/accounts/profile")
-                .send({ username: newAccounts.noUsername.username, icon: "5"})
+                .send({icon: "5"})
                 .set("authentication", jwt.sign({ id: existingAccounts[0]._id }, process.env.SECRET));
             
             //Assert
@@ -275,6 +275,19 @@ describe("Account Integration Tests", () => {
             assert.equal(account.icon, "0");
         });
         
-        
+        it("should respond 400 with no icon", async () => {
+            //Act
+            const actual = await requester
+                .put("/accounts/profile")
+                .send({ username: newAccounts.emptyUsername.username })
+                .set("authentication", jwt.sign({ id: existingAccounts[0]._id }, process.env.SECRET));
+            
+            //Assert
+            const account = await Account.findById(existingAccounts[0]._id);
+
+            assert.equal(actual.status, 400);
+            assert.equal(account.username, existingAccounts[0].username);
+            assert.equal(account.icon, "0");
+        });
     })
 });
