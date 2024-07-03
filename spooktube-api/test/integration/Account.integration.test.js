@@ -14,7 +14,7 @@ import { existingAccounts, newAccounts, testLogins } from "../data/testAccounts.
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 
-describe.skip("Account Integration Tests", () => {
+describe("Account Integration Tests", () => {
     let server;
     let database;
     let requester;
@@ -407,6 +407,21 @@ describe.skip("Account Integration Tests", () => {
             const account = await Account.findById(existingAccounts[0]._id);
             assert.equal(actual.status, 404);
             assert.equal(account.email, existingAccounts[0].email);
+        });
+    });
+    
+    describe("Update Password", () => {
+        it("should respond 204 in normal circumstances", async () => {
+            //Act
+            const actual = await requester
+                .put("/accounts/password")
+                .send({ oldPassword: existingAccounts[0].password, newPassword: newAccounts.valid.password })
+                .set("authentication", jwt.sign({ id: existingAccounts[0]._id }, process.env.SECRET));
+            
+            //Assert
+            const account = await Account.findById(existingAccounts[0]._id);
+            assert.equal(actual.status, 204);
+            assert.isOk(bcrypt.compareSync(newAccounts.valid.password, account.password));
         });
     });
 });

@@ -21,6 +21,21 @@ export default class AccountMiddleware {
         });
     }
     
+    static validateNewPassword = () => {
+        try {
+            return [
+                expressValidator
+                    .body("newPassword")
+                    .notEmpty()
+                    .withMessage("Please enter a password"),
+                AccountMiddleware.handleValidationErrors,
+            ];
+        } catch (e) {
+            console.log(e);
+            return [];
+        }
+    };
+    
     static validateNewEmail = () => {
         try {
             return [
@@ -71,8 +86,7 @@ export default class AccountMiddleware {
                 expressValidator
                     .body("password")
                     .notEmpty()
-                    .withMessage("Please enter a password")
-                    .escape(),
+                    .withMessage("Please enter a password"),
                 AccountMiddleware.handleValidationErrors,
             ];
         } catch (e) {

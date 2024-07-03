@@ -25,5 +25,8 @@ export default class AccountRouter extends Router {
         this._router.put("/email", [AccountMiddleware.authenticateToken, AccountMiddleware.validateNewEmail()], (req, res) => {
             this._controller.updateEmail(req, res);
         });
+        this._router.put("/password", [AccountMiddleware.authenticateToken, AccountMiddleware.validateNewPassword()], (req, res) => {
+            this._controller.updatePassword(req, res);
+        });
     }
 }
