@@ -331,7 +331,7 @@ describe("Comment Controller", () => {
         });
     });
     
-    describe("editComment", () => {
+    describe("deleteComment", () => {
         let stubbedCommentService;
         let stubbedAccountService;
         let stubbedResponse;
@@ -413,7 +413,7 @@ describe("Comment Controller", () => {
             stubbedResponse = { status: sinon.stub().returnsThis(), json: sinon.stub() };
             
             testController = new CommentController(stubbedCommentService, stubbedAccountService);
-            testRequest = { params: { rangeMin: 0, rangeMax: 20 }, body: { userId: 1 } };
+            testRequest = { params: { rangeMin: 0, rangeMax: 20, searchTerm: " " }, body: { userId: 1 } };
 
             testComments = [];
             testResponseComments = [];

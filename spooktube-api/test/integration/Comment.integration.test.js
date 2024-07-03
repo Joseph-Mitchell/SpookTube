@@ -176,7 +176,7 @@ describe("Comment Integration Tests", () => {
         it("should respond 200 in normal circumstances", async () => {
             //Act
             const actual = await requester
-                .get("/comments/all/0/10")
+                .get("/comments/all/ /0/10")
                 .set("authentication", jwt.sign({ id: existingComments[0].userId }, process.env.SECRET));
             
             //Assert
@@ -187,11 +187,22 @@ describe("Comment Integration Tests", () => {
         it("should respond 403 if user not moderator", async () => {
             //Act
             const actual = await requester
-                .get("/comments/all/0/10")
+                .get("/comments/all/ /0/10")
                 .set("authentication", jwt.sign({ id: existingComments[5].userId }, process.env.SECRET));
             
             //Assert
             assert.equal(actual.status, 403);
+        });
+        
+        it("should respond with only matching comments", async () => {
+            //Act
+            const actual = await requester
+                .get("/comments/all/Hello/0/10")
+                .set("authentication", jwt.sign({ id: existingComments[0].userId }, process.env.SECRET));
+            
+            //Assert
+            assert.equal(actual.status, 200);
+            assert.equal(actual.body.comments.length, 2);
         });
     });
     

@@ -32,11 +32,11 @@ export default class CommentService {
         return await Comment.findByIdAndDelete(id);
     }
     
-    async getCommentsCount() {
-        return await Comment.find({}).estimatedDocumentCount();
+    async getCommentsCount(searchTerm) {
+        return await Comment.find({ comment: { $regex: searchTerm, $options: "i" } }).estimatedDocumentCount();
     }
     
-    async getAllComments() {
-        return await Comment.find({});
+    async getAllComments(searchTerm) {
+        return await Comment.find({ comment: { $regex: searchTerm, $options: "i" } });
     }
 }

@@ -48,12 +48,12 @@ export default class CommentController {
             if (role !== "moderator")
                 return res.status(403).json("user not authorised")
             
-            const count = await this.#commentService.getCommentsCount();
+            const count = await this.#commentService.getCommentsCount(req.params.searchTerm.trim());
             
             const commentsPerPage = (req.params.rangeMax - req.params.rangeMin);
             const pages = Math.floor((count - 1) / commentsPerPage) + 1;
             
-            const comments = await this.#commentService.getAllComments();
+            const comments = await this.#commentService.getAllComments(req.params.searchTerm.trim());
             let response = []
             for (let i = Math.max(req.params.rangeMin, 0); (i < comments.length) && (i < req.params.rangeMax); i++) {
                 let { uploadDate, ...rest } = comments[i]._doc;

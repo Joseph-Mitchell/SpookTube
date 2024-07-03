@@ -17,7 +17,7 @@ export default class CommentRouter extends Router {
         this._router.get("/user/:rangeMin/:rangeMax", AccountMiddleware.authenticateToken, (req, res) => {
             this._controller.getUserComments(req, res);
         });
-        this._router.get("/all/:rangeMin/:rangeMax", AccountMiddleware.authenticateToken, (req, res) => {
+        this._router.get("/all/:searchTerm/:rangeMin/:rangeMax", AccountMiddleware.authenticateToken, (req, res) => {
             this._controller.getAllComments(req, res);
         });
         this._router.post(
