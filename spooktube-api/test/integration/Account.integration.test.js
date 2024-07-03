@@ -436,5 +436,18 @@ describe("Account Integration Tests", () => {
             assert.equal(actual.status, 400);
             assert.isOk(bcrypt.compareSync(existingAccounts[0].password, account.password));
         });
+        
+        it("should respond 400 if newPassword is empty", async () => {
+            //Act
+            const actual = await requester
+                .put("/accounts/password")
+                .send({ oldPassword: existingAccounts[0].password, newPassword: "" })
+                .set("authentication", jwt.sign({ id: existingAccounts[0]._id }, process.env.SECRET));
+            
+            //Assert
+            const account = await Account.findById(existingAccounts[0]._id);
+            assert.equal(actual.status, 400);
+            assert.isOk(bcrypt.compareSync(existingAccounts[0].password, account.password));
+        });
     });
 });
