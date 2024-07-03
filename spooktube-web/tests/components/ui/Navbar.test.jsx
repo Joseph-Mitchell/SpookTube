@@ -1,5 +1,6 @@
 import { screen } from "@testing-library/dom";
 import { render } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { afterEach, beforeEach, vi } from 'vitest';
 
 import LoginModal from "../../../src/components/ui/LoginModal.jsx";
@@ -16,6 +17,7 @@ describe("Navbar", () => {
     let navigate;
     let role;
     let setRole;
+    let user;
 
     beforeEach(() => {
         loggedIn = false;
@@ -26,6 +28,9 @@ describe("Navbar", () => {
         navigate = vi.fn();
         role = "user";
         setRole = vi.fn();
+        user = userEvent.setup();
+
+        vi.spyOn(Storage.prototype, "removeItem");
     });
 
     afterEach(() => {
@@ -37,6 +42,9 @@ describe("Navbar", () => {
         navigate = undefined;
         role = undefined;
         setRole = undefined;
+        user = undefined;
+
+        localStorage.clear();
     });
 
     it("should display icon image with correct src for passed icon", () => {
@@ -183,5 +191,33 @@ describe("Navbar", () => {
         expect(screen.queryByText("My Content")).toBeNull();
         expect(screen.queryByText("Upload")).toBeNull();
         expect(screen.queryByText("Profile")).toBeNull();
+    });
+
+    it("should call expected functions if logout button clicked", async () => {
+        //Arrange
+        loggedIn = true;
+
+        //Act
+        render(
+            <Navbar
+                loggedIn={loggedIn}
+                setLoggedIn={setLoggedIn}
+                setUsername={setUsername}
+                icon={icon}
+                setIcon={setIcon}
+                navigate={navigate}
+                role={role}
+                setRole={setRole}
+            />
+        );
+        await user.click(screen.getByText("Log-Out"));
+
+        //Assert
+        expect(setLoggedIn).toHaveBeenCalledTimes(1);
+        expect(setUsername).toHaveBeenCalledTimes(1);
+        expect(setIcon).toHaveBeenCalledTimes(1);
+        expect(setRole).toHaveBeenCalledTimes(1);
+        expect(localStorage.removeItem).toHaveBeenCalledTimes(1);
+        expect(navigate).toHaveBeenCalledTimes(1);
     });
 });
