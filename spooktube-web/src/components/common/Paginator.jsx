@@ -3,7 +3,7 @@ const Paginator = ({ currentPage, setCurrentPage, pages }) => {
     let pageButtons = [];
     for (let i = 1; i <= pages; i++) {
         const active = currentPage === i ? " link-light bg-primary" : " link-primary";
-        pageButtons.push(<li className="page-item" key={i}><button className={"page-link" + active} onClick={() => { setCurrentPage(i); }}>{i}</button></li>);
+        pageButtons.push(<li role="switch" className="page-item" key={i}><button className={"page-link" + active} onClick={() => { setCurrentPage(i); }}>{i}</button></li>);
     }
 
     let prevDisabled = "";

@@ -61,4 +61,12 @@ describe("Paginator", () => {
         //Assert
         expect(screen.getByText("Next")).toHaveClass("link-primary");
     });
+
+    it("should display correct amount of page buttons", () => {
+        //Act
+        render(<Paginator currentPage={currentPage} setCurrentPage={setCurrentPage} pages={pages} />);
+
+        //Assert
+        expect(screen.queryAllByRole("switch")).toHaveLength(pages);
+    });
 });
