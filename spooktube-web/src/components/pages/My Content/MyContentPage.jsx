@@ -29,6 +29,7 @@ const MyContentPage = ({ loggedIn, loginFinished, navigate, role, setBackgroundH
     const [newComment, setNewComment] = useState("");
     const [commentEditing, setCommentEditing] = useState("");
     const [editModal, setEditModal] = useState({});
+    const [loadCommentsFlag, setLoadCommentsFlag] = useState(false);
 
     const [currentTab, setCurrentTab] = useState("videos");
 
@@ -81,9 +82,10 @@ const MyContentPage = ({ loggedIn, loginFinished, navigate, role, setBackgroundH
         document.getElementById("edit-comment-modal-cancel").setAttribute("disabled", true);
 
         await editComment(commentEditing, newComment, localStorage.getItem("token"));
-        setNewComment("");
-        setCommentEditing("");
-        window.location.reload();
+        cancelEditComment();
+        document.getElementById("edit-comment-modal-confirm").removeAttribute("disabled");
+        document.getElementById("edit-comment-modal-cancel").removeAttribute("disabled");
+        setLoadCommentsFlag(true);
     }
 
     function cancelEditComment() {
@@ -98,11 +100,13 @@ const MyContentPage = ({ loggedIn, loginFinished, navigate, role, setBackgroundH
     }
 
     async function confirmDeleteVideo() {
-        document.getElementById("delete-modal-cancel").setAttribute("disabled", true);
-        document.getElementById("delete-modal-confirm").setAttribute("disabled", true);
+        document.getElementById("delete-modal-video-cancel").setAttribute("disabled", true);
+        document.getElementById("delete-modal-video-confirm").setAttribute("disabled", true);
         await deleteVideo(toBeDeleted, localStorage.getItem("token"));
-        setToBeDeleted("");
-        window.location.reload();
+        cancelDeleteVideo();
+        document.getElementById("delete-modal-video-cancel").removeAttribute("disabled");
+        document.getElementById("delete-modal-video-confirm").removeAttribute("disabled");
+        refreshVideos();
     }
 
     function cancelDeleteVideo() {
@@ -116,11 +120,14 @@ const MyContentPage = ({ loggedIn, loginFinished, navigate, role, setBackgroundH
     }
 
     async function confirmDeleteComment() {
-        document.getElementById("delete-modal-cancel").setAttribute("disabled", true);
-        document.getElementById("delete-modal-confirm").setAttribute("disabled", true);
+        document.getElementById("delete-modal-comment-cancel").setAttribute("disabled", true);
+        document.getElementById("delete-modal-comment-confirm").setAttribute("disabled", true);
         console.log(await deleteComment(commentEditing, localStorage.getItem("token")));
-        setToBeDeleted("");
-        window.location.reload();
+        setCommentEditing("");
+        setLoadCommentsFlag(true);
+        deleteCommentModal.hide();
+        document.getElementById("delete-modal-comment-cancel").removeAttribute("disabled");
+        document.getElementById("delete-modal-comment-confirm").removeAttribute("disabled");
     }
 
     function cancelDeleteComment() {
@@ -161,7 +168,7 @@ const MyContentPage = ({ loggedIn, loginFinished, navigate, role, setBackgroundH
                     <VideoGrid videos={videos} clickDeleteVideo={clickDeleteVideo} user setBackgroundHeight={setBackgroundHeight} />
                 </div>
                 <div role="grid" id="user-comment-grid" className="d-none">
-                    <CommentGrid currentPage={currentPage} setPages={setPages} clickEditComment={clickEditComment} role={role} loginFinished={loginFinished} currentTab={currentTab} setBackgroundHeight={setBackgroundHeight} />
+                    <CommentGrid currentPage={currentPage} setPages={setPages} clickEditComment={clickEditComment} role={role} loginFinished={loginFinished} currentTab={currentTab} setBackgroundHeight={setBackgroundHeight} loadCommentsFlag={loadCommentsFlag} setLoadCommentsFlag={setLoadCommentsFlag} />
                 </div>
                 <Paginator currentPage={currentPage} setCurrentPage={setCurrentPage} pages={pages} />
             </div>

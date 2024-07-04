@@ -4,7 +4,7 @@ import CommentCard from "../Watch/CommentCard.jsx";
 import getUserComments from "../../../services/getUserComments.js";
 import getAllComments from "../../../services/getAllComments.js";
 
-const CommentGrid = ({ currentPage, setPages, clickEditComment, role, loginFinished, currentTab, setBackgroundHeight }) => {
+const CommentGrid = ({ currentPage, setPages, clickEditComment, role, loginFinished, currentTab, setBackgroundHeight, loadCommentsFlag, setLoadCommentsFlag }) => {
     const COMMENTS_PER_PAGE = 10;
 
     const [search, setSearch] = useState("");
@@ -35,6 +35,13 @@ const CommentGrid = ({ currentPage, setPages, clickEditComment, role, loginFinis
     useEffect(() => {
         loadComments();
     }, [search, loginFinished, currentTab, currentPage]);
+
+    useEffect(() => {
+        if (loadCommentsFlag) {
+            loadComments();
+            setLoadCommentsFlag(false);
+        }
+    }, [loadCommentsFlag]);
 
     useEffect(() => {
         populateCommentList();
