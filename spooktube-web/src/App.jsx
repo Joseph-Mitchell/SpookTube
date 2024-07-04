@@ -16,6 +16,7 @@ function App() {
     const [icon, setIcon] = useState("default");
     const [role, setRole] = useState("user");
     const [fileReader, setFileReader] = useState(new FileReader());
+    const [videosPerPage, setVideosPerPage] = useState(18);
 
     async function sendLoginWithToken(token) {
         const response = await loginWithToken(token);
@@ -63,7 +64,7 @@ function App() {
                 <Route
                     path="/"
                     element={
-                        <Homepage setBackgroundHeight={setBackgroundHeight} />
+                        <Homepage setBackgroundHeight={setBackgroundHeight} videosPerPage={videosPerPage} setVideosPerPage={setVideosPerPage} />
                     }
                 />
                 <Route
