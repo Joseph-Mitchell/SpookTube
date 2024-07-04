@@ -73,7 +73,7 @@ const CommentList = ({ videoHeight, currentVideoTime, videoId, loggedIn }) => {
     }, [currentVideoTime]);
 
     return (
-        <div id="comment-section" className="p-0">
+        <div role="group" id="comment-section" className="p-0">
             <div id="comment-list" className="overflow-y-scroll w-100">
                 {commentList}
             </div>

@@ -19,6 +19,7 @@ function App() {
 
     async function sendLoginWithToken(token) {
         const response = await loginWithToken(token);
+
         if (response.message) {
             localStorage.removeItem("token");
         }

@@ -7,6 +7,7 @@ const VideoPlayer = ({ setVideoHeight, videoId, setCurrentVideoTime }) => {
     window.onresize = resizeVideo;
 
     function resizeVideo(e) {
+        console.log("resize");
         const video = document.getElementById("video-container");
         setVideoHeight(video.offsetHeight);
     }
@@ -31,7 +32,7 @@ const VideoPlayer = ({ setVideoHeight, videoId, setCurrentVideoTime }) => {
     }, []);
 
     return (
-        <div id="video-container" className="d-flex justify-content-end h-100">
+        <div role="main" id="video-container" className="d-flex justify-content-end h-100">
             <video
                 ref={videoRef}
                 data-cld-public-id={videoId}
