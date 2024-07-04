@@ -125,6 +125,7 @@ const UploadPage = ({ loggedIn, loginFinished, navigate }) => {
             <form className="d-flex flex-column justify-content-center" onSubmit={(e) => { e.preventDefault(); }}>
                 <h1 className="text-center mb-4">Upload</h1>
                 <div
+                    role="figure"
                     className={`bg-${dropZoneColour} bg-opacity-25 border border-secondary border-opacity-50 rounded-4 d-flex flex-column justify-content-center align-items-center mx-auto`}
                     id="drop-zone"
                     onDrop={fileDropped}
@@ -132,9 +133,9 @@ const UploadPage = ({ loggedIn, loginFinished, navigate }) => {
                     onDragLeave={fileNotHovering}
                 >
                     <i id="drop-icon" className={`bi-${dropZoneIcon} display-1 text-${dropZoneColour}`} />
-                    <div id="drop-spinner" className={`spinner-border spinner-border-lg text-${dropZoneColour} d-none`} />
+                    <div role="img" id="drop-spinner" className={`spinner-border spinner-border-lg text-${dropZoneColour} d-none`} />
                     <br />
-                    <p className={`user-select-none fs-4 text-${dropZoneColour} text-center`} >{dropZoneText}</p>
+                    <p role="note" className={`user-select-none fs-4 text-${dropZoneColour} text-center`} >{dropZoneText}</p>
                 </div>
                 <video id="upload-video" className="mx-auto d-none" controls />
                 <button id="upload-button" className="btn btn-primary btn-lg text-light mt-4 w-25 mx-auto d-none" onClick={sendUploadVideo}>Upload</button>
