@@ -21,9 +21,15 @@ export default class Server {
     }
     
     start() {
-        this.#server = this.#app.listen(this.#port, this.#host, () => {
-            console.log(`Server is listening on http://${this.#host}:${this.#port}`);
-        });
+        if (this.#host === undefined) {
+            this.#server = this.#app.listen(this.#port, () => {
+                console.log(`Server is listening on port ${this.#port}`);
+            });
+        } else {
+            this.#server = this.#app.listen(this.#port, this.#host, () => {
+                console.log(`Server is listening on http://${this.#host}:${this.#port}`);
+            });
+        }
         
         this.#app.use(cors());
         this.#app.use(express.json({ limit: "10mb" }))
