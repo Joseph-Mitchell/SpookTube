@@ -32,11 +32,11 @@ const MyContentPage = ({ loggedIn, loginFinished, navigate, role, setBackgroundH
 
     const [currentTab, setCurrentTab] = useState("videos");
 
-    // useEffect(() => {
-    //     if (!loggedIn && loginFinished) {
-    //         navigate("/");
-    //     }
-    // }, [loginFinished]);
+    useEffect(() => {
+        if (!loggedIn && loginFinished) {
+            navigate("/");
+        }
+    }, [loginFinished]);
 
     useEffect(() => {
         refreshVideos();
