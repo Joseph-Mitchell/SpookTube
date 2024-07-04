@@ -42,4 +42,15 @@ describe("VideoGrid", () => {
         //Assert
         expect(screen.getByRole("grid")).toHaveClass("bg-secondary-subtle");
     });
+
+    it("should display grid background if user false", async () => {
+        //Arrange
+        user = true;
+
+        //Act
+        render(<VideoGrid videos={videos} clickDeleteVideo={clickDeleteVideo} user={user} setBackgroundHeight={setBackgroundHeight} />);
+
+        //Assert
+        expect(screen.getByRole("grid")).toHaveClass("bg-transparent");
+    });
 });
