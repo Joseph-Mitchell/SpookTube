@@ -19,10 +19,12 @@ export default class ContentManagerService {
     }
     
     async deleteVideo(videoId) {
-        let folder = process.env.CLOUDINARY_FOLDER;
-        if (process.env.CLOUDINARY_FOLDER !== "")
-            folder += "/";
-
+        let folder;
+        if (process.env.CLOUDINARY_FOLDER)
+            folder = process.env.CLOUDINARY_FOLDER + "/";
+        else
+            folder = "";
+        
         return await cloudinary.v2.uploader.destroy(folder + videoId, {
             resource_type: "video",
         });

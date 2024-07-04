@@ -90,14 +90,13 @@ export default class VideoController {
                     return res.status(404).json({ message: "Video by this user not found" });
                 }
             }
-            
             await this.#videoService.deleteVideo(req.body.videoId);
             
             const deletion = await this.#contentManagerService.deleteVideo(req.body.videoId);
             
-            if (!deletion.result || deletion.result !== "ok") {
+            if (deletion.result !== "ok") {
                 await this.#videoService.createVideo(video.videoId, video.userId, video.uploadDate);
-                return new Error("Video could not be deleted due to a content manager error: " + deletion)
+                throw new Error("Video could not be deleted due to a content manager error: " + deletion.result)
             }
 
             return res.status(204).json();
