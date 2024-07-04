@@ -53,4 +53,13 @@ describe("LoginModal", () => {
         //Assert
         expect(screen.getByRole("alert")).toHaveClass("d-none");
     });
+
+    it("should show alert on submit register with empty fields", () => {
+        //Act
+        render(<LoginModal loginModal={loginModal} setLoginModal={setLoginModal} setLoggedIn={setLoggedIn} setUsername={setUsername} setIcon={setIcon} setRole={setRole} />);
+        fireEvent.click(screen.getAllByRole("button")[1]);
+
+        //Assert
+        expect(screen.getByRole("alert")).not.toHaveClass("d-none");
+    });
 });
