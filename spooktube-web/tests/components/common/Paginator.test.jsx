@@ -28,4 +28,15 @@ describe("Paginator", () => {
         //Assert
         expect(screen.getByText("Previous")).toHaveClass("link-secondary");
     });
+
+    it("should not display previous button as disabled if currentPage is > 1", () => {
+        //Arrange
+        currentPage = 2;
+
+        //Act
+        render(<Paginator currentPage={currentPage} setCurrentPage={setCurrentPage} pages={pages} />);
+
+        //Assert
+        expect(screen.getByText("Previous")).toHaveClass("link-primary");
+    });
 });
