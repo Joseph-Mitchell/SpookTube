@@ -1,5 +1,5 @@
 import { screen } from "@testing-library/dom";
-import { render } from "@testing-library/react";
+import { render, fireEvent } from "@testing-library/react";
 import { afterEach, beforeEach, it, vi } from 'vitest';
 
 import UploadPage from "../../../../src/components/pages/Upload/UploadPage.jsx";
@@ -33,5 +33,18 @@ describe("UploadPage", () => {
         expect(screen.getByRole("figure").firstChild).toHaveClass("text-secondary");
         expect(screen.getByRole("img")).toHaveClass("text-secondary");
         expect(screen.getByRole("note")).toHaveClass("text-secondary");
+    });
+
+    it("should display correctly with dragging file over", async () => {
+        //Act
+        render(<UploadPage loggedIn={loggedIn} loginFinished={loginFinished} navigate={navigate} />);
+        await fireEvent.dragOver(screen.getByRole("figure"));
+
+        //Assert
+        expect(screen.getByRole("figure")).toHaveClass("bg-primary");
+        expect(screen.getByRole("figure").firstChild).toHaveClass("bi-upload");
+        expect(screen.getByRole("figure").firstChild).toHaveClass("text-primary");
+        expect(screen.getByRole("img")).toHaveClass("text-primary");
+        expect(screen.getByRole("note")).toHaveClass("text-primary");
     });
 });
