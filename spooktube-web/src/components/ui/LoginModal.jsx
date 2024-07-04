@@ -140,7 +140,7 @@ const LoginModal = ({ loginModal, setLoginModal, setLoggedIn, setUsername, setIc
                                     />
                                     <br /><br />
                                     <div className="d-flex | justify-content-evenly | mt-3 mb-4">
-                                        <button className="btn btn-primary w-25 fs-6 text-light" type="button" onClick={sendLogin}>Log-In</button>
+                                        <button role="button" className="btn btn-primary w-25 fs-6 text-light" type="button" onClick={sendLogin}>Log-In</button>
                                     </div>
                                 </form>
                             </div>
@@ -188,7 +188,7 @@ const LoginModal = ({ loginModal, setLoginModal, setLoggedIn, setUsername, setIc
                                     />
                                     <br /><br />
                                     <div className="d-flex | justify-content-evenly | mt-3 mb-4">
-                                        <button className="btn btn-outline-primary w-25 fs-6" type="button" onClick={sendRegister}>Sign-Up</button>
+                                        <button role="button" className="btn btn-outline-primary w-25 fs-6" type="button" onClick={sendRegister}>Sign-Up</button>
                                     </div>
                                 </form>
                             </div>
