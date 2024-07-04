@@ -25,7 +25,7 @@ export default class Server {
             console.log(`Server is listening on http://${this.#host}:${this.#port}`);
         });
         
-        this.#app.use(cors({ origin: process.env.CLIENT_URL }));
+        this.#app.use(cors());
         this.#app.use(express.json({ limit: "10mb" }))
         
         this.#routers.forEach(router => {
