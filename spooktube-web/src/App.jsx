@@ -15,6 +15,7 @@ function App() {
     const [username, setUsername] = useState("");
     const [icon, setIcon] = useState("default");
     const [role, setRole] = useState("user");
+    const [fileReader, setFileReader] = useState(new FileReader());
 
     async function sendLoginWithToken(token) {
         const response = await loginWithToken(token);
@@ -71,7 +72,7 @@ function App() {
                 <Route
                     path="/upload"
                     element={
-                        <UploadPage loggedIn={loggedIn} loginFinished={loginFinished} navigate={navigate} />
+                        <UploadPage loggedIn={loggedIn} loginFinished={loginFinished} navigate={navigate} fileReader={fileReader} />
                     }
                 />
                 <Route

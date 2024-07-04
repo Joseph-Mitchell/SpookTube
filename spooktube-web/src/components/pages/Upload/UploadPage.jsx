@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
 import uploadVideo from "../../../services/uploadVideo.js";
 
-const UploadPage = ({ loggedIn, loginFinished, navigate }) => {
+const UploadPage = ({ loggedIn, loginFinished, navigate, fileReader }) => {
 
     const [video, setVideo] = useState({});
     const [dropZoneIcon, setDropZoneIcon] = useState("upload");
     const [dropZoneColour, setDropZoneColour] = useState("secondary");
     const [dropZoneText, setDropZoneText] = useState("Drag a video to upload");
-    const [fileReader, setFileReader] = useState(new FileReader());
     const [disableDrop, setDisableDrop] = useState(false);
 
     useEffect(() => {
@@ -80,12 +79,11 @@ const UploadPage = ({ loggedIn, loginFinished, navigate }) => {
 
         video.addEventListener("loadedmetadata", metaDataLoaded);
         video.setAttribute("src", file);
-
     }
 
     function metaDataLoaded(e) {
         e.target.removeEventListener("loadedmetadata", metaDataLoaded);
-
+        console.log("first");
         if (e.target.videoWidth !== 420 || e.target.videoHeight !== 420) {
             console.log(e.target.videoWidth, e.target.videoHeight);
             badFile();
@@ -137,7 +135,7 @@ const UploadPage = ({ loggedIn, loginFinished, navigate }) => {
                     <br />
                     <p role="note" className={`user-select-none fs-4 text-${dropZoneColour} text-center`} >{dropZoneText}</p>
                 </div>
-                <video id="upload-video" className="mx-auto d-none" controls />
+                <video role="main" id="upload-video" className="mx-auto d-none" controls />
                 <button id="upload-button" className="btn btn-primary btn-lg text-light mt-4 w-25 mx-auto d-none" onClick={sendUploadVideo}>Upload</button>
             </form>
         </div>
