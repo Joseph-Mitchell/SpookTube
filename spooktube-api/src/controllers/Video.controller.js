@@ -27,6 +27,7 @@ export default class VideoController {
 
             return res.status(200).json({ videos: response, pages: pages });
         } catch (e) {
+            console.log(e.message)
             return res.status(500).json({ message: e.message });
         }
     }
@@ -58,18 +59,19 @@ export default class VideoController {
             const result = await this.#contentManagerService.uploadVideo(req.body.videoFile);
 
             if (!result.public_id) {
-                return res.status(500).json({ message: "Content Manager not available" });
+                throw new Error("Video could not be created due to a content manager error");
             }
 
             const newVideo = await this.#videoService.createVideo(result.public_id, req.body.userId);
             
             if (newVideo === null) {
                 await this.#contentManagerService.deleteVideo(result.public_id);
-                return res.status(500).json({ message: "Server Error" });
+                throw new Error("Video could not be created due to a server error");
             }
             
             return res.status(201).json({ videoId: result.public_id });
         } catch (e) {
+            console.log(e.message)
             return res.status(500).json({ message: e.message });
         }
     }
@@ -95,11 +97,12 @@ export default class VideoController {
             
             if (!deletion.result || deletion.result !== "ok") {
                 await this.#videoService.createVideo(video.videoId, video.userId, video.uploadDate);
-                return res.status(500).json({ message: "Content manager error" });
+                return new Error("Video could not be deleted due to a content manager error: " + deletion)
             }
 
             return res.status(204).json();
         } catch (e) {
+            console.log(e.message)
             return res.status(500).json({ message: e.message });
         }
     }

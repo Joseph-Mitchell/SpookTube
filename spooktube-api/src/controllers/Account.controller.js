@@ -40,7 +40,8 @@ export default class AccountController {
             
             const signedToken = jwt.sign({ id: account._id.toString() }, process.env.SECRET, { expiresIn: "1 week" });
             return res.status(200).json({ token: signedToken, username: account.username, icon: account.icon, role: account.role.roleName });
-        } catch (e) {      
+        } catch (e) {     
+            console.log(e.message)
             return res.status(500).json({ message: e.message });
         }
     }
@@ -54,6 +55,7 @@ export default class AccountController {
             
             return res.status(200).json({ username: account.username, icon: account.icon, role: account.role.roleName });
         } catch (e) {      
+            console.log(e.message)
             return res.status(500).json({ message: e.message });
         }
     }
@@ -69,6 +71,7 @@ export default class AccountController {
             
             return res.status(204).json();
         } catch (e) {      
+            console.log(e.message)
             return res.status(500).json({ message: e.message });
         }
     }
@@ -99,7 +102,7 @@ export default class AccountController {
             const result = await this.#accountService.updatePassword(account._id, req.body.newPassword);
             
             if (result === null)
-                return res.status(500).json({ message: "There was an internal error, please try again later" });
+                throw new Error("Password could not be updated due to a server error");
             
             return res.status(204).json();
         } catch (e) {

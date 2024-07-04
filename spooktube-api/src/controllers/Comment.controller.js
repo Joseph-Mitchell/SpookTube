@@ -17,6 +17,7 @@ export default class CommentController {
             
             return res.status(200).json({ comments: mapped });
         } catch (e) {
+            console.log(e.message)
             return res.status(500).json({ message: e.message })
         }
     }
@@ -88,6 +89,7 @@ export default class CommentController {
             
             return res.status(201).json({ comment: newComment });
         } catch (e) {
+            console.log(e.message)
             return res.status(500).json({ message: e.message })
         }
     }
