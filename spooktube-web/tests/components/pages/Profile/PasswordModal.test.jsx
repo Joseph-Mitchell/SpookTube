@@ -30,13 +30,13 @@ describe("PasswordModal", () => {
         expect(screen.getByRole("alert")).toHaveClass("alert-danger");
     });
 
-    it.skip("should show success alert if submitted with filled fields", async () => {
+    it("should show success alert if submitted with filled fields", async () => {
         //Act
         render(<PasswordModal setModal={setModal} />);
-        const inputs = screen.getAllByPlaceholderText("email@example.com");
-        await user.type(inputs[0], "email@example.com");
-        await user.type(inputs[1], "email@example.com");
-        await user.type(inputs[2], "email@example.com");
+        const inputs = screen.getAllByPlaceholderText("password");
+        await user.type(screen.getByPlaceholderText("email@example.com"), "email@example.com");
+        await user.type(inputs[0], "password");
+        await user.type(inputs[1], "password");
         await user.click(screen.getAllByRole("button")[0]);
 
         //Assert
