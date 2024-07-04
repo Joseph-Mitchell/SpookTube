@@ -142,12 +142,14 @@ const MyContentPage = ({ loggedIn, loginFinished, navigate, role, setBackgroundH
             />
             <div id="tabs" className="d-flex justify-content-evenly w-100">
                 <button
+                    role="switch"
                     className={`tab-button btn fs-2 border border-bottom-0 border-2 rounded-top-4 rounded-bottom-0 ${videoClasses}`}
                     onClick={clickVideos}
                 >
                     Videos
                 </button>
                 <button
+                    role="switch"
                     className={`tab-button btn fs-2 border border-bottom-0 border-2 rounded-top-4 rounded-bottom-0 ${commentClasses}`}
                     onClick={clickComments}
                 >
@@ -155,10 +157,10 @@ const MyContentPage = ({ loggedIn, loginFinished, navigate, role, setBackgroundH
                 </button>
             </div>
             <div id="user-content" className="border border-start-0 border-end-0 border-top-2 border-primary-subtle bg-primary-subtle position-relative z-1">
-                <div id="user-video-grid">
+                <div role="grid" id="user-video-grid">
                     <VideoGrid videos={videos} clickDeleteVideo={clickDeleteVideo} user setBackgroundHeight={setBackgroundHeight} />
                 </div>
-                <div id="user-comment-grid" className="d-none">
+                <div role="grid" id="user-comment-grid" className="d-none">
                     <CommentGrid currentPage={currentPage} setPages={setPages} clickEditComment={clickEditComment} role={role} loginFinished={loginFinished} currentTab={currentTab} setBackgroundHeight={setBackgroundHeight} />
                 </div>
                 <Paginator currentPage={currentPage} setCurrentPage={setCurrentPage} pages={pages} />

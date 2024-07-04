@@ -66,6 +66,7 @@ const UploadPage = ({ loggedIn, loginFinished, navigate, fileReader }) => {
         document.getElementById("drop-spinner").classList.remove("d-none");
         setDropZoneText("Reading file...");
 
+        console.log("here");
         fileReader.addEventListener("load", fileLoaded);
         fileReader.readAsDataURL(e.dataTransfer.files[0]);
     }
@@ -83,9 +84,8 @@ const UploadPage = ({ loggedIn, loginFinished, navigate, fileReader }) => {
 
     function metaDataLoaded(e) {
         e.target.removeEventListener("loadedmetadata", metaDataLoaded);
-        console.log("first");
+
         if (e.target.videoWidth !== 420 || e.target.videoHeight !== 420) {
-            console.log(e.target.videoWidth, e.target.videoHeight);
             badFile();
             return;
         }
