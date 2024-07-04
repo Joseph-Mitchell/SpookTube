@@ -40,4 +40,15 @@ describe("CommentCard", () => {
         const comments = await screen.findAllByTestId("comment-card");
         expect(comments).toHaveLength(5);
     });
+
+    it("should display comment form if loggedIn true", async () => {
+        //Arrange
+        loggedIn = true;
+
+        //Act
+        render(<CommentList videoHeight={videoHeight} currentVideoTime={currentVideoTime} videoId={videoId} loggedIn={loggedIn} />);
+
+        //Assert
+        expect(screen.getByTestId("comment-form")).toBeInTheDocument();
+    });
 });
