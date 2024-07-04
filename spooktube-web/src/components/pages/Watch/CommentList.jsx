@@ -25,7 +25,6 @@ const CommentList = ({ videoHeight, currentVideoTime, videoId, loggedIn }) => {
         setComments(comments);
 
         setNewComment("");
-        populateCommentList();
     }
 
     function sortCommentList(a, b) {

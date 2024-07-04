@@ -42,6 +42,8 @@ function App() {
 
     }, []);
 
+    window.onscroll = setBackgroundHeight;
+
     function setBackgroundHeight() {
         document.getElementById("full-height").style.height = "max-content";
 
