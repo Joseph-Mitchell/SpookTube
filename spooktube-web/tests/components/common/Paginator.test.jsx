@@ -39,4 +39,15 @@ describe("Paginator", () => {
         //Assert
         expect(screen.getByText("Previous")).toHaveClass("link-primary");
     });
+
+    it("should display next button as disabled if currentPage === pages", () => {
+        //Arrange
+        currentPage = pages;
+
+        //Act
+        render(<Paginator currentPage={currentPage} setCurrentPage={setCurrentPage} pages={pages} />);
+
+        //Assert
+        expect(screen.getByText("Next")).toHaveClass("link-secondary");
+    });
 });
