@@ -5,6 +5,7 @@ import { afterEach, beforeEach, it, vi } from 'vitest';
 import UploadPage from "../../../../src/components/pages/Upload/UploadPage.jsx";
 
 vi.mock("../../../../src/services/uploadVideo.js", () => ({ default: () => { return { comments: [{ timeCode: 0 }, { timeCode: 1 }, { timeCode: 2 }, { timeCode: 4 }, { timeCode: 5 },] }; } }));
+vi.spyOn(FileReader.prototype, "readAsDataURL");
 
 describe("UploadPage", () => {
     let loggedIn;
@@ -77,5 +78,22 @@ describe("UploadPage", () => {
         expect(screen.getByRole("figure").firstChild).toHaveClass("text-danger");
         expect(screen.getByRole("img")).toHaveClass("text-danger");
         expect(screen.getByRole("note")).toHaveClass("text-danger");
+    });
+
+    it("should display correctly with loading file details", async () => {
+        //Act
+        render(<UploadPage loggedIn={loggedIn} loginFinished={loginFinished} navigate={navigate} />);
+        await fireEvent.drop(screen.getByRole("figure"), {
+            dataTransfer: {
+                files: [new File(["blob"], "video.webm", { type: "video/webm" })]
+            }
+        });
+
+        //Assert
+        expect(screen.getByRole("figure")).toHaveClass("bg-success");
+        expect(screen.getByRole("figure").firstChild).toHaveClass("bi-upload");
+        expect(screen.getByRole("figure").firstChild).toHaveClass("text-success");
+        expect(screen.getByRole("img")).toHaveClass("text-success");
+        expect(screen.getByRole("note")).toHaveClass("text-success");
     });
 });
