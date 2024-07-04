@@ -2,12 +2,12 @@ import { screen } from "@testing-library/dom";
 import { render, fireEvent } from "@testing-library/react";
 import { afterEach, beforeEach, expect, it, vi } from 'vitest';
 
-import UploadPage from "../../../../src/components/pages/Upload/UploadPage.jsx";
 import MyContentPage from "../../../../src/components/pages/My Content/MyContentPage.jsx";
 
-vi.mock("../../../../src/services/uploadVideo.js", () => ({ default: () => { return { comments: [{ timeCode: 0 }, { timeCode: 1 }, { timeCode: 2 }, { timeCode: 4 }, { timeCode: 5 },] }; } }));
+vi.mock("../../../../src/components/common/VideoGrid.jsx", () => ({ default: () => { "VideoGrid"; } }));
+vi.mock("../../../../src/components/pages/My Content/CommentGrid.jsx", () => ({ default: () => { "CommentGrid"; } }));
 
-describe("UploadPage", () => {
+describe("MyContentPage", () => {
     let loggedIn;
     let loginFinished;
     let navigate;
@@ -38,5 +38,16 @@ describe("UploadPage", () => {
         //Assert
         expect(screen.getAllByRole("grid")[0]).toHaveClass("d-none");
         expect(screen.getAllByRole("grid")[1]).not.toHaveClass("d-none");
+    });
+
+    it("should display videos after clicking videos tab", async () => {
+        //Act
+        render(<MyContentPage loggedIn={loggedIn} loginFinished={loginFinished} navigate={navigate} role={role} setBackgroundHeight={setBackgroundHeight} />);
+        await fireEvent.click(screen.getAllByRole("switch")[1]);
+        await fireEvent.click(screen.getAllByRole("switch")[0]);
+
+        //Assert
+        expect(screen.getAllByRole("grid")[0]).not.toHaveClass("d-none");
+        expect(screen.getAllByRole("grid")[1]).toHaveClass("d-none");
     });
 });
