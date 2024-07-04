@@ -50,4 +50,15 @@ describe("Paginator", () => {
         //Assert
         expect(screen.getByText("Next")).toHaveClass("link-secondary");
     });
+
+    it("should not display next button as disabled if currentPage < pages", () => {
+        //Arrange
+        currentPage = 2;
+
+        //Act
+        render(<Paginator currentPage={currentPage} setCurrentPage={setCurrentPage} pages={pages} />);
+
+        //Assert
+        expect(screen.getByText("Next")).toHaveClass("link-primary");
+    });
 });
