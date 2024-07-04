@@ -57,7 +57,6 @@ const LoginModal = ({ loginModal, setLoginModal, setLoggedIn, setUsername, setIc
 
     async function sendLogin() {
         clearAlert();
-        console.log(loginIdentifier, loginPassword);
 
         if (loginIdentifier === "") {
             showAlert("Please enter your username/email");

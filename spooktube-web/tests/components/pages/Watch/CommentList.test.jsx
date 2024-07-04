@@ -10,7 +10,7 @@ vi.mock("../../../../src/components/pages/Watch/CommentForm.jsx", () => ({ defau
 vi.mock("../../../../src/services/getVideoComments.js", () => ({ default: () => { return { comments: [{ timeCode: 0 }, { timeCode: 1 }, { timeCode: 2 }, { timeCode: 4 }, { timeCode: 5 },] }; } }));
 vi.mock("../../../../src/services/postComment.js", () => ({ default: () => { return { comment: { timeCode: 3 } }; } }));
 
-describe("CommentCard", () => {
+describe("CommentList", () => {
     window.HTMLElement.prototype.scrollTo = () => { };
 
     let videoHeight;

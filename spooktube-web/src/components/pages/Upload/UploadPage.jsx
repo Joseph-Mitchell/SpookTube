@@ -66,7 +66,6 @@ const UploadPage = ({ loggedIn, loginFinished, navigate, fileReader }) => {
         document.getElementById("drop-spinner").classList.remove("d-none");
         setDropZoneText("Reading file...");
 
-        console.log("here");
         fileReader.addEventListener("load", fileLoaded);
         fileReader.readAsDataURL(e.dataTransfer.files[0]);
     }
