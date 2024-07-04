@@ -69,4 +69,18 @@ describe("Paginator", () => {
         //Assert
         expect(screen.queryAllByRole("switch")).toHaveLength(pages);
     });
+
+    it("should only highlight correct button for currentPage", () => {
+        //Arrange
+        currentPage = 2;
+
+        //Act
+        render(<Paginator currentPage={currentPage} setCurrentPage={setCurrentPage} pages={pages} />);
+
+        //Assert
+        const buttons = screen.queryAllByRole("switch");
+        expect(buttons[0].firstChild).not.toHaveClass("bg-primary");
+        expect(buttons[1].firstChild).toHaveClass("bg-primary");
+        expect(buttons[2].firstChild).not.toHaveClass("bg-primary");
+    });
 });
