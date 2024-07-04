@@ -1,6 +1,6 @@
 import Config from './config/Config.js';
 import Server from "./server/Server.js";
-import Database from "./database/Database.js";
+import Database from "./database/database.js";
 import VideoRouter from './routers/Video.router.js';
 import VideoController from './controllers/Video.controller.js';
 import VideoService from './services/Video.service.js';
