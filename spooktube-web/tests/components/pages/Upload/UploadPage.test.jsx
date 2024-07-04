@@ -47,4 +47,18 @@ describe("UploadPage", () => {
         expect(screen.getByRole("img")).toHaveClass("text-primary");
         expect(screen.getByRole("note")).toHaveClass("text-primary");
     });
+
+    it("should display correctly with dragging file away", async () => {
+        //Act
+        render(<UploadPage loggedIn={loggedIn} loginFinished={loginFinished} navigate={navigate} />);
+        await fireEvent.dragOver(screen.getByRole("figure"));
+        await fireEvent.dragLeave(screen.getByRole("figure"));
+
+        //Assert
+        expect(screen.getByRole("figure")).toHaveClass("bg-secondary");
+        expect(screen.getByRole("figure").firstChild).toHaveClass("bi-upload");
+        expect(screen.getByRole("figure").firstChild).toHaveClass("text-secondary");
+        expect(screen.getByRole("img")).toHaveClass("text-secondary");
+        expect(screen.getByRole("note")).toHaveClass("text-secondary");
+    });
 });
