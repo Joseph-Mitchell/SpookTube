@@ -62,4 +62,17 @@ describe("LoginModal", () => {
         //Assert
         expect(screen.getByRole("alert")).not.toHaveClass("d-none");
     });
+
+    it("should not show alert on submit login with filled fields", () => {
+        //Act
+        render(<LoginModal loginModal={loginModal} setLoginModal={setLoginModal} setLoggedIn={setLoggedIn} setUsername={setUsername} setIcon={setIcon} setRole={setRole} />);
+        fireEvent.change(screen.getByPlaceholderText("username"), { target: { value: "username" } });
+        fireEvent.change(screen.getAllByPlaceholderText("email@example.com")[0], { target: { value: "email" } });
+        fireEvent.change(screen.getAllByPlaceholderText("email@example.com")[1], { target: { value: "email" } });
+        fireEvent.change(screen.getAllByPlaceholderText("Password")[1], { target: { value: "password" } });
+        fireEvent.click(screen.getAllByRole("button")[1]);
+
+        //Assert
+        expect(screen.getByRole("alert")).toHaveClass("d-none");
+    });
 });
