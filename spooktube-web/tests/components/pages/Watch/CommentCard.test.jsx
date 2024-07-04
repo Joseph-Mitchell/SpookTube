@@ -39,4 +39,15 @@ describe("CommentCard", () => {
         //Assert
         expect(screen.getByRole("comment")).toHaveClass("d-none");
     });
+
+    it("should display correct comment user icon", () => {
+        //Arrange
+        comment.userId.icon = "test";
+
+        //Act
+        render(<CommentCard comment={comment} currentVideoTime={currentVideoTime} clickEditComment={clickEditComment} />);
+
+        //Assert
+        expect(screen.getByAltText("comment-icon")).toHaveAttribute("src", "icon-" + comment.userId.icon + ".png");
+    });
 });
