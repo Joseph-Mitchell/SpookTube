@@ -48,8 +48,11 @@ const CommentList = ({ videoHeight, currentVideoTime, videoId, loggedIn }) => {
 
     useEffect(() => {
         loadComments();
-        populateCommentList();
     }, []);
+
+    useEffect(() => {
+        populateCommentList();
+    }, [comments]);
 
     //Lock comment section height to video height
     useEffect(() => {
