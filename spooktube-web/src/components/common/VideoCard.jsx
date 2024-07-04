@@ -14,7 +14,7 @@ const VideoCard = ({ video, clickDeleteVideo }) => {
     }
 
     return (
-        <div className="col-12 col-md-6 col-lg-4 d-flex justify-content-center">
+        <div role="gridcell" className="col-12 col-md-6 col-lg-4 d-flex justify-content-center">
             <div className="position-relative">
                 <a className="btn btn-link" onClick={goToVideo} >
                     <img alt="Video Thumbnail" className="img rounded-4 border border-5 border-primary" src={source} />
