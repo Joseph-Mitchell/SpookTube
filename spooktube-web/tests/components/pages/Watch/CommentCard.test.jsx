@@ -28,4 +28,15 @@ describe("CommentCard", () => {
         //Assert
         expect(screen.getByRole("comment")).not.toHaveClass("d-none");
     });
+
+    it("should not display comment if currentVideoTime <= comment timeCode", () => {
+        //Arrange
+        comment.timeCode = 2;
+
+        //Act
+        render(<CommentCard comment={comment} currentVideoTime={currentVideoTime} clickEditComment={clickEditComment} />);
+
+        //Assert
+        expect(screen.getByRole("comment")).toHaveClass("d-none");
+    });
 });
