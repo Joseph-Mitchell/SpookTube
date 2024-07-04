@@ -1,7 +1,7 @@
 import { screen } from "@testing-library/dom";
 import { render } from "@testing-library/react";
 import { afterEach, beforeEach, vi } from 'vitest';
-import VideoCard from "../../../src/components/common/VideoCard.jsx";
+
 import VideoGrid from "../../../src/components/common/VideoGrid.jsx";
 
 vi.mock("../../../src/components/common/VideoCard.jsx", () => ({ default: () => <div data-testid="video-card"></div> }));

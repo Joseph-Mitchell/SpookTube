@@ -94,7 +94,7 @@ const EmailModal = ({ setModal }) => {
                         />
                         <br /><br />
                         <div className="d-flex | justify-content-evenly | mb-4">
-                            <button className="btn btn-primary w-25 fs-6 text-light" type="submit">Confirm</button>
+                            <button type="button" className="btn btn-primary w-25 fs-6 text-light" type="submit">Confirm</button>
                         </div>
                     </form>
                     <div className={"alert alert-" + alertColour + " alert-dismissible fade show position-fixed w-50 start-50 top-50 translate-middle " + alertDisplay} role="alert" id="new-email-alert">
