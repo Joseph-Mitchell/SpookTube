@@ -4,11 +4,11 @@ import { afterEach, beforeEach, expect, it, vi } from 'vitest';
 
 import LoginModal from "../../../src/components/ui/LoginModal.jsx";
 
-vi.mock("../../../src/services/login.js", () => ({ default: () => { "login"; } }));
-vi.mock("../../../src/services/register.js", () => ({ default: () => { "register"; } }));
-vi.mock("react-router-dom", () => ({ useNavigate: () => { vi.fn(); } }));
+vi.mock("../../../src/services/login.js", () => ({ default: () => { return {}; } }));
+vi.mock("../../../src/services/register.js", () => ({ default: () => { return {}; } }));
+vi.mock("react-router-dom", () => ({ useNavigate: () => { return vi.fn(); } }));
 
-describe("MyContentPage", () => {
+describe("LoginModal", () => {
     let loginModal;
     let setLoginModal;
     let setLoggedIn;
@@ -41,5 +41,16 @@ describe("MyContentPage", () => {
 
         //Assert
         expect(screen.getByRole("alert")).not.toHaveClass("d-none");
+    });
+
+    it("should not show alert on submit login with filled fields", () => {
+        //Act
+        render(<LoginModal loginModal={loginModal} setLoginModal={setLoginModal} setLoggedIn={setLoggedIn} setUsername={setUsername} setIcon={setIcon} setRole={setRole} />);
+        fireEvent.change(screen.getByPlaceholderText("email@example.com/username"), { target: { value: "username" } });
+        fireEvent.change(screen.getAllByPlaceholderText("Password")[0], { target: { value: "password" } });
+        fireEvent.click(screen.getAllByRole("button")[0]);
+
+        //Assert
+        expect(screen.getByRole("alert")).toHaveClass("d-none");
     });
 });
