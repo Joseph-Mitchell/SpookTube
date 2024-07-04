@@ -26,8 +26,8 @@ const VideoGrid = ({ videos = [], clickDeleteVideo, user, setBackgroundHeight })
 
     return (
         <>
-            <div className="container-fluid d-flex justify-content-center w-100" id="">
-                <div className={`row justify-content-around mt-5 px-5 pb-5 gy-5 bg-${user ? "transparent" : "secondary-subtle"}`} id="video-grid">
+            <div className="container-fluid d-flex justify-content-center w-100">
+                <div role="grid" className={`row justify-content-around mt-5 px-5 pb-5 gy-5 bg-${user ? "transparent" : "secondary-subtle"}`} id="video-grid">
                     {videoCards}
                 </div>
             </div>

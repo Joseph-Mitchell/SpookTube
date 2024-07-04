@@ -34,4 +34,12 @@ describe("VideoGrid", () => {
         const cards = await screen.findAllByTestId("video-card");
         expect(cards).toHaveLength(videos.length);
     });
+
+    it("should display grid background if user false", async () => {
+        //Act
+        render(<VideoGrid videos={videos} clickDeleteVideo={clickDeleteVideo} user={user} setBackgroundHeight={setBackgroundHeight} />);
+
+        //Assert
+        expect(screen.getByRole("grid")).toHaveClass("bg-secondary-subtle");
+    });
 });
