@@ -7,6 +7,15 @@ export default class CommentController {
         this.#accountService = accountService;
     }
     
+    async routeWrapper(req, res, routeFunction) {
+        try {
+            await routeFunction(req, res);
+        } catch (e) {
+            console.log(e.message);
+            return res.status(500).json({ message: e.message });
+        }
+    }
+    
     async getVideoComments(req, res) {
         try {
             const comments = await this.#commentService.getVideoComments(req.params.videoId);

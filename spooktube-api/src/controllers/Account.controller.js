@@ -9,6 +9,15 @@ export default class AccountController {
         this.#accountService = accountService;
     }
     
+    async routeWrapper(req, res, routeFunction) {
+        try {
+            await routeFunction(req, res);
+        } catch (e) {
+            console.log(e.message);
+            return res.status(500).json({ message: e.message });
+        }
+    }
+    
     async registerAccount(req, res) {
         try {
             const existingEmailAccount = await this.#accountService.getAccountByIdentifier(req.body.email);

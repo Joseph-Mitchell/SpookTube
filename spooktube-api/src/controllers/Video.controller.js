@@ -10,6 +10,15 @@ export default class VideoController {
         this.#accountService = accountService;
     }
     
+    async routeWrapper(req, res, routeFunction) {
+        try {
+            await routeFunction(req, res);
+        } catch (e) {
+            console.log(e.message);
+            return res.status(500).json({ message: e.message });
+        }
+    }
+    
     async getAllVideos(req, res) {
         try {
             const count = await this.#videoService.getVideosCount();
