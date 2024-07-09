@@ -10,9 +10,9 @@ export default class VideoController {
         this.#accountService = accountService;
     }
     
-    async routeWrapper(req, res, routeFunction) {
+    async routeWrapper(req, res, controllerFunction) {
         try {
-            await routeFunction(req, res);
+            await controllerFunction(req, res);
         } catch (e) {
             console.log(e.message);
             return res.status(500).json({ message: e.message });
@@ -20,7 +20,7 @@ export default class VideoController {
     }
     
     async getAllVideos(req, res) {
-        try {
+        await this.routeWrapper(req, res, async (req, res) => {
             const count = await this.#videoService.getVideosCount();
             
             const videosPerPage = (req.params.rangeMax - req.params.rangeMin);
@@ -28,20 +28,18 @@ export default class VideoController {
             
             const videos = await this.#videoService.getAllVideos();
 
-            let response = []
+            let response = [];
             for (let i = Math.max(req.params.rangeMin, 0); (i < videos.length) && (i < req.params.rangeMax); i++) {
                 let { uploadDate, ...rest } = videos[i]._doc;
                 response.push(rest);
             }
 
             return res.status(200).json({ videos: response, pages: pages });
-        } catch (e) {
-            return res.status(500).json({ message: e.message });
-        }
+        });
     }
     
-    async getUserVideos(req, res) {
-        try {           
+    async getUserVideos(req, res) {     
+        await this.routeWrapper(req, res, async (req, res) => {
             const count = await this.#videoService.getUserVideosCount(req.body.userId);
             
             const videosPerPage = (req.params.rangeMax - req.params.rangeMin);
@@ -49,21 +47,18 @@ export default class VideoController {
             
             const videos = await this.#videoService.getUserVideos(req.body.userId);
 
-            let response = []
+            let response = [];
             for (let i = Math.max(req.params.rangeMin, 0); (i < videos.length) && (i < req.params.rangeMax); i++) {
                 let { uploadDate, ...rest } = videos[i]._doc;
                 response.push(rest);
             }
 
             return res.status(200).json({ videos: response, pages: pages });
-        } catch (e) {
-            console.log(e.message)
-            return res.status(500).json({ message: e.message });
-        }
+        });
     }
     
     async uploadVideo(req, res) {
-        try {
+        await this.routeWrapper(req, res, async (req, res) => {
             const result = await this.#contentManagerService.uploadVideo(req.body.videoFile);
 
             if (!result.public_id) {
@@ -78,13 +73,11 @@ export default class VideoController {
             }
             
             return res.status(201).json({ videoId: result.public_id });
-        } catch (e) {
-            return res.status(500).json({ message: e.message });
-        }
+        });
     }
     
     async deleteVideo(req, res) {
-        try {
+        await this.routeWrapper(req, res, async (req, res) => {
             let role = (await this.#accountService.getRoleById(req.body.userId)).role.roleName;
 
             let video;
@@ -108,8 +101,6 @@ export default class VideoController {
             }
 
             return res.status(204).json();
-        } catch (e) {
-            return res.status(500).json({ message: e.message });
-        }
+        });
     }
 }

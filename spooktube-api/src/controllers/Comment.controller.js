@@ -7,9 +7,9 @@ export default class CommentController {
         this.#accountService = accountService;
     }
     
-    async routeWrapper(req, res, routeFunction) {
+    async routeWrapper(req, res, controllerFunction) {
         try {
-            await routeFunction(req, res);
+            await controllerFunction(req, res);
         } catch (e) {
             console.log(e.message);
             return res.status(500).json({ message: e.message });
@@ -17,45 +17,40 @@ export default class CommentController {
     }
     
     async getVideoComments(req, res) {
-        try {
+        await this.routeWrapper(req, res, async (req, res) => {
             const comments = await this.#commentService.getVideoComments(req.params.videoId);
 
             const mapped = comments.map((comment) => {
                 return comment._doc;
-            })
+            });
             
             return res.status(200).json({ comments: mapped });
-        } catch (e) {
-            return res.status(500).json({ message: e.message })
-        }
+        });
     }
     
     async getUserComments(req, res) {
-        try {           
+        await this.routeWrapper(req, res, async (req, res) => {
             const count = await this.#commentService.getUserCommentsCount(req.body.userId);
             
             const commentsPerPage = (req.params.rangeMax - req.params.rangeMin);
             const pages = Math.floor((count - 1) / commentsPerPage) + 1;
             
             const comments = await this.#commentService.getUserComments(req.body.userId);
-            let response = []
+            let response = [];
             for (let i = Math.max(req.params.rangeMin, 0); (i < comments.length) && (i < req.params.rangeMax); i++) {
                 let { uploadDate, ...rest } = comments[i]._doc;
                 response.push(rest);
             }
 
             return res.status(200).json({ comments: response, pages: pages });
-        } catch (e) {
-            console.log(e.message);
-            return res.status(500).json({ message: e.message });
-        }
+        });
     }
     
-    async getAllComments(req, res) {
-        try {           
+    async getAllComments(req, res) {        
+        await this.routeWrapper(req, res, async (req, res) => {
             let role = (await this.#accountService.getRoleById(req.body.userId)).role.roleName;
             if (role !== "moderator")
-                return res.status(403).json("user not authorised")
+                return res.status(403).json("user not authorised");
             
             const count = await this.#commentService.getCommentsCount(req.params.searchTerm.trim());
             
@@ -63,21 +58,18 @@ export default class CommentController {
             const pages = Math.floor((count - 1) / commentsPerPage) + 1;
             
             const comments = await this.#commentService.getAllComments(req.params.searchTerm.trim());
-            let response = []
+            let response = [];
             for (let i = Math.max(req.params.rangeMin, 0); (i < comments.length) && (i < req.params.rangeMax); i++) {
                 let { uploadDate, ...rest } = comments[i]._doc;
                 response.push(rest);
             }
 
             return res.status(200).json({ comments: response, pages: pages });
-        } catch (e) {
-            console.log(e.message);
-            return res.status(500).json({ message: e.message });
-        }
+        });
     }
     
     async makeComment(req, res) {
-        try {
+        await this.routeWrapper(req, res, async (req, res) => {
             const account = await this.#accountService.getAccountById(req.body.userId);
             
             if (account === null) {
@@ -96,13 +88,11 @@ export default class CommentController {
             }
             
             return res.status(201).json({ comment: newComment });
-        } catch (e) {
-            return res.status(500).json({ message: e.message })
-        }
+        });
     }
     
     async editComment(req, res) {
-        try {
+        await this.routeWrapper(req, res, async (req, res) => {
             let comment = {};
             let role = (await this.#accountService.getRoleById(req.body.userId)).role.roleName;
             
@@ -111,20 +101,17 @@ export default class CommentController {
             }
 
             if (comment === null) {
-                return res.status(404).json({ message: "No comment with given id by given user" })
+                return res.status(404).json({ message: "No comment with given id by given user" });
             }
             
             await this.#commentService.editComment(req.body.id, req.body.newComment);
             
             return res.status(204).json();
-        } catch (e) {
-            console.log(e.message)
-            return res.status(500).json({ message: e.message })
-        }
+        });
     }
     
     async deleteComment(req, res) {
-        try {
+        await this.routeWrapper(req, res, async (req, res) => {
             let comment = {};
             let role = (await this.#accountService.getRoleById(req.body.userId)).role.roleName;
             
@@ -133,15 +120,12 @@ export default class CommentController {
             }
 
             if (comment === null) {
-                return res.status(404).json({ message: "No comment with given id by given user" })
+                return res.status(404).json({ message: "No comment with given id by given user" });
             }
             
             await this.#commentService.deleteComment(req.body.id);
             
             return res.status(204).json();
-        } catch (e) {
-            console.log(e.message);
-            return res.status(500).json({ message: e.message });
-        }
+        });
     }
 }

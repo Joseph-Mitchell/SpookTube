@@ -9,9 +9,9 @@ export default class AccountController {
         this.#accountService = accountService;
     }
     
-    async routeWrapper(req, res, routeFunction) {
+    async routeWrapper(req, res, controllerFunction) {
         try {
-            await routeFunction(req, res);
+            await controllerFunction(req, res);
         } catch (e) {
             console.log(e.message);
             return res.status(500).json({ message: e.message });
@@ -19,7 +19,7 @@ export default class AccountController {
     }
     
     async registerAccount(req, res) {
-        try {
+        await this.routeWrapper(req, res, async (req, res) => {
             const existingEmailAccount = await this.#accountService.getAccountByIdentifier(req.body.email);
             
             if (existingEmailAccount !== null)
@@ -33,15 +33,13 @@ export default class AccountController {
             const newAccount = await this.#accountService.createAccount(req.body.email, req.body.username, req.body.password);
             const role = (await this.#accountService.getRoleById(newAccount._id)).role.roleName;
             const signedToken = jwt.sign({ id: newAccount._id.toString() }, process.env.SECRET, { expiresIn: "1 week" });
+            
             return res.status(201).json({ token: signedToken, username: newAccount.username, icon: newAccount.icon, role: role });
-        } catch (e) {
-            console.log(e.message)
-            return res.status(500).json({ message: e.message });
-        }
+        });
     }
     
     async loginAccount(req, res) {
-        try {
+        await this.routeWrapper(req, res, async (req, res) => {
             const account = await this.#accountService.getAccountByIdentifier(req.body.identifier);
                     
             if (account === null || !bcrypt.compareSync(req.body.password, account.password))
@@ -49,26 +47,22 @@ export default class AccountController {
             
             const signedToken = jwt.sign({ id: account._id.toString() }, process.env.SECRET, { expiresIn: "1 week" });
             return res.status(200).json({ token: signedToken, username: account.username, icon: account.icon, role: account.role.roleName });
-        } catch (e) {      
-            return res.status(500).json({ message: e.message });
-        }
+        });
     }
     
     async loginWithToken(req, res) {
-        try {
+        await this.routeWrapper(req, res, async (req, res) => {
             const account = await this.#accountService.getAccountById(req.body.userId);
                     
             if (account === null)
                 return res.status(404).json({ message: "No account with this id" });
             
             return res.status(200).json({ username: account.username, icon: account.icon, role: account.role.roleName });
-        } catch (e) {      
-            return res.status(500).json({ message: e.message });
-        }
+        });
     }
     
     async updateProfileDetails(req, res) {
-        try {
+        await this.routeWrapper(req, res, async (req, res) => {
             const account = await this.#accountService.getAccountById(req.body.userId);
                     
             if (account === null)
@@ -77,13 +71,11 @@ export default class AccountController {
             this.#accountService.updateProfileDetails(req.body.userId, req.body.username, req.body.icon);
             
             return res.status(204).json();
-        } catch (e) {      
-            return res.status(500).json({ message: e.message });
-        }
+        });
     }
     
     async updateEmail(req, res) {
-        try {
+        await this.routeWrapper(req, res, async (req, res) => {
             const account = await this.#accountService.getAccountByIdAndEmail(req.body.userId, req.body.oldEmail);
                     
             if (account === null)
@@ -92,14 +84,11 @@ export default class AccountController {
             await this.#accountService.updateEmail(req.body.userId, req.body.newEmail);
             
             return res.status(204).json();
-        } catch (e) {
-            console.log(e.message)
-            return res.status(500).json({ message: e.message });
-        }
+        });
     }
     
     async updatePassword(req, res) {
-        try {
+        await this.routeWrapper(req, res, async (req, res) => {
             const account = await this.#accountService.getAccountByEmail(req.body.email);
             
             if (account === null || !bcrypt.compareSync(req.body.oldPassword, account.password))
@@ -111,9 +100,6 @@ export default class AccountController {
                 return res.status(500).json({ message: "There was an internal error, please try again later" });
             
             return res.status(204).json();
-        } catch (e) {
-            console.log(e.message)
-            return res.status(500).json({ message: e.message });
-        }
+        });
     }
 }
