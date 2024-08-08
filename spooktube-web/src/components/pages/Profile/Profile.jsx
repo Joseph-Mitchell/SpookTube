@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
-import IconModal from "./IconModal.jsx";
 import EmailModal from "./EmailModal.jsx";
 import PasswordModal from "./PasswordModal.jsx";
 import updateProfileDetails from "../../../services/updateProfileDetails.js";
 
 const Profile = ({ loggedIn, loginFinished, icon, setIcon, username }) => {
-    const [iconModal, setIconModal] = useState({});
     const [emailModal, setEmailModal] = useState({});
     const [passwordModal, setPasswordModal] = useState({});
+    const [iconColour, setIconColour] = useState("#ff0000");
+    const [iconText, setIconText] = useState("`^`");
 
     const [displayUsername, setDisplayUsername] = useState("");
     const [displayIcon, setDisplayIcon] = useState("default");
@@ -44,13 +44,8 @@ const Profile = ({ loggedIn, loginFinished, icon, setIcon, username }) => {
         document.getElementById("profile-username-form").classList.add("d-none");
     }
 
-    function showIconModal() {
-        iconModal.show();
-    }
-
     async function saveIcon() {
         if (displayIcon !== "default" && displayIcon !== icon) {
-            iconModal.hide();
             const response = await updateProfileDetails(localStorage.getItem("token"), displayUsername, displayIcon);
             setIcon(displayIcon);
         }
@@ -70,15 +65,25 @@ const Profile = ({ loggedIn, loginFinished, icon, setIcon, username }) => {
 
     return (
         <>
-            <IconModal setModal={setIconModal} chooseIcon={chooseIcon} />
             <EmailModal setModal={setEmailModal} />
             <PasswordModal setModal={setPasswordModal} />
             <div className="d-flex flex-column align-items-center">
                 <h1 className="mt-3 mb-4">Profile</h1>
-                <div className="position-relative">
-                    <img id="profile-icon" className="border border-5 border-primary rounded-circle" src={`icon-${displayIcon}.png`} />
-                    <a className="btn btn-link position-absolute top-0 end-0" onClick={showIconModal}><i className="bi-pencil-square fs-4" /></a>
-                </div>
+                <form onSubmit={(e) => { e.preventDefault(); }}>
+                    <div className="row justify-content-center" >
+                        <input
+                            id="icon-form-emoticon"
+                            className="border border-3 border-primary rounded-circle text-center fs-1 mb-2"
+                            type="text"
+                            style={{ backgroundColor: iconColour }}
+                            value={iconText}
+                            onChange={(e) => { setIconText(e.target.value); }}
+                        />
+                        <input className="mb-2" type="color" value={iconColour} onChange={(e) => { setIconColour(e.target.value); }} />
+                        <input className="btn btn-primary text-white" type="submit" value="Update Icon" />
+                    </div>
+
+                </form>
                 <h3 id="profile-username" className="mt-3">{displayUsername}<a className="btn btn-link" onClick={showUsernameForm}><i className="bi-pencil-square fs-4" /></a></h3>
                 <form id="profile-username-form" className="d-none my-3" onSubmit={submitNewUsername}><input className="fs-4" type="text" value={displayUsername} onChange={(e) => { setDisplayUsername(e.target.value); }} /></form>
                 <a className="btn btn-link fs-4" onClick={showEmailModal}>Change Email</a>
