@@ -1,11 +1,12 @@
 import basicService from "./basicService.js";
 
-export default async function updateProfileDetails(token, username, icon) {
+export default async function updateProfileDetails(token, username, iconText, iconColour) {
     const method = "put";
     const url = "/accounts/profile/";
     const body = {
         username: username,
-        icon: icon,
+        iconText: iconText,
+        iconColour: iconColour,
     }
     const headers = {
         authentication: token
