@@ -44,7 +44,7 @@ export default class AccountController {
                 return res.status(404).json({ message: "username or password incorrect" });
             
             const signedToken = jwt.sign({ id: account._id.toString() }, process.env.SECRET, { expiresIn: "1 week" });
-            return res.status(200).json({ token: signedToken, username: account.username, icon: account.icon, role: account.role.roleName });
+            return res.status(200).json({ token: signedToken, username: account.username, iconText: account.iconText, iconColour: account.iconColour, role: account.role.roleName });
         });
     }
     
@@ -55,7 +55,7 @@ export default class AccountController {
             if (account === null)
                 return res.status(404).json({ message: "No account with this id" });
             
-            return res.status(200).json({ username: account.username, icon: account.icon, role: account.role.roleName });
+            return res.status(200).json({ username: account.username, iconText: account.iconText, iconColour: account.iconColour, role: account.role.roleName });
         });
     }
     
