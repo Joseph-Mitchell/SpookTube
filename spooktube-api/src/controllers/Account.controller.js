@@ -20,13 +20,11 @@ export default class AccountController {
     
     async registerAccount(req, res) {
         await this.routeWrapper(req, res, async (req, res) => {
-            const existingEmailAccount = await this.#accountService.getAccountByIdentifier(req.body.email);
-            
+            const existingEmailAccount = await this.#accountService.getAccountByIdentifier(req.body.email);           
             if (existingEmailAccount !== null)
                 return res.status(409).json({ message: "An account with this email already exists" });
             
             const existingUsernameAccount = await this.#accountService.getAccountByIdentifier(req.body.username);
-    
             if (existingUsernameAccount !== null)
                 return res.status(409).json({ message: "An account with this username already exists" });
             
