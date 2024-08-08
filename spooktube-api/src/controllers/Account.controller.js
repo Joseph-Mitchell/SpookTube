@@ -66,7 +66,7 @@ export default class AccountController {
             if (account === null)
                 return res.status(404).json({ message: "No account with this id" });
             
-            this.#accountService.updateProfileDetails(req.body.userId, req.body.username, req.body.icon);
+            this.#accountService.updateProfileDetails(req.body.userId, req.body.username, req.body.iconText, req.body.iconColour);
             
             return res.status(204).json();
         });

@@ -21,8 +21,8 @@ export default class AccountService {
         return await Account.findById(id).select("role").populate("role");
     }
     
-    async updateProfileDetails(id, username, icon) {
-        return await Account.findByIdAndUpdate(id, { username: username, icon: icon });
+    async updateProfileDetails(id, username, iconText, iconColour) {
+        return await Account.findByIdAndUpdate(id, { username: username, iconText: iconText, iconColour: iconColour });
     }
     
     async updateEmail(id, email) {

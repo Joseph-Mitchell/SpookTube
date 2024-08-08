@@ -14,7 +14,7 @@ import { existingAccounts, newAccounts, testLogins } from "../data/testAccounts.
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 
-describe.skip("Account Integration Tests", () => {
+describe("Account Integration Tests", () => {
     let server;
     let database;
     let requester;
@@ -234,7 +234,7 @@ describe.skip("Account Integration Tests", () => {
             //Act
             const actual = await requester
                 .put("/accounts/profile")
-                .send({ username: newAccounts.valid.username, icon: "5" })
+                .send({ username: newAccounts.valid.username, iconText: ":-)", iconColour: "#00ff00" })
                 .set("authentication", jwt.sign({ id: existingAccounts[0]._id }, process.env.SECRET));
             
             //Assert
@@ -242,14 +242,15 @@ describe.skip("Account Integration Tests", () => {
 
             assert.equal(actual.status, 204);
             assert.equal(account.username, newAccounts.valid.username);
-            assert.equal(account.icon, "5");
+            assert.equal(account.iconText, ":-)");
+            assert.equal(account.iconColour, "#00ff00");
         });
         
         it("should respond 400 with no username", async () => {
             //Act
             const actual = await requester
                 .put("/accounts/profile")
-                .send({ icon: "5" })
+                .send({ iconText: ":-)", iconColour: "#00ff00" })
                 .set("authentication", jwt.sign({ id: existingAccounts[0]._id }, process.env.SECRET));
             
             //Assert
@@ -257,14 +258,15 @@ describe.skip("Account Integration Tests", () => {
 
             assert.equal(actual.status, 400);
             assert.equal(account.username, existingAccounts[0].username);
-            assert.equal(account.icon, "0");
+            assert.equal(account.iconText, ":O");
+            assert.equal(account.iconColour, "#ffffff");
         });
         
         it("should respond 400 with empty username", async () => {
             //Act
             const actual = await requester
                 .put("/accounts/profile")
-                .send({ username: newAccounts.emptyUsername.username, icon: "5" })
+                .send({ username: newAccounts.emptyUsername.username, iconText: ":-)", iconColour: "#00ff00" })
                 .set("authentication", jwt.sign({ id: existingAccounts[0]._id }, process.env.SECRET));
             
             //Assert
@@ -272,44 +274,15 @@ describe.skip("Account Integration Tests", () => {
 
             assert.equal(actual.status, 400);
             assert.equal(account.username, existingAccounts[0].username);
-            assert.equal(account.icon, "0");
-        });
-        
-        it("should respond 400 with no icon", async () => {
-            //Act
-            const actual = await requester
-                .put("/accounts/profile")
-                .send({ username: newAccounts.valid.username })
-                .set("authentication", jwt.sign({ id: existingAccounts[0]._id }, process.env.SECRET));
-            
-            //Assert
-            const account = await Account.findById(existingAccounts[0]._id);
-
-            assert.equal(actual.status, 400);
-            assert.equal(account.username, existingAccounts[0].username);
-            assert.equal(account.icon, "0");
-        });
-        
-        it("should respond 400 with empty icon", async () => {
-            //Act
-            const actual = await requester
-                .put("/accounts/profile")
-                .send({ username: newAccounts.valid.username, icon: "" })
-                .set("authentication", jwt.sign({ id: existingAccounts[0]._id }, process.env.SECRET));
-            
-            //Assert
-            const account = await Account.findById(existingAccounts[0]._id);
-
-            assert.equal(actual.status, 400);
-            assert.equal(account.username, existingAccounts[0].username);
-            assert.equal(account.icon, "0");
+            assert.equal(account.iconText, ":O");
+            assert.equal(account.iconColour, "#ffffff");
         });
         
         it("should respond 404 with unknown user id", async () => {
             //Act
             const actual = await requester
                 .put("/accounts/profile")
-                .send({ username: newAccounts.valid.username, icon: "5" })
+                .send({ username: newAccounts.valid.username, iconText: ":-)", iconColour: "#00ff00" })
                 .set("authentication", jwt.sign({ id: "668529d3d52abbef90c9305c" }, process.env.SECRET));
             
             //Assert

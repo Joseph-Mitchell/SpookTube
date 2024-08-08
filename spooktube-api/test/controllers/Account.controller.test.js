@@ -234,8 +234,8 @@ describe("Account Controller", () => {
             };
             
             testController = new AccountController(stubbedService);
-            testAccount = { _id: 1, username: "testUsername", icon: "0", role: { roleName: "" } };
-            testRequest = { body: { userId: "1", username: "testName", icon: "0" } };
+            testAccount = { _id: 1, username: "testUsername", iconText: ":O", iconColour: "#ffffff", role: { roleName: "" } };
+            testRequest = { body: { userId: "1", username: "testName", iconText: ":)", iconColour: "#ff0000" } };
             
             stubbedService.getAccountById.resolves(testAccount);
         });
@@ -254,7 +254,7 @@ describe("Account Controller", () => {
             
             //Assert
             sinon.assert.calledWith(stubbedService.getAccountById, testRequest.body.userId);
-            sinon.assert.calledWith(stubbedService.updateProfileDetails, testRequest.body.userId, testRequest.body.username, testRequest.body.icon);
+            sinon.assert.calledWith(stubbedService.updateProfileDetails, testRequest.body.userId, testRequest.body.username, testRequest.body.iconText, testRequest.body.iconColour);
             sinon.assert.calledWith(stubbedResponse.status, 204);
         });
         

@@ -59,10 +59,6 @@ export default class AccountMiddleware {
                     .notEmpty()
                     .withMessage("Please enter a username")
                     .escape(),
-                expressValidator
-                    .body("icon")
-                    .notEmpty()
-                    .withMessage("Please choose an icon"),
                 AccountMiddleware.handleValidationErrors,
             ];
         } catch (e) {

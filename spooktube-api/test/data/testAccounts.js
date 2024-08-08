@@ -4,7 +4,8 @@ export const existingAccounts = [
         email: "test1@email.com",
         username: "testuser1",
         password: "testpass",
-        icon: 0,
+        iconText: ":O",
+        iconColour: "#ffffff",
         role: "667b4c31215f0508c26f0df8",
     },
     {
@@ -12,7 +13,8 @@ export const existingAccounts = [
         email: "test2@email.com",
         username: "testuser2",
         password: "testpass",
-        icon: 1,
+        iconText: ":O",
+        iconColour: "#ffffff",
         role: "667b4c78215f0508c26f0df9",
     },
     {
@@ -20,7 +22,8 @@ export const existingAccounts = [
         email: "test3@email.com",
         username: "testuser3",
         password: "testpass",
-        icon: 2,
+        iconText: ":O",
+        iconColour: "#ffffff",
         role: "667b4c31215f0508c26f0df8",
     },
     {
@@ -28,7 +31,8 @@ export const existingAccounts = [
         email: "test4@email.com",
         username: "testuser4",
         password: "testpass",
-        icon: 3,
+        iconText: ":O",
+        iconColour: "#ffffff",
         role: "667b4c31215f0508c26f0df8",
     },
     {
@@ -36,7 +40,8 @@ export const existingAccounts = [
         email: "test5@email.com",
         username: "testuser5",
         password: "testpass",
-        icon: 4,
+        iconText: ":O",
+        iconColour: "#ffffff",
         role: "667b4c31215f0508c26f0df8",
     }
 ];
