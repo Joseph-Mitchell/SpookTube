@@ -1,7 +1,7 @@
 import { useState } from "react";
 import LoginModal from "./LoginModal.jsx";
 
-const Navbar = ({ loggedIn, setLoggedIn, setUsername, icon, setIcon, navigate, role, setRole }) => {
+const Navbar = ({ loggedIn, logOut, applyLogin, iconText, iconColour, navigate, role }) => {
 
     const [logoColor, setLogoColor] = useState("bg-dark");
     const [loginModal, setLoginModal] = useState({});
@@ -12,15 +12,6 @@ const Navbar = ({ loggedIn, setLoggedIn, setUsername, icon, setIcon, navigate, r
 
     function unHighlightLogo() {
         setLogoColor("bg-dark");
-    }
-
-    function logOut() {
-        setLoggedIn(false);
-        setUsername("");
-        setIcon("default");
-        setRole("user");
-        localStorage.removeItem("token");
-        navigate("/");
     }
 
     return (
@@ -80,12 +71,14 @@ const Navbar = ({ loggedIn, setLoggedIn, setUsername, icon, setIcon, navigate, r
                             }
                         </ul>
                     </div>
-                    <button className="btn btn-link" data-bs-toggle="collapse" data-bs-target="#navCollapse" aria-expanded="false" aria-controls="navCollapse">
-                        <img className="border border-4 border-primary rounded-5" alt="User Icon" src={`icon-${icon}.png`} />
+                    <button className="btn btn-link link-underline link-underline-opacity-0" data-bs-toggle="collapse" data-bs-target="#navCollapse" aria-expanded="false" aria-controls="navCollapse">
+                        <p className="user-icon border border-4 border-primary rounded-circle mb-0 py-2 text-black text-center user-select-none overflow-hidden" style={{ backgroundColor: iconColour }}>
+                            {iconText}
+                        </p>
                     </button>
                 </div>
             </nav>
-            <LoginModal loginModal={loginModal} setLoginModal={setLoginModal} setLoggedIn={setLoggedIn} setUsername={setUsername} setIcon={setIcon} setRole={setRole} />
+            <LoginModal loginModal={loginModal} setLoginModal={setLoginModal} applyLogin={applyLogin} />
         </>
     );
 };

@@ -74,7 +74,8 @@
 #icon-form-emoticon {
     height: 200px;
     width: 200px;
-    font-size: 65px;
+    font-size: 90px;
+    padding-bottom: 2cqh;
 }
 
 #icon-form-colour {
@@ -82,4 +83,10 @@
     width: 50px;
     top: -7px;
     right: -10px;
+}
+
+.user-icon {
+    height: 65px;
+    width: 65px;
+    font-size: 25px;
 }

@@ -18,6 +18,25 @@ function App() {
     const [role, setRole] = useState("user");
     const [fileReader, setFileReader] = useState(new FileReader());
 
+    function logOut() {
+        setLoggedIn(false);
+        setUsername("");
+        setIconText("");
+        setIconColour("#727272");
+        setRole("user");
+        localStorage.removeItem("token");
+        navigate("/");
+    }
+
+    function applyLogin(response) {
+        localStorage.setItem("token", response.token);
+        setLoggedIn(true);
+        setUsername(response.username);
+        setIconText(response.iconText);
+        setIconColour(response.iconColour);
+        setRole(response.role);
+    }
+
     async function sendLoginWithToken(token) {
         const response = await loginWithToken(token);
 
@@ -58,7 +77,7 @@ function App() {
 
     return (
         <div id="full-height">
-            <Navbar loggedIn={loggedIn} setLoggedIn={setLoggedIn} setUsername={setUsername} iconText={iconText} setIconText={setIconText} navigate={navigate} role={role} setRole={setRole} />
+            <Navbar loggedIn={loggedIn} logOut={logOut} applyLogin={applyLogin} iconText={iconText} iconColour={iconColour} navigate={navigate} role={role} />
             <Routes>
                 <Route
                     path="/"

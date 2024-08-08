@@ -4,7 +4,7 @@ import register from "../../services/register.js";
 import { useNavigate } from "react-router-dom";
 import login from "../../services/login.js";
 
-const LoginModal = ({ loginModal, setLoginModal, setLoggedIn, setUsername, setIcon, setRole }) => {
+const LoginModal = ({ loginModal, setLoginModal, applyLogin }) => {
     const navigate = useNavigate();
 
     const [loginIdentifier, setLoginIdentifier] = useState("");
@@ -37,14 +37,11 @@ const LoginModal = ({ loginModal, setLoginModal, setLoggedIn, setUsername, setIc
         setSignUpPassword("");
     }
 
-    function applyLogin(response) {
+    function clearForLogin(response) {
         clearForm();
 
-        localStorage.setItem("token", response.token);
-        setLoggedIn(true);
-        setUsername(response.username);
-        setIcon(response.icon);
-        setRole(response.role);
+        applyLogin(response);
+
         loginModal.hide();
         navigate("/");
     }
@@ -73,7 +70,7 @@ const LoginModal = ({ loginModal, setLoginModal, setLoggedIn, setUsername, setIc
         if (response.message) {
             showAlert(response.message);
         } else {
-            applyLogin(response);
+            clearForLogin(response);
         }
     }
 
@@ -105,7 +102,7 @@ const LoginModal = ({ loginModal, setLoginModal, setLoggedIn, setUsername, setIc
         if (response.message) {
             showAlert(response.message);
         } else {
-            applyLogin(response);
+            clearForLogin(response);
         }
     }
 
