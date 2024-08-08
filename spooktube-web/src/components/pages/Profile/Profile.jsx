@@ -3,22 +3,25 @@ import EmailModal from "./EmailModal.jsx";
 import PasswordModal from "./PasswordModal.jsx";
 import updateProfileDetails from "../../../services/updateProfileDetails.js";
 
-const Profile = ({ loggedIn, loginFinished, icon, setIcon, username }) => {
+const Profile = ({ loggedIn, loginFinished, iconText, setIconText, iconColour, setIconColour, username }) => {
     const [emailModal, setEmailModal] = useState({});
     const [passwordModal, setPasswordModal] = useState({});
-    const [iconColour, setIconColour] = useState("#ff0000");
-    const [iconText, setIconText] = useState("`^`");
 
     const [displayUsername, setDisplayUsername] = useState("");
-    const [displayIcon, setDisplayIcon] = useState("default");
+    const [pageIconColour, setPageIconColour] = useState("#727272");
+    const [pageIconText, setPageIconText] = useState("");
 
     useEffect(() => {
         setDisplayUsername(username);
     }, [username]);
 
     useEffect(() => {
-        setDisplayIcon(icon);
-    }, [icon]);
+        setPageIconText(iconText);
+    }, [iconText]);
+
+    useEffect(() => {
+        setPageIconColour(iconColour);
+    }, [iconColour]);
 
     useEffect(() => {
         if (!loggedIn && loginFinished) {
@@ -27,32 +30,28 @@ const Profile = ({ loggedIn, loginFinished, icon, setIcon, username }) => {
     }, [loginFinished]);
 
     useEffect(() => {
-        saveIcon();
-    }, [displayIcon]);
+        document.getElementById("update-profile-button").removeAttribute("disabled");
+    }, [displayUsername, pageIconColour, pageIconText]);
 
     function showUsernameForm() {
         document.getElementById("profile-username").classList.add("d-none");
         document.getElementById("profile-username-form").classList.remove("d-none");
     }
 
-    async function submitNewUsername(e) {
-        e.preventDefault();
-
-        const response = await updateProfileDetails(localStorage.getItem("token"), displayUsername, displayIcon);
-
+    function hideUsernameForm() {
         document.getElementById("profile-username").classList.remove("d-none");
         document.getElementById("profile-username-form").classList.add("d-none");
     }
 
-    async function saveIcon() {
-        if (displayIcon !== "default" && displayIcon !== icon) {
-            const response = await updateProfileDetails(localStorage.getItem("token"), displayUsername, displayIcon);
-            setIcon(displayIcon);
-        }
-    }
+    async function submitProfileUpdate(e) {
+        e.preventDefault();
 
-    function chooseIcon(icon) {
-        setDisplayIcon(icon);
+        document.getElementById("update-profile-button").setAttribute("disabled", true);
+
+        await updateProfileDetails(localStorage.getItem("token"), displayUsername, pageIconText, pageIconColour);
+
+        setIconText(pageIconText);
+        setIconColour(pageIconColour);
     }
 
     function showEmailModal() {
@@ -69,23 +68,27 @@ const Profile = ({ loggedIn, loginFinished, icon, setIcon, username }) => {
             <PasswordModal setModal={setPasswordModal} />
             <div className="d-flex flex-column align-items-center">
                 <h1 className="mt-3 mb-4">Profile</h1>
-                <form onSubmit={(e) => { e.preventDefault(); }}>
-                    <div className="row justify-content-center" >
+                <form className="w-100 d-flex flex-column align-items-center mb-4" onSubmit={submitProfileUpdate}>
+                    <div className="position-relative">
                         <input
                             id="icon-form-emoticon"
-                            className="border border-3 border-primary rounded-circle text-center fs-1 mb-2"
+                            className="border border-3 border-primary rounded-circle text-center mb-3"
                             type="text"
-                            style={{ backgroundColor: iconColour }}
-                            value={iconText}
-                            onChange={(e) => { setIconText(e.target.value); }}
+                            style={{ backgroundColor: pageIconColour }}
+                            value={pageIconText}
+                            onChange={(e) => { setPageIconText(e.target.value); }}
                         />
-                        <input className="mb-2" type="color" value={iconColour} onChange={(e) => { setIconColour(e.target.value); }} />
-                        <input className="btn btn-primary text-white" type="submit" value="Update Icon" />
+                        <input
+                            id="icon-form-colour"
+                            className="mb-2 form-control form-control-color position-absolute"
+                            type="color"
+                            value={pageIconColour}
+                            onChange={(e) => { setPageIconColour(e.target.value); }}
+                        />
                     </div>
-
+                    <input className="fs-4 mb-3" type="text" value={displayUsername} onChange={(e) => { setDisplayUsername(e.target.value); }} />
+                    <input id="update-profile-button" className="btn btn-primary text-white" type="submit" value="Update Profile" />
                 </form>
-                <h3 id="profile-username" className="mt-3">{displayUsername}<a className="btn btn-link" onClick={showUsernameForm}><i className="bi-pencil-square fs-4" /></a></h3>
-                <form id="profile-username-form" className="d-none my-3" onSubmit={submitNewUsername}><input className="fs-4" type="text" value={displayUsername} onChange={(e) => { setDisplayUsername(e.target.value); }} /></form>
                 <a className="btn btn-link fs-4" onClick={showEmailModal}>Change Email</a>
                 <a className="btn btn-link fs-4" onClick={showPasswordModal}>Change Password</a>
             </div>

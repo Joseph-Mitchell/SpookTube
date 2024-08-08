@@ -13,7 +13,8 @@ function App() {
     const [loggedIn, setLoggedIn] = useState(false);
     const [loginFinished, setLoginFinished] = useState(false);
     const [username, setUsername] = useState("");
-    const [icon, setIcon] = useState("default");
+    const [iconText, setIconText] = useState("");
+    const [iconColour, setIconColour] = useState("#727272");
     const [role, setRole] = useState("user");
     const [fileReader, setFileReader] = useState(new FileReader());
 
@@ -26,7 +27,8 @@ function App() {
         else {
             await setLoggedIn(true);
             await setUsername(response.username);
-            await setIcon(response.icon);
+            await setIconText(response.iconText);
+            await setIconColour(response.iconColour);
             await setRole(response.role);
         }
         setLoginFinished(true);
@@ -56,7 +58,7 @@ function App() {
 
     return (
         <div id="full-height">
-            <Navbar loggedIn={loggedIn} setLoggedIn={setLoggedIn} setUsername={setUsername} icon={icon} setIcon={setIcon} navigate={navigate} role={role} setRole={setRole} />
+            <Navbar loggedIn={loggedIn} setLoggedIn={setLoggedIn} setUsername={setUsername} iconText={iconText} setIconText={setIconText} navigate={navigate} role={role} setRole={setRole} />
             <Routes>
                 <Route
                     path="/"
@@ -91,7 +93,7 @@ function App() {
                 <Route
                     path="/profile"
                     element={
-                        <Profile loggedIn={loggedIn} loginFinished={loginFinished} icon={icon} setIcon={setIcon} username={username} />
+                        <Profile loggedIn={loggedIn} loginFinished={loginFinished} iconText={iconText} setIconText={setIconText} iconColour={iconColour} setIconColour={setIconColour} username={username} />
                     }
                 />
             </Routes>
