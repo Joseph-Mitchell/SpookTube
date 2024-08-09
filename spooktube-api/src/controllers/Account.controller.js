@@ -95,7 +95,7 @@ export default class AccountController {
             const result = await this.#accountService.updatePassword(account._id, req.body.newPassword);
             
             if (result === null)
-                return res.status(500).json({ message: "There was an internal error, please try again later" });
+                throw new Error("Password could not be updated due to a server error");
             
             return res.status(204).json();
         });

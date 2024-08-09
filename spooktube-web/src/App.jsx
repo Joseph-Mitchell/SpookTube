@@ -17,6 +17,7 @@ function App() {
     const [iconColour, setIconColour] = useState("#727272");
     const [role, setRole] = useState("user");
     const [fileReader, setFileReader] = useState(new FileReader());
+    const [videosPerPage, setVideosPerPage] = useState(18);
 
     function logOut() {
         setLoggedIn(false);
@@ -63,6 +64,8 @@ function App() {
 
     }, []);
 
+    window.onscroll = setBackgroundHeight;
+
     function setBackgroundHeight() {
         document.getElementById("full-height").style.height = "max-content";
 
@@ -82,7 +85,7 @@ function App() {
                 <Route
                     path="/"
                     element={
-                        <Homepage setBackgroundHeight={setBackgroundHeight} />
+                        <Homepage setBackgroundHeight={setBackgroundHeight} videosPerPage={videosPerPage} setVideosPerPage={setVideosPerPage} />
                     }
                 />
                 <Route
