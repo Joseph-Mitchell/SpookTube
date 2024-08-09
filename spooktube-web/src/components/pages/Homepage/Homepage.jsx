@@ -20,11 +20,6 @@ const Homepage = ({ setBackgroundHeight, videosPerPage, setVideosPerPage }) => {
 
     return (
         <>
-            <form className="w-100 d-flex justify-content-center mt-4" onSubmit={(e) => { e.preventDefault(); }}>
-                <label className="me-3 pt-1" HTMLFor="videos-per-page">Videos Per Page</label>
-                <input type="number" id="videos-per-page" value={videosPerPage} onChange={(e) => { setVideosPerPage(e.target.value); }} />
-                <button type="button" className="btn btn-primary text-white ms-3" onClick={refreshVideos}>Set</button>
-            </form>
             <VideoGrid videos={videos} setBackgroundHeight={setBackgroundHeight} />
             <Paginator currentPage={currentPage} setCurrentPage={setCurrentPage} pages={pages} />
         </>
