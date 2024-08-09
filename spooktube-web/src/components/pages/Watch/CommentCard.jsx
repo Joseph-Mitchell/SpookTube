@@ -13,7 +13,9 @@ const CommentCard = ({ comment = { _id: "1", userId: { username: "", icon: "plac
     return (
         <div role="comment" className={`row bg-secondary-subtle mt-2 me-2 ms-1 p-2 ${display} position-relative`}>
             <div className="col-3 text-center py-0 ps-4 text-break">
-                <img alt="comment-icon" className="border border-4 border-dark rounded-5 mx-auto d-block" src={`icon-${comment.userId.icon}.png`} />
+                <p className="user-icon border border-4 border-dark rounded-circle mb-0 py-2 text-black text-center user-select-none overflow-hidden" style={{ backgroundColor: comment.userId.iconColour }}>
+                    {comment.userId.iconText}
+                </p>
                 {comment.userId.username}
             </div>
             <div className="col-9 text-break">
