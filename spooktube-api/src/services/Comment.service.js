@@ -9,15 +9,15 @@ export default class CommentService {
     }
     
     async getVideoComments(videoId) {
-        return await Comment.find({ videoId: videoId }).sort({ timeCode: 1 }).select("comment videoId userId timeCode").populate("userId", "-_id username icon");
+        return await Comment.find({ videoId: videoId }).sort({ timeCode: 1 }).select("comment videoId userId timeCode").populate("userId", "-_id username iconText iconColour");
     }
     
     async getUserComments(userId) {
-        return await Comment.find({ userId: userId }).select("comment videoId userId timeCode").populate("userId", "-_id username icon");
+        return await Comment.find({ userId: userId }).select("comment videoId userId timeCode").populate("userId", "-_id username iconText iconColour");
     }
     
     async createComment(comment, videoId, userId, timeCode) {
-        return (await Comment.create({comment: comment, videoId: videoId, userId: userId, timeCode: timeCode})).populate("userId", "-_id username icon");
+        return (await Comment.create({comment: comment, videoId: videoId, userId: userId, timeCode: timeCode})).populate("userId", "-_id username iconText iconColour");
     }
     
     async editComment(id, newComment) {
@@ -37,6 +37,6 @@ export default class CommentService {
     }
     
     async getAllComments(searchTerm) {
-        return await Comment.find({ comment: { $regex: searchTerm, $options: "i" } }).populate("userId", "-_id username icon");
+        return await Comment.find({ comment: { $regex: searchTerm, $options: "i" } }).populate("userId", "-_id username iconText iconColour");
     }
 }

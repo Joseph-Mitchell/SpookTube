@@ -16,7 +16,7 @@ import AccountService from "../../src/services/Account.service.js";
 
 import jwt from "jsonwebtoken";
 
-describe.skip("Comment Integration Tests", () => {
+describe("Comment Integration Tests", () => {
     let server;
     let database;
     let requester;
@@ -72,7 +72,8 @@ describe.skip("Comment Integration Tests", () => {
                 videoId: "grhujedai",
                 userId: {
                     username: "testuser2",
-                    icon: "1",
+                    iconText: ":O",
+                    iconColour: "#ffffff",
                 },
                 timeCode: 43,
             },);
@@ -109,7 +110,8 @@ describe.skip("Comment Integration Tests", () => {
                 videoId: "grhujedai",
                 userId: {
                     username: "testuser1",
-                    icon: "0",
+                    iconText: ":O",
+                    iconColour: "#ffffff",
                 },
                 timeCode: 43,
             });
